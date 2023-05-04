@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/azul_coach"
+    tools:context=".CrearCuenta">
+
+    <EditText
+        android:id="@+id/editTextTextEmailAddress5"
+        android:layout_width="278dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="43dp"
+        android:background="@drawable/inputs"
+        android:ems="10"
+
+        android:hint="@string/correo"
+        android:inputType="textEmailAddress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName3" />
+
+    <View
+        android:id="@+id/rectangle_5"
+        android:layout_width="417dp"
+        android:layout_height="180dp"
+        android:background="@drawable/view_profile_layout"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/textView37"
+        android:layout_width="370dp"
+        android:layout_height="260dp"
+        android:paddingLeft="125dp"
+        android:paddingTop="25dp"
+        android:text="LowCal"
+        android:textColor="@color/white"
+        android:textSize="60dp"
+        android:textStyle="bold"
+        android:translationX="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.016"
+        tools:layout_editor_absoluteX="36dp" />
+
+    <TextView
+        android:id="@+id/txtViewCrear5"
+        android:layout_width="173dp"
+        android:layout_height="47dp"
+        android:text="Crear Cuenta"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.323" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView2"
+        android:layout_width="441dp"
+        android:layout_height="49dp"
+        android:backgroundTint="@color/encabezado"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView15"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="16dp"
+        android:translationX="40dp"
+        android:translationY="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.051"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logo_lowcal" />
+
+    <EditText
+        android:id="@+id/editTextTextPassword5"
+        android:layout_width="280dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="41dp"
+        android:background="@drawable/inputs"
+        android:ems="10"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextEmailAddress5" />
+
+    <EditText
+        android:id="@+id/editTextTextPersonName3"
+        android:layout_width="280dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="49dp"
+        android:background="@drawable/inputs"
+        android:ems="10"
+        android:hint="@string/name"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView37" />
+
+    <TableRow
+        android:layout_width="282dp"
+        android:layout_height="69dp"
+        android:layout_marginBottom="44dp"
+        app:layout_constraintBottom_toTopOf="@+id/cardView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.573"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword5">
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/boton_redondo_blanco"
+            android:onClick="cancelar"
+            android:text="@string/btnCancelar"
+            android:textColor="@color/black" />
+
+        <Space
+            android:layout_width="85dp"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btnEntrar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/boton_redondo_azul"
+            android:onClick="btnEntrar"
+            android:text="@string/entrar"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/cardView2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword"
+            app:layout_constraintVertical_bias="0.291" />
+        />
+    </TableRow>
+</androidx.constraintlayout.widget.ConstraintLayout>

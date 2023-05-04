@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">ProyectoIntegrador</string>
+    <string name="bienvenido">¡Bienvenido a LowCal!</string>
+    <string name="descripcion">Esta es una aplicacion que te brinda la llave a una vida más saludable</string>
+    <string name="correo">Correo</string>
+    <string name="password">Contraseña</string>
+    <string name="name">Nombre</string>
+    <string name="entrar">Entrar</string>
+    <string name="ingresar">Ingresar</string>
+    <string name="info">Información general</string>
+    <string name="centimetros">cm</string>
+    <string name="kilogramos">kg</string>
+    <string name="fecha">DD/MM/AAAA</string>
+    <string name="btnnext">SIGUIENTE</string>
+    <string name="btnatras">ATRAS</string>
+    <string name="btnCancelar">CANCELAR</string>
+    <string name="tvRecuperarPass">Recuperar Contraseña</string>
+    <string name="recuperarPassInfo1">Para recuperar tu contraseña deberás escribir en el recuadro
+    de abajo  el correo electrónico que usaste para crear tu cuenta:</string>
+    <string name="recuperarPassInfo2">Te enviaremos un comprobande de cambio de contraseña,
+    por favor revisa tu bandeja de entrada.</string>
+    <string name="recuperarPassInfo3">Por favor, introduce una nueva contraseña para tu cuenta</string>
+    <string name="opcionRecuperarPass"><u>¿Olvidó su contraseña? Ingrese aquí </u></string>
+    <string name="inicio">Inicio</string>
+    <string name="coach">Coach</string>
+    <string name="add">Agregar mas</string>
+    <string name="dieta">Dieta</string>
+    <string name="perfil">Perfil</string>
+    <string name="reservadas">Reservadas</string>
+    <string name="agua">Agua</string>
+    <string name="consumidas">Consumidas</string>
+    <string name="desayuno">Desayuno</string>
+    <string name="comida">Comida</string>
+    <string name="cena">Cena</string>
+    <string name="aperitivo">Aperitivo</string>
+    <string name="consumo">Consumo Diario</string>
+    <string name="graficas">Graficas Comparativas</string>
+</resources>
