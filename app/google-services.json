@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "739151280706",
+    "project_id": "controlcaloriaslowcal",
+    "storage_bucket": "controlcaloriaslowcal.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:739151280706:android:a4714dbc4c3019c28c4bdb",
+        "android_client_info": {
+          "package_name": "com.example.lowca"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "739151280706-k3qeqc491aupcjja99nf4gmkdgkuip3v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAOsNiwuVOCa81s2mUHg2QpOW7OEbzakc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "739151280706-k3qeqc491aupcjja99nf4gmkdgkuip3v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
