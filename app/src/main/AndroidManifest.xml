@@ -12,20 +12,23 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:targetApi="31">
         <activity
+            android:name=".perfil"
+            android:exported="true" />
+        <activity
             android:name=".datos2"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".datos1"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".CrearCuenta"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".IniciarSesion"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".MenuInicial"
             android:exported="true">

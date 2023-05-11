@@ -8,7 +8,7 @@
     tools:context=".CrearCuenta">
 
     <EditText
-        android:id="@+id/editTextTextEmailAddress5"
+        android:id="@+id/etCorreo"
         android:layout_width="278dp"
         android:layout_height="55dp"
         android:layout_marginTop="43dp"
@@ -20,7 +20,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName3" />
+        app:layout_constraintTop_toBottomOf="@+id/etNombre" />
 
     <View
         android:id="@+id/rectangle_5"
@@ -86,7 +86,7 @@
         app:srcCompat="@drawable/logo_lowcal" />
 
     <EditText
-        android:id="@+id/editTextTextPassword5"
+        android:id="@+id/etPassword"
         android:layout_width="280dp"
         android:layout_height="50dp"
         android:layout_marginTop="41dp"
@@ -97,10 +97,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextEmailAddress5" />
+        app:layout_constraintTop_toBottomOf="@+id/etCorreo" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName3"
+        android:id="@+id/etNombre"
         android:layout_width="280dp"
         android:layout_height="50dp"
         android:layout_marginTop="49dp"
@@ -121,14 +121,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.573"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword5">
+        app:layout_constraintTop_toBottomOf="@+id/etPassword">
 
         <Button
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/boton_redondo_blanco"
-            android:onClick="cancelar"
+            android:onClick="atras"
             android:text="@string/btnCancelar"
             android:textColor="@color/black" />
 
@@ -141,6 +141,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/boton_redondo_azul"
+            android:onClick="datosPantalla"
             android:text="@string/entrar"
             android:textColor="@color/white"
             app:layout_constraintBottom_toTopOf="@+id/cardView2"

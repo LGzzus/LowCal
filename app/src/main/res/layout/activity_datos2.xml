@@ -15,7 +15,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.627"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword">
+        app:layout_constraintTop_toBottomOf="@+id/etPesoObjetivo"
+        app:layout_constraintVertical_bias="0.692">
 
         <Button
             android:id="@+id/button"
@@ -35,6 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/boton_redondo_azul"
+            android:onClick="cargarCuenta"
             android:text="@string/btnnext"
             android:textColor="@color/white" />
     </TableRow>
@@ -49,6 +51,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible" />
+
+    <View
+        android:id="@+id/rectangle_3"
+        android:layout_width="248dp"
+        android:layout_height="48dp"
+
+        android:background="@drawable/boton_redondo_blanco"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.423"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.355"
+        tools:visibility="visible" />
+
+    <Spinner
+        android:id="@+id/spinnerDatos"
+        android:layout_width="233dp"
+        android:layout_height="42dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.455"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.358" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView2"
@@ -121,13 +148,13 @@
         app:layout_constraintVertical_bias="0.671" />
 
     <EditText
-        android:id="@+id/editTextTextPassword3"
+        android:id="@+id/etPesoObjetivo"
         android:layout_width="280dp"
         android:layout_height="50dp"
         android:background="@drawable/inputs"
         android:ems="10"
         android:hint="@string/kilogramos"
-        android:inputType="date"
+        android:inputType="number"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.549"
@@ -135,32 +162,19 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.741" />
 
-    <EditText
-        android:id="@+id/editTxtEstatura2"
-        android:layout_width="280dp"
-        android:layout_height="50dp"
-        android:background="@drawable/inputs"
-        android:ems="10"
-        android:hint="Sedentario"
-        android:inputType="numberDecimal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.488"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="243dp" />
-
     <RadioGroup
         android:id="@+id/radioGroupSexo"
-        android:layout_width="265dp"
-        android:layout_height="88dp"
-        android:layout_marginBottom="288dp"
+        android:layout_width="178dp"
+        android:layout_height="85dp"
         android:background="@drawable/inputs"
         app:layout_constraintBottom_toBottomOf="parent"
 
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.452"
+        app:layout_constraintHorizontal_bias="0.296"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rectangle_541"
-        app:layout_constraintVertical_bias="0.37">
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.534">
 
         <RadioButton
             android:id="@+id/radioBtnHombre"
@@ -175,4 +189,5 @@
             android:text="Mujer" />
 
     </RadioGroup>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ProyectoIntegrador</string>
+    <string name="app_name">lowCal</string>
     <string name="bienvenido">¡Bienvenido a LowCal!</string>
     <string name="descripcion">Esta es una aplicacion que te brinda la llave a una vida más saludable</string>
     <string name="correo">Correo</string>
