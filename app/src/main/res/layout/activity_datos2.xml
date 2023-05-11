@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/boton_redondo_azul"
             android:onClick="cargarCuenta"
-            android:text="@string/btnnext"
+            android:text="@string/btnAceptar"
             android:textColor="@color/white" />
     </TableRow>
 

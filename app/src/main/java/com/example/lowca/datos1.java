@@ -20,19 +20,13 @@ public class datos1 extends AppCompatActivity {
         etEstatura=(EditText)findViewById(R.id.etEstatura);
         etNacido=(EditText)findViewById(R.id.etNacido);
 
-        /*Bundle recibirDatos= getIntent().getExtras();
-        datos1=recibirDatos.getStringArray("keyDatos");*/
+
         recibirDatos= getIntent().getExtras();
     }
     public void datos2Pantalla(View v){
 
 
         datos1=recibirDatos.getStringArray("keyDatos");
-        /*String nombre=datos1[0];
-        String correo=datos1[1];
-        String contraseña=datos1[2];
-        System.out.println("Nombre: "+nombre+"Correo"+correo+"Contraseña"+contraseña);*/
-
         String peso=etPeso.getText().toString();
         String estatura=etEstatura.getText().toString();
         String nacido=etNacido.getText().toString();

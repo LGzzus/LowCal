@@ -16,8 +16,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -41,7 +43,7 @@ public class datos2 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_datos2);
-
+        FirebaseApp.initializeApp(this);
         etPesoObjetivo=(EditText) findViewById(R.id.etPesoObjetivo);
         rbHombre=(RadioButton) findViewById(R.id.radioBtnHombre);
         rbMujer=(RadioButton) findViewById(R.id.radioBtnMujer);
@@ -54,35 +56,41 @@ public class datos2 extends AppCompatActivity {
         recibirDatos2=getIntent().getExtras();
         datos1=recibirDatos1.getStringArray("keyDatos");
 
-         nombre=datos1[0];
-         correo=datos1[1];
-         password=datos1[2];
-        //System.out.println("Nombre: "+nombre);
 
         datosDos=recibirDatos2.getStringArray("keyDatos2");
-         peso=datosDos[0];
-         estatura=datosDos[1];
-        nacido=datosDos[2];
+
 
         mAuth=FirebaseAuth.getInstance();
-        //db=FirebaseFirestore.getInstance();
-         db = FirebaseFirestore.getInstance();
+        db = FirebaseFirestore.getInstance();
+        onStart();
 
 
 
     }
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            currentUser.reload();
+        }
+    }
 
     public void cargarCuenta(View view){
-
+        //Cuenta
+        nombre=datos1[0];
+        correo=datos1[1];
+        password=datos1[2];
+        //Datos 1
+        peso=datosDos[0];
+        estatura=datosDos[1];
+        nacido=datosDos[2];
         Map<String,Object>user=new HashMap<>();
         Map<String,Object>account=new HashMap<>();
         Map<String,Object>antropometric_dates=new HashMap<>();
         user.put("name",nombre);
         account.put("mail",correo);
         account.put("password",password);
-
-
-
 
         //String nivelAcF;
         String genero;
@@ -106,16 +114,13 @@ public class datos2 extends AppCompatActivity {
             Toast.makeText(this,"Seleccione sus datos",Toast.LENGTH_LONG).show();
         }
 
-
         mAuth.createUserWithEmailAndPassword(correo,password).
                 addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-
                             Log.d(TAG,"createUserWithEmail:success");
                             FirebaseUser user =mAuth.getCurrentUser();
-
 
                         }
                         else {
@@ -138,6 +143,7 @@ public class datos2 extends AppCompatActivity {
                 });
         db.collection("user")
                 .add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d(TAG, "DocumentSnapshot written with ID:" + documentReference.getId());

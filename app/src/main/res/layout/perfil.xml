@@ -29,6 +29,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+            <ImageButton
+                android:id="@+id/imageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#00FFFFFF"
+                android:onClick="atras"
+                android:tint="#00FFFFFF"
+                app:srcCompat="?attr/actionModeCloseDrawable" />
         </androidx.cardview.widget.CardView>
 
         <ImageView
