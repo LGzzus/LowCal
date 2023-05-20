@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ProyectoIntegrador</string>
+    <string name="app_name">lowCal</string>
     <string name="bienvenido">¡Bienvenido a LowCal!</string>
     <string name="descripcion">Esta es una aplicacion que te brinda la llave a una vida más saludable</string>
     <string name="correo">Correo</string>
@@ -14,10 +14,10 @@
     <string name="btnnext">SIGUIENTE</string>
     <string name="btnatras">ATRAS</string>
     <string name="btnCancelar">CANCELAR</string>
+    <string name="btnAceptar">ACEPTAR</string>
     <string name="tvRecuperarPass">Recuperar Contraseña</string>
-    <string name="recuperarPassInfo1">Para recuperar tu contraseña deberás escribir en el recuadro
-    de abajo  el correo electrónico que usaste para crear tu cuenta:</string>
-    <string name="recuperarPassInfo2">Te enviaremos un comprobande de cambio de contraseña,
+    <string name="recuperarPassInfo1">Ingrese su correo:</string>
+    <string name="recuperarPassInfo2">Te enviaremos un enlace de cambio de contraseña,
     por favor revisa tu bandeja de entrada.</string>
     <string name="recuperarPassInfo3">Por favor, introduce una nueva contraseña para tu cuenta</string>
     <string name="opcionRecuperarPass"><u>¿Olvidó su contraseña? Ingrese aquí </u></string>

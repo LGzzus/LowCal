@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "103211473156",
+    "project_id": "lowcalproject2",
+    "storage_bucket": "lowcalproject2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:103211473156:android:21dd8121274d8e50bd9851",
+        "android_client_info": {
+          "package_name": "com.example.lowca"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "103211473156-goov4pfsjhhtsn35h0r4gosbpsnqrljl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWYFjYegnbtFIahcVEXWMg7xvf7gJfj6w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "103211473156-goov4pfsjhhtsn35h0r4gosbpsnqrljl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

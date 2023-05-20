@@ -54,10 +54,10 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.289"
+        app:layout_constraintHorizontal_bias="0.273"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.308" />
+        app:layout_constraintVertical_bias="0.283" />
 
     <TextView
         android:id="@+id/txtViewSexo"
@@ -68,10 +68,10 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.289"
+        app:layout_constraintHorizontal_bias="0.273"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.45" />
+        app:layout_constraintVertical_bias="0.444" />
 
     <TextView
         android:id="@+id/txtViewPesoOb"
@@ -88,7 +88,7 @@
         app:layout_constraintVertical_bias="0.61" />
 
     <EditText
-        android:id="@+id/editTextTextEmailAddress2"
+        android:id="@+id/etPeso"
         android:layout_width="278dp"
         android:layout_height="55dp"
         android:background="@drawable/inputs"
@@ -102,7 +102,7 @@
         app:layout_constraintVertical_bias="0.56" />
 
     <EditText
-        android:id="@+id/editTextTextPassword2"
+        android:id="@+id/etNacido"
         android:layout_width="280dp"
         android:layout_height="50dp"
         android:background="@drawable/inputs"
@@ -117,20 +117,19 @@
         app:layout_constraintVertical_bias="0.69" />
 
     <EditText
-        android:id="@+id/editTxtEstatura"
+        android:id="@+id/etEstatura"
         android:layout_width="280dp"
         android:layout_height="50dp"
-        android:layout_marginBottom="380dp"
+        android:layout_marginTop="228dp"
         android:background="@drawable/inputs"
         android:ems="10"
         android:hint="@string/centimetros"
+
         android:inputType="numberDecimal"
-        app:layout_constraintBottom_toTopOf="@+id/cardView2"
+        app:layout_constraintBottom_toTopOf="@+id/txtViewSexo"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/rectangle_541"
-        app:layout_constraintVertical_bias="0.397" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TableRow
         android:id="@+id/tableRow"
@@ -139,7 +138,7 @@
         app:layout_constraintBottom_toTopOf="@+id/cardView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword">
+        app:layout_constraintTop_toBottomOf="@+id/etNacido">
 
         <Button
             android:id="@+id/button"
