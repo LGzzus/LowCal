@@ -159,7 +159,7 @@ public class datos2 extends AppCompatActivity {
         /*System.out.println("Nombre: "+nombre+" Correo: "+correo+" Contraseña: "+contraseña);
         System.out.println("Peso: "+peso+" Estatura"+ estatura+" Nacido: "+nacido);*/
 
-        Intent intent=new Intent(datos2.this, perfil.class);
+        Intent intent=new Intent(datos2.this, MainActivity.class);
 
         startActivity(intent);
 

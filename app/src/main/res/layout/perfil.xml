@@ -82,6 +82,7 @@
             android:layout_height="40dp"
             android:layout_marginTop="69dp"
             android:background="@drawable/boton_redondo_azul"
+            android:onClick="cerrarSesion"
             android:text="Cerrar Sesión"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.85"
