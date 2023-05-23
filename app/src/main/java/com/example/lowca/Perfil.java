@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,12 +43,14 @@ public class Perfil extends Fragment {
     private String mParam2;
 
     View vista;
-    TextView tvNombre, tvCorreo;
+    TextView tvNombre, tvCorreo, tvPesoO;
+    EditText etGenero, etPesoA, etEstatura, etActividadF, etFechan;
     Button cerrarSesion;
     private FirebaseAuth mAuth;
     FirebaseFirestore db;
     public String userUid;
     Activity main;
+    public String NombreD, CorreoD, FechaND, EstaturaD, PesoAD, PesoOD, GeneroD, ActividadD;
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -85,9 +88,18 @@ public class Perfil extends Fragment {
         // Inflate the layout for this fragment
         main = getActivity();
         vista = inflater.inflate(R.layout.fragment_perfil, container, false);
+        tvNombre = (TextView) vista.findViewById(R.id.tvNombre);
+        tvCorreo = (TextView) vista.findViewById(R.id.tvCorreo);
+        etEstatura = (EditText) vista.findViewById(R.id.etEstaturaD);
+        etFechan = (EditText) vista.findViewById(R.id.etFechaN);
+        etGenero = (EditText) vista.findViewById(R.id.etGenero);
+        etPesoA = (EditText) vista.findViewById(R.id.etPesoA);
+        etActividadF = (EditText) vista.findViewById(R.id.etActf);
+        tvPesoO = (TextView) vista.findViewById(R.id.tvPesoO);
         cerrarSesion = (Button) vista.findViewById(R.id.cerrar_sesion);
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+        extraerDatos();
         cerrarSesion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,5 +111,53 @@ public class Perfil extends Fragment {
             }
         });
         return vista;
+    }
+    private void extraerDatos(){
+        try {
+        userUid = mAuth.getCurrentUser().getUid();
+        DocumentReference refA = db.collection("account").document(userUid);
+        DocumentReference refU = db.collection("user").document(userUid);
+        DocumentReference refD = db.collection("antropometric_dates").document(userUid);
+            refU.addSnapshotListener(getActivity(), new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                NombreD = value.getString("name");
+                tvNombre.setText(NombreD);
+            }
+        });
+            refA.addSnapshotListener(getActivity(), new EventListener<DocumentSnapshot>() {
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                    CorreoD = value.getString("mail");
+                    tvCorreo.setText(CorreoD);
+                }
+            });
+            refD.addSnapshotListener(getActivity(), new EventListener<DocumentSnapshot>() {
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                    FechaND = value.getString("birth_date");
+                    GeneroD = value.getString("gender");
+                    EstaturaD = value.getString("height");
+                    PesoAD = value.getString("weight");
+                    PesoOD = value.getString("target_weight");
+                    ActividadD = value.getString("physical_activity_lever");
+                    etFechan.setText(FechaND);
+                    etGenero.setText("Genero: "+GeneroD);
+                    etEstatura.setText("Altura: "+EstaturaD+" cm");
+                    etPesoA.setText("Peso Actual: "+PesoAD+" kg");
+                    tvPesoO.setText(PesoOD+" kg");
+                    etActividadF.setText("Nivel de actividad: "+ActividadD);
+                }
+            });
+            etFechan.setEnabled(false);
+            etGenero.setEnabled(false);
+            etEstatura.setEnabled(false);
+            etPesoA.setEnabled(false);
+            etActividadF.setEnabled(false);
+
+
+        }catch (Exception e){
+            System.out.println(e);
+        }
     }
 }
