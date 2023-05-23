@@ -1,90 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/view"
-        android:layout_width="408dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:id="@+id/view2"
-        android:layout_width="421dp"
-        android:layout_height="66dp"
-        android:background="@color/encabezado"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
+    <FrameLayout
+        android:id="@+id/frame_container"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/botom_navigacion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:elevation="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <Button
-            android:id="@+id/btnCoach"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="#03FFFFFF"
-            android:drawableTop="@drawable/baseline_home_24"
-            android:onClick="irPagina1"
-            android:text="@string/inicio"
-            android:textColor="@color/azul_fuerte" />
-
-        <Button
-            android:id="@+id/btnCoach2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="#03FFFFFF"
-            android:drawableTop="@drawable/baseline_sports_soccer_24"
-            android:onClick="irPagina2"
-            android:text="@string/coach"
-            android:textColor="@color/azul_fuerte" />
-
-        <Button
-            android:id="@+id/btnAgregarMas"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="#03FFFFFF"
-            android:drawableTop="@drawable/baseline_add_circle_24"
-            android:onClick="irPagina3"
-            android:text="@string/add"
-            android:textColor="@color/azul_fuerte" />
-
-        <Button
-            android:id="@+id/btnDieta"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="#03FFFFFF"
-            android:drawableTop="@drawable/baseline_no_food_24"
-            android:onClick="irPagina4"
-            android:text="@string/dieta"
-            android:textColor="@color/azul_fuerte" />
-
-        <Button
-            android:id="@+id/btnPerfil"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="#03FFFFFF"
-            android:drawableTop="@drawable/baseline_account_circle_24"
-            android:onClick="irPagina5"
-            android:text="@string/perfil"
-            android:textColor="@color/azul_fuerte" />
-    </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:menu="@menu/botones_navegacion"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        app:labelVisibilityMode="selected"
+        android:background="@color/encabezado"/>
+</RelativeLayout>

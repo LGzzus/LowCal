@@ -35,8 +35,8 @@ public class datos2 extends AppCompatActivity {
     RadioButton rbHombre,rbMujer;
     String[] datos1; String[]datosDos; //,datos3;
     Bundle recibirDatos1,recibirDatos2;
-    String nombre, correo, password,peso,estatura,nacido;
-    private FirebaseAuth mAuth;
+    String nombre, correo, password,peso,estatura,nacido,userUid;
+    public FirebaseAuth mAuth;
     private FirebaseFirestore db;
 
     @Override
@@ -62,6 +62,7 @@ public class datos2 extends AppCompatActivity {
 
         mAuth=FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+
         onStart();
 
 
@@ -77,6 +78,8 @@ public class datos2 extends AppCompatActivity {
     }
 
     public void cargarCuenta(View view){
+        userUid = mAuth.getCurrentUser().getUid();
+        System.out.println(userUid);
         //Cuenta
         nombre=datos1[0];
         correo=datos1[1];
@@ -114,46 +117,30 @@ public class datos2 extends AppCompatActivity {
             Toast.makeText(this,"Seleccione sus datos",Toast.LENGTH_LONG).show();
         }
 
-        mAuth.createUserWithEmailAndPassword(correo,password).
-                addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+
+
+        db.collection("account").document(userUid)
+                .set(account).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            Log.d(TAG,"createUserWithEmail:success");
-                            FirebaseUser user =mAuth.getCurrentUser();
-
-                        }
-                        else {
-                                // If sign in fails, display a message to the user.
-
-                                Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                Toast.makeText(datos2.this, "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
-                                // updateUI(null);
-                            }
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot written with ID: ");
                     }
                 });
-
-        db.collection("account")
-                .add(account).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
-                    }
-                });
-        db.collection("user")
-                .add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        db.collection("user").document(userUid)
+                .set(user)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
 
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot written with ID:" + documentReference.getId());
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot written with ID:");
                     }
                 });
-        db.collection("antropometric_dates")
-                .add(antropometric_dates).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        db.collection("antropometric_dates").document(userUid)
+                .set(antropometric_dates)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot written with ID:" + documentReference.getId());
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot written with ID:");
                     }
                 });
         /*System.out.println("Nombre: "+nombre+" Correo: "+correo+" Contraseña: "+contraseña);

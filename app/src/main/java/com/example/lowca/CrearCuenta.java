@@ -1,16 +1,27 @@
 package com.example.lowca;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class CrearCuenta extends AppCompatActivity {
     EditText etCorreo,etPassword, etNombre;
     String[] datos;
+    public FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,6 +29,8 @@ public class CrearCuenta extends AppCompatActivity {
         etNombre=(EditText) findViewById(R.id.etNombre);
         etCorreo=(EditText) findViewById(R.id.etCorreo);
         etPassword=(EditText) findViewById(R.id.etPassword);
+
+        mAuth=FirebaseAuth.getInstance();
 
     }
     public void datosPantalla(View v){
@@ -35,12 +48,30 @@ public class CrearCuenta extends AppCompatActivity {
 
             Toast.makeText(this,"Contraseña minima de 6 caracteres",Toast.LENGTH_LONG).show();
         } else {
-            Bundle pasarDatos = new Bundle();
-            pasarDatos.putStringArray("keyDatos", datos);
-            Intent intent = new Intent(this, datos1.class);
-            intent.putExtras(pasarDatos);
-            startActivity(intent);
+            mAuth.createUserWithEmailAndPassword(correo,contraseña).
+                    addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if(task.isSuccessful()){
+                                Log.d(TAG,"createUserWithEmail:success");
+                                FirebaseUser user = mAuth.getCurrentUser();
+                            }
+                            else {
+                                // If sign in fails, display a message to the user.
+
+                                Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                                Toast.makeText(CrearCuenta.this, "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
+                                // updateUI(null);
+                            }
+                        }
+                    });
         }
+        Bundle pasarDatos = new Bundle();
+        pasarDatos.putStringArray("keyDatos", datos);
+        Intent intent = new Intent(this, datos1.class);
+        intent.putExtras(pasarDatos);
+        startActivity(intent);
     }
     public void atras(View view){
         this.finish();
