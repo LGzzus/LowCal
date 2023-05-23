@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/Inicio"
+        android:icon="@drawable/baseline_home_24"
+        android:title="@string/inicio"/>
+    <item
+        android:id="@+id/Coach"
+        android:icon="@drawable/baseline_sports_soccer_24"
+        android:title="@string/coach"/>
+    <item
+        android:id="@+id/Agmas"
+        android:icon="@drawable/baseline_add_circle_24"
+        android:title="@string/add"/>
+    <item
+        android:id="@+id/Dieta"
+        android:icon="@drawable/baseline_no_food_24"
+        android:title="@string/dieta"/>
+    <item
+        android:id="@+id/Perfil"
+        android:icon="@drawable/baseline_account_circle_24"
+        android:title="@string/perfil"/>
+</menu>

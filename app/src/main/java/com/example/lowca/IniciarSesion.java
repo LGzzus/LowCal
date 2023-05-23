@@ -44,7 +44,7 @@ public class IniciarSesion extends AppCompatActivity {
         }
     }
     public void atras(View v){
-        Intent intent=new Intent(this,MainActivity.class);
+        Intent intent=new Intent(this,MenuInicial.class);
         startActivity(intent);
     }
 
