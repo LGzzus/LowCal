@@ -20,9 +20,6 @@
             android:name=".RecuperarPassword1"
             android:exported="false" />
         <activity
-            android:name=".perfil2"
-            android:exported="true" />
-        <activity
             android:name=".datos2"
             android:exported="true" />
         <activity
