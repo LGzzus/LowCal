@@ -36,6 +36,7 @@ public class datos2 extends AppCompatActivity {
     String[] datos1; String[]datosDos; //,datos3;
     Bundle recibirDatos1,recibirDatos2;
     String nombre, correo, password,peso,estatura,nacido,userUid;
+    int pesoActual,pesoObjetivo2, estatura2;
     public FirebaseAuth mAuth;
     private FirebaseFirestore db;
 
@@ -88,6 +89,11 @@ public class datos2 extends AppCompatActivity {
         peso=datosDos[0];
         estatura=datosDos[1];
         nacido=datosDos[2];
+
+        //cabiar datos a int
+        pesoActual = Integer.parseInt(peso);
+        estatura2 = Integer.parseInt(estatura);
+
         Map<String,Object>user=new HashMap<>();
         Map<String,Object>account=new HashMap<>();
         Map<String,Object>antropometric_dates=new HashMap<>();
@@ -98,11 +104,12 @@ public class datos2 extends AppCompatActivity {
         //String nivelAcF;
         String genero;
         String pesoObjetivo=etPesoObjetivo.getText().toString();
+        pesoObjetivo2 = Integer.parseInt(pesoObjetivo);
         String nivelAcF= spinnerDatos.getSelectedItem().toString();
 
-        antropometric_dates.put("weight", peso);
-        antropometric_dates.put("height",estatura);
-        antropometric_dates.put("target_weight",pesoObjetivo);
+        antropometric_dates.put("weight", pesoActual);
+        antropometric_dates.put("height",estatura2);
+        antropometric_dates.put("target_weight",pesoObjetivo2);
         antropometric_dates.put("birth_date", nacido);
         antropometric_dates.put("physical_activity_lever",nivelAcF);
 

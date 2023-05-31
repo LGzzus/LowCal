@@ -45,7 +45,7 @@ public class Perfil extends Fragment {
     View vista;
     TextView tvNombre, tvCorreo, tvPesoO;
     EditText etGenero, etPesoA, etEstatura, etActividadF, etFechan;
-    Button cerrarSesion;
+    Button cerrarSesion, editarDatos, guardarDatos;
     private FirebaseAuth mAuth;
     FirebaseFirestore db;
     public String userUid;
@@ -97,6 +97,9 @@ public class Perfil extends Fragment {
         etActividadF = (EditText) vista.findViewById(R.id.etActf);
         tvPesoO = (TextView) vista.findViewById(R.id.tvPesoO);
         cerrarSesion = (Button) vista.findViewById(R.id.cerrar_sesion);
+        editarDatos = (Button) vista.findViewById(R.id.editar);
+        guardarDatos = (Button) vista.findViewById(R.id.guardar);
+        guardarDatos.setVisibility(View.INVISIBLE);
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         extraerDatos();
@@ -110,6 +113,20 @@ public class Perfil extends Fragment {
                 getActivity().finish();
             }
         });
+        editarDatos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editarDatos.setVisibility(View.INVISIBLE);
+                guardarDatos.setVisibility(View.VISIBLE);
+                etFechan.setEnabled(true);
+                etGenero.setEnabled(true);
+                etEstatura.setEnabled(true);
+                etPesoA.setEnabled(true);
+                etActividadF.setEnabled(true);
+            }
+        });
+        //extrae los datos para actualizarlos
+
         return vista;
     }
     private void extraerDatos(){
@@ -132,21 +149,22 @@ public class Perfil extends Fragment {
                     tvCorreo.setText(CorreoD);
                 }
             });
+
             refD.addSnapshotListener(getActivity(), new EventListener<DocumentSnapshot>() {
                 @Override
                 public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                     FechaND = value.getString("birth_date");
                     GeneroD = value.getString("gender");
-                    EstaturaD = value.getString("height");
-                    PesoAD = value.getString("weight");
-                    PesoOD = value.getString("target_weight");
+                    EstaturaD = String.valueOf(value.getLong("height"));
+                    PesoAD = String.valueOf(value.getLong("weight"));
+                    PesoOD = String.valueOf(value.getLong("target_weight"));
                     ActividadD = value.getString("physical_activity_lever");
                     etFechan.setText(FechaND);
-                    etGenero.setText("Genero: "+GeneroD);
-                    etEstatura.setText("Altura: "+EstaturaD+" cm");
-                    etPesoA.setText("Peso Actual: "+PesoAD+" kg");
-                    tvPesoO.setText(PesoOD+" kg");
-                    etActividadF.setText("Nivel de actividad: "+ActividadD);
+                    etGenero.setText(GeneroD);
+                    etEstatura.setText(EstaturaD);
+                    etPesoA.setText(PesoAD);
+                    tvPesoO.setText(PesoOD);
+                    etActividadF.setText(ActividadD);
                 }
             });
             etFechan.setEnabled(false);

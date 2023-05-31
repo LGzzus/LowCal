@@ -26,8 +26,6 @@ Perfil perfil = new Perfil();
         loadFragment(inicio);
 
 
-
-
     }
     private final BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
