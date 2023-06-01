@@ -35,4 +35,6 @@
     <string name="aperitivo">Aperitivo</string>
     <string name="consumo">Consumo Diario</string>
     <string name="graficas">Graficas Comparativas</string>
+    <string name="alimentacion">Alimentación</string>
+    <string name="ejercicio">Ejercicio</string>
 </resources>
