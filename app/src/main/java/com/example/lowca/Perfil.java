@@ -14,6 +14,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.lowca.model.Cuenta;
+import com.example.lowca.model.DatosAnt;
+import com.example.lowca.model.Usuario;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -23,22 +26,17 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.auth.User;
 
+import org.checkerframework.checker.units.qual.C;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Executor;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Perfil#newInstance} factory method to
- * create an instance of this fragment.
- *
- */
 public class Perfil extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -51,15 +49,7 @@ public class Perfil extends Fragment {
     public String userUid;
     Activity main;
     public String NombreD, CorreoD, FechaND, EstaturaD, PesoAD, PesoOD, GeneroD, ActividadD;
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Perfil.
-     */
-    // TODO: Rename and change types and number of parameters
+
     public static Perfil newInstance(String param1, String param2) {
         Perfil fragment = new Perfil();
         Bundle args = new Bundle();
@@ -86,8 +76,10 @@ public class Perfil extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         main = getActivity();
         vista = inflater.inflate(R.layout.fragment_perfil, container, false);
+        extraerDatos();
         tvNombre = (TextView) vista.findViewById(R.id.tvNombre);
         tvCorreo = (TextView) vista.findViewById(R.id.tvCorreo);
         etEstatura = (EditText) vista.findViewById(R.id.etEstaturaD);
@@ -102,7 +94,8 @@ public class Perfil extends Fragment {
         guardarDatos.setVisibility(View.INVISIBLE);
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
-        extraerDatos();
+
+
         cerrarSesion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,23 +118,53 @@ public class Perfil extends Fragment {
                 etActividadF.setEnabled(true);
             }
         });
+        guardarDatos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatosAnt datosA = new DatosAnt();
+                datosA.setFechaN(etFechan.getText().toString());
+                datosA.setGenero(etGenero.getText().toString());
+                datosA.setGenero(etGenero.getText().toString());
+                datosA.setEstatura(Integer.parseInt(etEstatura.getText().toString()));
+                datosA.setPesoA(Integer.parseInt(etPesoA.getText().toString()));
+                datosA.setActividadF(etActividadF.getText().toString());
+
+                Map<String, Object> dat = new HashMap<>();
+                dat.put("birth_date",datosA.getFechaN());
+                dat.put("gender", datosA.getGenero());
+                dat.put("height", datosA.getEstatura());
+                dat.put("weight",datosA.getPesoA());
+
+                db.collection("antropometric_dates").document(userUid).update(dat);
+                Toast.makeText(main,"Actualizando",Toast.LENGTH_LONG).show();
+                editarDatos.setVisibility(View.VISIBLE);
+                guardarDatos.setVisibility(View.INVISIBLE);
+                etFechan.setEnabled(false);
+                etGenero.setEnabled(false);
+                etEstatura.setEnabled(false);
+                etPesoA.setEnabled(false);
+                etActividadF.setEnabled(false);
+
+            }
+        });
+
         //extrae los datos para actualizarlos
 
         return vista;
     }
     private void extraerDatos(){
         try {
-        userUid = mAuth.getCurrentUser().getUid();
-        DocumentReference refA = db.collection("account").document(userUid);
-        DocumentReference refU = db.collection("user").document(userUid);
-        DocumentReference refD = db.collection("antropometric_dates").document(userUid);
+            userUid = mAuth.getCurrentUser().getUid();
+            DocumentReference refA = db.collection("account").document(userUid);
+            DocumentReference refU = db.collection("user").document(userUid);
+            DocumentReference refD = db.collection("antropometric_dates").document(userUid);
             refU.addSnapshotListener(getActivity(), new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                NombreD = value.getString("name");
-                tvNombre.setText(NombreD);
-            }
-        });
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                    NombreD = value.getString("name");
+                    tvNombre.setText(NombreD);
+                }
+            });
             refA.addSnapshotListener(getActivity(), new EventListener<DocumentSnapshot>() {
                 @Override
                 public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
