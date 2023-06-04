@@ -87,49 +87,99 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.61" />
 
-    <EditText
-        android:id="@+id/etPeso"
-        android:layout_width="278dp"
-        android:layout_height="55dp"
-        android:background="@drawable/inputs"
-        android:ems="10"
-        android:hint="@string/kilogramos"
-        android:inputType="numberDecimal"
-        app:layout_constraintBottom_toTopOf="@+id/cardView2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.56" />
 
-    <EditText
-        android:id="@+id/etNacido"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/TILPeso"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="280dp"
-        android:layout_height="50dp"
-        android:background="@drawable/inputs"
-        android:ems="10"
-        android:hint="@string/fecha"
-        android:inputType="date"
+        android:layout_height="wrap_content"
+        android:hint="kg"
+        app:boxBackgroundColor="@color/white"
+        app:boxBackgroundMode="outline"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:boxCornerRadiusTopEnd="10dp"
+        app:boxCornerRadiusTopStart="10dp"
+        app:errorEnabled="true"
+        app:boxStrokeColor="@color/azul_fuerte"
+        app:hintTextColor="@color/azul_fuerte"
+        app:layout_constraintBottom_toBottomOf="@+id/cardView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/rectangle_2"
+        app:layout_constraintVertical_bias="0.526"
+        app:startIconDrawable="@drawable/baseline_scale_24">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etPeso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:maxLines="1" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/TILFechaN"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:hint="DD/MM/AAAA"
+        app:boxBackgroundColor="@color/white"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:boxCornerRadiusTopEnd="10dp"
+        app:boxCornerRadiusTopStart="10dp"
+        app:boxStrokeColor="@color/azul_fuerte"
+        app:errorEnabled="true"
+        app:hintTextColor="@color/azul_fuerte"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.526"
+        app:layout_constraintHorizontal_bias="0.511"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.69" />
+        app:layout_constraintVertical_bias="0.702"
+        app:startIconDrawable="@drawable/baseline_calendar_month_24">
 
-    <EditText
-        android:id="@+id/etEstatura"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etFechaNacido"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:clickable="true"
+            android:maxLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/TILEstatura"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="280dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="228dp"
-        android:background="@drawable/inputs"
-        android:ems="10"
-        android:hint="@string/centimetros"
-
-        android:inputType="numberDecimal"
-        app:layout_constraintBottom_toTopOf="@+id/txtViewSexo"
+        android:layout_height="wrap_content"
+        android:hint="cm"
+        app:boxBackgroundColor="@color/white"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:boxCornerRadiusTopEnd="10dp"
+        app:boxCornerRadiusTopStart="10dp"
+        app:boxStrokeColor="@color/azul_fuerte"
+        app:hintTextColor="@color/azul_fuerte"
+        app:errorEnabled="true"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/rectangle_2"
+        app:layout_constraintVertical_bias="0.359"
+        app:startIconDrawable="@drawable/baseline_height_24">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etEstatura"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:maxLines="1" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <TableRow
         android:id="@+id/tableRow"
@@ -154,11 +204,10 @@
             android:layout_height="wrap_content" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/btnSiguiente"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/boton_redondo_azul"
-            android:onClick="datos2Pantalla"
             android:text="@string/btnnext"
             android:textColor="@color/white" />
     </TableRow>
