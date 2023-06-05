@@ -58,7 +58,7 @@ public class datos2 extends AppCompatActivity {
         rbMujer=(RadioButton) findViewById(R.id.radioBtnMujer);
         spinnerDatos=(Spinner) findViewById(R.id.spinnerDatos);
         btnSiguiente = (Button) findViewById(R.id.btnSiguiente);
-        String[] opciones={"Leve","Moderada","Energica"};
+        String[] opciones={"Sedentaria","Activa"};
         ArrayAdapter<String> adapter= new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,
                 opciones);
         spinnerDatos.setAdapter(adapter);

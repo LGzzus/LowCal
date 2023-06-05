@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Dieta2">
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:backgroundTint="@color/encabezado"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+
+        >
+
+        <TextView
+            android:id="@+id/tvNombreDieta"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Tipo de dieta: "
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            android:textStyle="bold"
+         />
+
+    </androidx.cardview.widget.CardView>
+
+    <ScrollView
+        android:id="@+id/scrollView6"
+        android:layout_width="match_parent"
+        android:layout_height="637dp"
+        android:layout_marginTop="72dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.38"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+
+
+            app:layout_constraintHorizontal_bias="0.5"
+
+            app:layout_constraintStart_toStartOf="parent">
+
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="15dp" />
+
+            <TextView
+                android:id="@+id/tvTotalCalorias"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Calorias totales: "
+                android:textColor="@color/black"
+                android:textSize="17dp"
+                android:textStyle="bold" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="15dp" />
+            <TextView
+                android:id="@+id/tvPlanAlimenticio"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Plan alimenticio:"
+                android:textColor="@color/black"
+                android:textSize="17dp"
+                android:textStyle="bold"
+                />
+
+            <TextView
+                android:id="@+id/tvInfoDieta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/dieta3"
+                android:textColor="@color/black"
+
+                android:textSize="17dp" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="30dp"></Space>
+
+            <Button
+
+                android:id="@+id/btnAsignarDieta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/boton_redondo_azul"
+
+                android:text="Asignar"
+                android:textColor="@color/white"
+                android:textStyle="bold"></Button>
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

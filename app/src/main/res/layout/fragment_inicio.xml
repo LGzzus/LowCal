@@ -27,7 +27,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="6dp"
                 android:text="Perfil"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="28sp"
                 android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
@@ -196,7 +196,7 @@
                                     android:textStyle="bold" />
 
                                 <TextView
-                                    android:id="@+id/textView10"
+                                    android:id="@+id/tvCaloriasDieta"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:paddingEnd="8dp"
