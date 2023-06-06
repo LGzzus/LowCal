@@ -1,6 +1,7 @@
 package com.example.lowca;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -9,28 +10,24 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.lowca.model.Cuenta;
 import com.example.lowca.model.DatosAnt;
-import com.example.lowca.model.Usuario;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.auth.User;
-
-import org.checkerframework.checker.units.qual.C;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Executor;
 
 public class Perfil extends Fragment {
 
@@ -44,6 +41,7 @@ public class Perfil extends Fragment {
     TextView tvNombre, tvCorreo, tvPesoO;
     EditText etGenero, etPesoA, etEstatura, etActividadF, etFechan;
     Button cerrarSesion, editarDatos, guardarDatos;
+    Spinner spinnerGen, spinnerAct;
     private FirebaseAuth mAuth;
     FirebaseFirestore db;
     public String userUid;
@@ -79,7 +77,6 @@ public class Perfil extends Fragment {
 
         main = getActivity();
         vista = inflater.inflate(R.layout.fragment_perfil, container, false);
-        extraerDatos();
         tvNombre = (TextView) vista.findViewById(R.id.tvNombre);
         tvCorreo = (TextView) vista.findViewById(R.id.tvCorreo);
         etEstatura = (EditText) vista.findViewById(R.id.etEstaturaD);
@@ -91,10 +88,28 @@ public class Perfil extends Fragment {
         cerrarSesion = (Button) vista.findViewById(R.id.cerrar_sesion);
         editarDatos = (Button) vista.findViewById(R.id.editar);
         guardarDatos = (Button) vista.findViewById(R.id.guardar);
+        spinnerGen = (Spinner) vista.findViewById(R.id.spinnerGenero);
+        spinnerAct = (Spinner) vista.findViewById(R.id.spinnerActividad);
         guardarDatos.setVisibility(View.INVISIBLE);
+        spinnerGen.setVisibility(View.INVISIBLE);
+        spinnerAct.setVisibility(View.INVISIBLE);
+        String[] generos={"Mujer","Hombre"};
+        ArrayAdapter<String> adapter= new ArrayAdapter<String>(main,android.R.layout.simple_spinner_item,
+                generos);
+        spinnerGen.setAdapter(adapter);
+        String[] opciones={"Leve","Moderada","Energica"};
+        ArrayAdapter<String> adapter2= new ArrayAdapter<String>(main,android.R.layout.simple_spinner_item,
+                opciones);
+        spinnerAct.setAdapter(adapter2);
+        extraerDatos();
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
-
+        etFechan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDialog();
+            }
+        });
 
         cerrarSesion.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,11 +126,13 @@ public class Perfil extends Fragment {
             public void onClick(View v) {
                 editarDatos.setVisibility(View.INVISIBLE);
                 guardarDatos.setVisibility(View.VISIBLE);
+                etGenero.setVisibility(View.INVISIBLE);
+                spinnerGen.setVisibility(View.VISIBLE);
+                etActividadF.setVisibility(View.INVISIBLE);
+                spinnerAct.setVisibility(View.VISIBLE);
                 etFechan.setEnabled(true);
-                etGenero.setEnabled(true);
                 etEstatura.setEnabled(true);
                 etPesoA.setEnabled(true);
-                etActividadF.setEnabled(true);
             }
         });
         guardarDatos.setOnClickListener(new View.OnClickListener() {
@@ -123,22 +140,26 @@ public class Perfil extends Fragment {
             public void onClick(View v) {
                 DatosAnt datosA = new DatosAnt();
                 datosA.setFechaN(etFechan.getText().toString());
-                datosA.setGenero(etGenero.getText().toString());
-                datosA.setGenero(etGenero.getText().toString());
+                datosA.setGenero(spinnerGen.getSelectedItem().toString());
                 datosA.setEstatura(Integer.parseInt(etEstatura.getText().toString()));
                 datosA.setPesoA(Integer.parseInt(etPesoA.getText().toString()));
-                datosA.setActividadF(etActividadF.getText().toString());
+                datosA.setActividadF(spinnerAct.getSelectedItem().toString());
 
                 Map<String, Object> dat = new HashMap<>();
                 dat.put("birth_date",datosA.getFechaN());
                 dat.put("gender", datosA.getGenero());
                 dat.put("height", datosA.getEstatura());
                 dat.put("weight",datosA.getPesoA());
+                dat.put("physical_activity_lever",datosA.getActividadF());
 
                 db.collection("antropometric_dates").document(userUid).update(dat);
                 Toast.makeText(main,"Actualizando",Toast.LENGTH_LONG).show();
                 editarDatos.setVisibility(View.VISIBLE);
                 guardarDatos.setVisibility(View.INVISIBLE);
+                etGenero.setVisibility(View.VISIBLE);
+                spinnerGen.setVisibility(View.INVISIBLE);
+                etActividadF.setVisibility(View.VISIBLE);
+                spinnerAct.setVisibility(View.INVISIBLE);
                 etFechan.setEnabled(false);
                 etGenero.setEnabled(false);
                 etEstatura.setEnabled(false);
@@ -200,5 +221,14 @@ public class Perfil extends Fragment {
         }catch (Exception e){
             System.out.println(e);
         }
+    }
+    public void openDialog(){
+        DatePickerDialog fechaNacido = new DatePickerDialog(main, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int day) {
+                etFechan.setText(String.valueOf(day)+"/"+String.valueOf(month+1)+"/"+String.valueOf(year));
+            }
+        }, 2023, 06, 03);
+        fechaNacido.show();
     }
 }
