@@ -135,21 +135,34 @@ public class CrearCuenta extends AppCompatActivity {
                 tlNombre.setError("Escribe tu nombre");
                 tlCorreo.setError("Escribe tu correo");
                 tlContraseña.setError("Escribe tu contraseña");
+                retorno =false;
         }
         if(nombre.isEmpty()){
                 tlNombre.setError("Escribe tu nombre");
+                retorno =false;
         }else {
             tlNombre.setErrorEnabled(false);
         }
-        if (correo.isEmpty() || !correo.contains("@")) {
-            tlCorreo.setError("Escribe tu correo");
+        if (correo.isEmpty()){
+            tlCorreo.setError("Llena este campo");
+            retorno =false;
         }else{
-            tlCorreo.setErrorEnabled(false);
+            if(!correo.contains("@")){
+                tlCorreo.setError("Escribe tu correo correctamente");
+            }else{
+                tlCorreo.setErrorEnabled(false);
+            }
         }
-        if (contraseña.isEmpty() || contraseña.length() < 6) {
-            tlContraseña.setError("Escribe tu contraseña");
-        }else{
-            tlContraseña.setErrorEnabled(false);
+        if (contraseña.isEmpty()) {
+            tlContraseña.setError("Escribe tu contraseña correctamente");
+            retorno =false;
+        }else {
+            if (contraseña.length() < 6) {
+                tlContraseña.setError("Tu contraseña debe ser mayor a 6 digito");
+                retorno = false;
+            } else {
+                tlContraseña.setErrorEnabled(false);
+            }
         }
         return retorno;
     }

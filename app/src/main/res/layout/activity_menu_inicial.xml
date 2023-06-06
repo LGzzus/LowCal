@@ -98,6 +98,7 @@
 
     <Button
         android:id="@+id/btnCrearCuenta"
+        style="@style/MiBotonEstilo"
         android:layout_width="155dp"
         android:layout_height="47dp"
         android:background="@drawable/boton_redondo_blanco"

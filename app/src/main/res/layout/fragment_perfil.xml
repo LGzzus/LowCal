@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/spinnerAct"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Perfil">
 
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -185,8 +187,11 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="10dp"
+                android:clickable="true"
                 android:ems="10"
+                android:focusable="false"
                 android:inputType="textPersonName"
+                android:maxLines="1"
                 android:text="Name"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView36"
@@ -241,8 +246,7 @@
                 android:layout_marginTop="4dp"
                 android:background="@drawable/baseline_save_as_24"
                 app:layout_constraintStart_toEndOf="@+id/textView6"
-                app:layout_constraintTop_toTopOf="@+id/view3"
-                tools:visibility="invisible" />
+                app:layout_constraintTop_toTopOf="@+id/view3" />
 
             <Button
                 android:id="@+id/editar"
@@ -319,6 +323,30 @@
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView36" />
+
+            <Spinner
+                android:id="@+id/spinnerGenero"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                app:layout_constraintBottom_toBottomOf="@+id/etGenero"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView"
+                tools:visibility="invisible" />
+
+            <Spinner
+                android:id="@+id/spinnerActividad"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/textView38"
+                app:layout_constraintTop_toBottomOf="@+id/etFechaN" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
