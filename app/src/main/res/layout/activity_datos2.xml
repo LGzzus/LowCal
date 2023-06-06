@@ -53,7 +53,7 @@
         tools:visibility="visible" />
 
     <View
-        android:id="@+id/rectangle_3"
+        android:id="@+id/rectangleSpinner"
         android:layout_width="248dp"
         android:layout_height="48dp"
 
