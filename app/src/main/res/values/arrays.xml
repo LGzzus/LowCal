@@ -5,7 +5,6 @@
         <item>Comida</item>
         <item>Cena</item>
         <item>Aperitivo</item>
-        <item>Extra</item>
     </string-array>
     <string-array name="Lista_de_comidas">
         <item>Arroz</item>
@@ -14,7 +13,7 @@
         <item>Pechuga empanizada</item>
         <item>Spaguetti</item>
     </string-array>
-    <integer-array name="Cantidad">
+    <string-array name="Cantidad">
         <item>1</item>
         <item>2</item>
         <item>3</item>
@@ -25,5 +24,5 @@
         <item>8</item>
         <item>9</item>
         <item>10</item>
-    </integer-array>
+    </string-array>
 </resources>
