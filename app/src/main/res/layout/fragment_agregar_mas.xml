@@ -19,11 +19,11 @@
                 android:id="@+id/btnEjercicioMas"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="16dp"
                 android:background="@drawable/baseline_add_circle_24"
-                app:layout_constraintStart_toEndOf="@+id/spinnerEjercicio"
-                app:layout_constraintTop_toBottomOf="@+id/cardView23" />
+                app:layout_constraintStart_toEndOf="@+id/txtViewAlimentacion2"
+                app:layout_constraintTop_toBottomOf="@+id/cardView24" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView23"
@@ -39,10 +39,12 @@
                 android:id="@+id/cardView24"
                 android:layout_width="match_parent"
                 android:layout_height="5dp"
+                android:layout_marginTop="228dp"
                 android:backgroundTint="@color/encabezado"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/scrollView4"></androidx.cardview.widget.CardView>
+                app:layout_constraintTop_toBottomOf="@+id/cardView22"></androidx.cardview.widget.CardView>
 
             <TextView
                 android:id="@+id/txtViewAlimentacion2"
@@ -64,15 +66,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"></androidx.cardview.widget.CardView>
-
-            <Spinner
-                android:id="@+id/spinnerAlimentos"
-                android:layout_width="310dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="4dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardView22" />
 
             <TextView
                 android:id="@+id/txtViewAlimentacion"
@@ -101,51 +94,30 @@
                 android:id="@+id/btnAlimentacionMas"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="12dp"
                 android:background="@drawable/baseline_add_circle_24"
-                app:layout_constraintStart_toEndOf="@+id/spinnerAlimentos"
+                app:layout_constraintStart_toEndOf="@+id/txtViewAlimentacion"
+                app:layout_constraintTop_toBottomOf="@+id/cardView" />
+
+            <ListView
+                android:id="@+id/listViewAlimentos"
+                android:layout_width="wrap_content"
+                android:layout_height="200dp"
+                android:layout_marginTop="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cardView22" />
 
-            <ScrollView
-                android:id="@+id/scrollView4"
-                android:layout_width="398dp"
-                android:layout_height="181dp"
-                android:layout_marginTop="24dp"
+            <ListView
+                android:id="@+id/listViewEjercicios"
+                android:layout_width="wrap_content"
+                android:layout_height="200dp"
+                android:layout_marginTop="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerAlimentos">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" />
-            </ScrollView>
-
-            <Spinner
-                android:id="@+id/spinnerEjercicio"
-                android:layout_width="310dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cardView23" />
-
-            <ScrollView
-                android:id="@+id/scrollView5"
-                android:layout_width="382dp"
-                android:layout_height="191dp"
-                android:layout_marginTop="3dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerEjercicio">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" />
-            </ScrollView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+        >
+
+        <Spinner
+            android:id="@+id/spinnerCategoria"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/Categoria"
+            android:spinnerMode="dropdown"
+            android:layout_margin="8dp"
+            android:layout_gravity="center"
+            ></Spinner>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <Spinner
+                android:id="@+id/spinnerAlimento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/Lista_de_comidas"
+                android:layout_margin="8dp"
+                ></Spinner>
+
+            <Spinner
+                android:id="@+id/spinnerCantidad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/Cantidad"
+                android:layout_margin="8dp"
+                ></Spinner>
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/btnAgregarComida"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/boton_redondo_azul"
+            android:text="@string/agregar"
+            android:textColor="@color/white"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            ></Button>
+    </LinearLayout>
+
+</LinearLayout>
