@@ -135,6 +135,7 @@ public class Dieta2 extends AppCompatActivity {
                             mDialog.show();
                             Toast.makeText(Dieta2.this,"Dieta asignada",Toast.LENGTH_LONG).show();
                             mDialog.dismiss();
+                            Dieta2.this.finish();
 
                         })
                         .addOnFailureListener(e -> {

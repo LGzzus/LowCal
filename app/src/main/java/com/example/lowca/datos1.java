@@ -3,6 +3,8 @@ package com.example.lowca;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -33,6 +35,29 @@ public class datos1 extends AppCompatActivity {
         tilFechaNa = (TextInputLayout) findViewById(R.id.TILFechaN);
         btnContinuar = (Button) findViewById(R.id.btnSiguiente);
         recibirDatos= getIntent().getExtras();
+        //Establece que la alturo solo debe ser max de 3 cifras
+        InputFilter lengthFilter = new InputFilter.LengthFilter(3);
+        etEstatura.setFilters(new InputFilter[]{lengthFilter});
+        // Crea un InputFilter para limitar los decimales
+        InputFilter decimalFilter = new InputFilter() {
+            @Override
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+                String inputText = dest.toString();
+                String newText = inputText.substring(0, dstart) + source.subSequence(start, end) + inputText.substring(dend);
+
+                // Verifica si el nuevo texto cumple con el formato de dos decimales después del punto
+                if (!newText.matches("^\\d+(\\.\\d{0,2})?$")) {
+                    return "";
+                }
+
+                return null; // Deja pasar el texto ingresado
+            }
+        };
+
+
+
+// Agrega el InputFilter al TextInput
+        etPeso.setFilters(new InputFilter[]{decimalFilter});
 
         btnContinuar.setOnClickListener(v -> {
             try {

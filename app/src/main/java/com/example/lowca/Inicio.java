@@ -256,6 +256,7 @@ public class Inicio extends Fragment {
                                             // La actualización fue exitosa
                                             Log.d("TAG", "Campo nuevo agregado correctamente");
 
+
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
