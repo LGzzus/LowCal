@@ -20,6 +20,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -59,30 +61,25 @@ public class CrearCuenta extends AppCompatActivity {
                             addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
-
-                                    if(task.isSuccessful()){
-                                        Log.d(TAG,"createUserWithEmail:success");
-                                        FirebaseUser user = mAuth.getCurrentUser();
-                                        registrado = true;
-                                    }
-                                    else {
-                                        // If sign in fails, display a message to the user.
-                                        Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                        // updateUI(null);
-                                        registrado = false;
-                                    }
+                                    Log.d(TAG,"createUserWithEmail:success");
+                                    FirebaseUser user = mAuth.getCurrentUser();
+                                }
+                            }).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                                @Override
+                                public void onSuccess(AuthResult authResult) {
+                                    Bundle pasarDatos = new Bundle();
+                                    pasarDatos.putStringArray("keyDatos", datos);
+                                    Intent intent = new Intent(CrearCuenta.this, datos1.class);
+                                    intent.putExtras(pasarDatos);
+                                    startActivity(intent);
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    dialogAlert();
                                 }
                             });
-                    if (registrado){
-                        Bundle pasarDatos = new Bundle();
-                        pasarDatos.putStringArray("keyDatos", datos);
-                        Intent intent = new Intent(this, datos1.class);
-                        intent.putExtras(pasarDatos);
-                        startActivity(intent);
-                    }else {
-                        dialogAlert();
-                    }
-
                 }
             }catch (Exception e){
             }
