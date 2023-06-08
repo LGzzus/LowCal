@@ -12,10 +12,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
-import com.example.lowca.Adaptadores.ListViewAlimentosAdapter;
 import com.example.lowca.Adaptadores.ListViewEjerciciosAdapter;
-import com.example.lowca.Models.Alimentos;
 import com.example.lowca.Models.Ejercicios;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -39,15 +38,15 @@ public class Coach extends Fragment {
 
     // TODO: Variables de entorno
     View vista;
-    private ArrayList<Ejercicios> listaEjercicios = new ArrayList<Ejercicios>();
-    ArrayAdapter<Ejercicios> arrayAdapterPersona;
+    private ArrayList<Ejercicios> listaEjercicios = new ArrayList<>();
+    //ArrayAdapter<Ejercicios> arrayAdapterPersona;
     ListViewEjerciciosAdapter listViewEjerciciosAdapter;
-    LinearLayout linearEntrenado, linearEjercicio;
+    //LinearLayout linearEntrenado, linearEjercicio;
     ListView listViewEntrena;
     //Spinner spinnerCategoria, spinnerAlimento, spinnerCantidad;
     //Button btnAgregarAlimento,btnAgregarEjercicio, btnAlimentacionMas , btnEjercicioMas;
     //Se usara para que se identique el objeto
-    Ejercicios ejercicioSelecicionado;
+    //Ejercicios ejercicioSelecicionado;
 
     // TODO: Variables de conexion
     private FirebaseAuth mAuth;
@@ -98,7 +97,7 @@ public class Coach extends Fragment {
         // Ejercicios generales
         //listaEjercicios = vista.findViewById(R.id.listaEjercicios);
         // Ejercicios que ha hecho el usuario
-        listViewEntrena = vista.findViewById(R.id.listaEntrena);
+        listViewEntrena = vista.findViewById(R.id.listaRealizados);
         /**
         btnAlimentacionMas.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,7 +141,8 @@ public class Coach extends Fragment {
                 }
             });
         } catch (Exception e){
-            System.out.println(e);
+            Toast.makeText(this.getContext(), "Error: "+e, Toast.LENGTH_SHORT).show();
+            //System.out.println(e);
         }
     }
 }

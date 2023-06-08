@@ -26,8 +26,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="6dp"
-                android:text="Perfil"
-                android:textColor="@color/white"
+                android:text="Tablero"
+                android:textColor="@color/black"
                 android:textSize="28sp"
                 android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
