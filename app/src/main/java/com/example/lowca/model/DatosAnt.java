@@ -3,8 +3,8 @@ package com.example.lowca.model;
 public class DatosAnt {
     String genero;
     int estatura;
-    int pesoO;
-    int pesoA;
+    float pesoO;
+    float pesoA;
     String fechaN;
     String actividadF;
 
@@ -24,19 +24,19 @@ public class DatosAnt {
         this.estatura = estatura;
     }
 
-    public int getPesoO() {
+    public float getPesoO() {
         return pesoO;
     }
 
-    public void setPesoO(int pesoO) {
+    public void setPesoO(float pesoO) {
         this.pesoO = pesoO;
     }
 
-    public int getPesoA() {
+    public float getPesoA() {
         return pesoA;
     }
 
-    public void setPesoA(int pesoA) {
+    public void setPesoA(float pesoA) {
         this.pesoA = pesoA;
     }
 

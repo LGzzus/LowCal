@@ -181,10 +181,18 @@ public class datos1 extends AppCompatActivity {
         int d = c.get(Calendar.DAY_OF_MONTH);
         int dia = d;
         int year = y-15;
+
         DatePickerDialog fechaNacido = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int y, int m, int d) {
                 if(y>year || dia<=d){
+
+        int mes = m;
+        DatePickerDialog fechaNacido = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int y, int m, int d) {
+                if(y>year || y>=year && d==dia && m==mes){
+
                     dialogAlert();
                 }else{
                     etNacido.setText(String.valueOf(d)+"/"+String.valueOf(m+1)+"/"+String.valueOf(y));
