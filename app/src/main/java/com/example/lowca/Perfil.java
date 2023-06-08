@@ -66,6 +66,7 @@ public class Perfil extends Fragment {
     public String userUid;
     Activity main;
     public String NombreD, CorreoD, FechaND, EstaturaD, PesoAD, PesoOD, GeneroD, ActividadD;
+    DatosAnt datosA = new DatosAnt();
 
     public static Perfil newInstance(String param1, String param2) {
         Perfil fragment = new Perfil();
@@ -112,12 +113,14 @@ public class Perfil extends Fragment {
         guardarDatos.setVisibility(View.INVISIBLE);
         spinnerGen.setVisibility(View.INVISIBLE);
         spinnerAct.setVisibility(View.INVISIBLE);
+        String[] generos={"Seleccione su genero","Mujer","Hombre"};
+
         btnExportarInfo=vista.findViewById(R.id.btnExportarInfo);
-        String[] generos={"Mujer","Hombre"};
+        
         ArrayAdapter<String> adapter= new ArrayAdapter<String>(main,android.R.layout.simple_spinner_item,
                 generos);
         spinnerGen.setAdapter(adapter);
-        String[] opciones={"Leve","Moderada","Energica"};
+        String[] opciones={"Seleccione la actividad fisica","Sedentaria","Moderada","Activa"};
         ArrayAdapter<String> adapter2= new ArrayAdapter<String>(main,android.R.layout.simple_spinner_item,
                 opciones);
         spinnerAct.setAdapter(adapter2);
@@ -158,34 +161,37 @@ public class Perfil extends Fragment {
         guardarDatos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatosAnt datosA = new DatosAnt();
-                datosA.setFechaN(etFechan.getText().toString());
-                datosA.setGenero(spinnerGen.getSelectedItem().toString());
-                datosA.setEstatura(Integer.parseInt(etEstatura.getText().toString()));
-                datosA.setPesoA(Integer.parseInt(etPesoA.getText().toString()));
-                datosA.setActividadF(spinnerAct.getSelectedItem().toString());
+                try {
+                    if(validar()){
+                        datosA.setFechaN(etFechan.getText().toString());
+                        datosA.setGenero(spinnerGen.getSelectedItem().toString());
+                        datosA.setEstatura(Integer.parseInt(etEstatura.getText().toString()));
+                        datosA.setPesoA(Integer.parseInt(etPesoA.getText().toString()));
+                        datosA.setActividadF(spinnerAct.getSelectedItem().toString());
+                        Map<String, Object> dat = new HashMap<>();
+                        dat.put("birth_date",datosA.getFechaN());
+                        dat.put("gender", datosA.getGenero());
+                        dat.put("height", datosA.getEstatura());
+                        dat.put("weight",datosA.getPesoA());
+                        dat.put("physical_activity_lever",datosA.getActividadF());
 
-                Map<String, Object> dat = new HashMap<>();
-                dat.put("birth_date",datosA.getFechaN());
-                dat.put("gender", datosA.getGenero());
-                dat.put("height", datosA.getEstatura());
-                dat.put("weight",datosA.getPesoA());
-                dat.put("physical_activity_lever",datosA.getActividadF());
+                        db.collection("antropometric_dates").document(userUid).update(dat);
+                        Toast.makeText(main,"Actualizando",Toast.LENGTH_LONG).show();
+                        editarDatos.setVisibility(View.VISIBLE);
+                        guardarDatos.setVisibility(View.INVISIBLE);
+                        etGenero.setVisibility(View.VISIBLE);
+                        spinnerGen.setVisibility(View.INVISIBLE);
+                        etActividadF.setVisibility(View.VISIBLE);
+                        spinnerAct.setVisibility(View.INVISIBLE);
+                        etFechan.setEnabled(false);
+                        etGenero.setEnabled(false);
+                        etEstatura.setEnabled(false);
+                        etPesoA.setEnabled(false);
+                        etActividadF.setEnabled(false);
+                    }
+                }catch (Exception e){
 
-                db.collection("antropometric_dates").document(userUid).update(dat);
-                Toast.makeText(main,"Actualizando",Toast.LENGTH_LONG).show();
-                editarDatos.setVisibility(View.VISIBLE);
-                guardarDatos.setVisibility(View.INVISIBLE);
-                etGenero.setVisibility(View.VISIBLE);
-                spinnerGen.setVisibility(View.INVISIBLE);
-                etActividadF.setVisibility(View.VISIBLE);
-                spinnerAct.setVisibility(View.INVISIBLE);
-                etFechan.setEnabled(false);
-                etGenero.setEnabled(false);
-                etEstatura.setEnabled(false);
-                etPesoA.setEnabled(false);
-                etActividadF.setEnabled(false);
-
+                }
             }
         });
         //Exportar informacion
@@ -259,5 +265,34 @@ public class Perfil extends Fragment {
             }
         }, 2023, 06, 03);
         fechaNacido.show();
+    }
+    public boolean validar(){
+        boolean retorno = true;
+        String FechaNac = datosA.getFechaN();
+        String Genero = datosA.getGenero();
+        String Estatura = etEstatura.getText().toString();
+        String PesoAc = etPesoA.getText().toString();
+        String ActividadFis = datosA.getActividadF();
+        /*if(etFechan.getText()==null){
+            etFechan.setError("Llena el campo");
+            retorno = false;
+        }*/
+        if (spinnerGen.getSelectedItemPosition()==0){
+            Toast.makeText(main,"Seleccione una opcion",Toast.LENGTH_LONG).show();
+            retorno = false;
+        }
+        if (Estatura.isEmpty()){
+            etEstatura.setError("Ingresa tu estatura correcta");
+            retorno = false;
+        }
+        if (PesoAc.isEmpty()){
+            etPesoA.setError("Ingresa tu Peso correcto");
+            retorno = false;
+        }
+        if(spinnerAct.getSelectedItemPosition()==0){
+            Toast.makeText(main,"Selecciona la opcion correcta",Toast.LENGTH_LONG).show();
+            retorno = false;
+        }
+        return retorno;
     }
 }

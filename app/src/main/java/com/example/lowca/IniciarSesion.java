@@ -19,6 +19,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -56,28 +58,23 @@ public class IniciarSesion extends AppCompatActivity {
                             .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if (task.isSuccessful()) {
                                         // Sign in success, update UI with the signed-in user's information
                                         Log.d(TAG, "signInWithEmail:success");
                                         FirebaseUser user = mAuth.getCurrentUser();
                                         //updateUI(user);
-
-
-                                    } else {
-                                        // If sign in fails, display a message to the user.
-                                        Log.w(TAG, "signInWithEmail:failure", task.getException());
-                                        //updateUI(null);
-                                        logueado=false;
-                                    }
+                                }
+                            }).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                                @Override
+                                public void onSuccess(AuthResult authResult) {
+                                    Intent i = new Intent(IniciarSesion.this, MainActivity.class);
+                                    startActivity(i);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    dialogAlert();
                                 }
                             });
-                    if (logueado){
-                        Intent i = new Intent(IniciarSesion.this, MainActivity.class);
-                        startActivity(i);
-                        logueado=true;
-                    }else {
-                        dialogAlert();
-                    }
                 }
 
             }catch (Exception e){
@@ -174,6 +171,7 @@ public class IniciarSesion extends AppCompatActivity {
         }else{
             if(!Patterns.EMAIL_ADDRESS.matcher(correo).matches()){
                 tlCorreo.setError("Correo Incorrecto, Verifiquelo");
+                retorno =false;
             }else{
                 tlCorreo.setErrorEnabled(false);
             }
