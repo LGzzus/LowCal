@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -11,43 +10,31 @@
         android:orientation="vertical"
         >
 
-        <Spinner
-            android:id="@+id/spinnerCalorias"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="8dp"
-            android:entries="@array/Categoria"
-            android:spinnerMode="dropdown"
-
-            android:visibility="gone"></Spinner>
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center">
 
             <Spinner
-                android:id="@+id/spinnerAlimento"
+                android:id="@+id/spinnerEjercicio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:entries="@array/Lista_de_comidas"
                 android:layout_margin="8dp"
-                ></Spinner>
+                android:entries="@array/Lista_de_ejercicios"></Spinner>
 
             <Spinner
-                android:id="@+id/spinnerCantidad"
+                android:id="@+id/spinnerMinutos"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:entries="@array/Cantidad"
                 android:layout_margin="8dp"
-                ></Spinner>
+                android:entries="@array/Minutos"></Spinner>
+
 
         </LinearLayout>
 
 
         <Button
-            android:id="@+id/btnAgregarComida"
+            android:id="@+id/btnAgregarEjericio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/boton_redondo_azul"
@@ -55,7 +42,6 @@
             android:textColor="@color/white"
             android:layout_gravity="center"
             android:layout_margin="10dp"
-            ></Button>
+        ></Button>
     </LinearLayout>
-
 </LinearLayout>

@@ -5,8 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ScrollView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.lowca.Models.Alimentos;
@@ -51,12 +49,13 @@ public class ListViewAlimentosAdapter extends BaseAdapter {
         }
         //enlazar vistas
         TextView alimento = rowView.findViewById(R.id.txtViewAlimento);
-        TextView calorias = rowView.findViewById(R.id.txtVIewAlimentoCalorias);
+        TextView calorias = rowView.findViewById(R.id.txtVIewAlimentoGramos);
         TextView cantidad = rowView.findViewById(R.id.txtVIewAlimentoCantidad);
         alimentosModel = alimentosData.get(i);
         alimento.setText(alimentosModel.getAlimento());
         calorias.setText(alimentosModel.getCalorias());
         cantidad.setText(alimentosModel.getCantidad());
+
         return rowView;
     }
 }

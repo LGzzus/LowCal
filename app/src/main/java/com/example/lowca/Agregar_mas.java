@@ -2,24 +2,27 @@ package com.example.lowca;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.example.lowca.Adaptadores.ListViewAlimentosAdapter;
+import com.example.lowca.Adaptadores.ListViewEjerciciosAdapter;
 import com.example.lowca.Models.Alimentos;
+import com.example.lowca.Models.Ejercicios;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,7 +31,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -44,15 +46,16 @@ import java.util.TimeZone;
 public class Agregar_mas extends Fragment {
     View view;
     private ArrayList<Alimentos> listAlimentos = new ArrayList<Alimentos>();
+    private ArrayList<Ejercicios> listEjercicios = new ArrayList<Ejercicios>();
     ArrayAdapter<Alimentos> arrayAdapterPersona;
-    ListViewAlimentosAdapter listViewAlimentosAdapter;
+    private ListViewAlimentosAdapter listViewAlimentosAdapter;
+    private ListViewEjerciciosAdapter listViewEjerciciosAdapter;
     LinearLayout linearLayoutAgregarComida;
 
     ListView listViewAlimentos, listViewEjericicios;
-    Spinner spinnerCategoria, spinnerAlimento, spinnerCantidad;
+    Spinner spinnerCalorias, spinnerAlimento, spinnerCantidad, spinnerEjercicio, spinnerMinutos;
     Button btnAgregarAlimento,btnAgregarEjercicio, btnAlimentacionMas , btnEjercicioMas;
     //Se usara para que se identique el objeto
-    Alimentos alimentoSelecicionado;
     private FirebaseAuth mAuth;
     FirebaseFirestore db;
     public String userId;
@@ -97,32 +100,62 @@ public class Agregar_mas extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-
-
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_agregar_mas, container, false);
-        spinnerCategoria = (Spinner) view.findViewById(R.id.spinnerCategoria);
+        spinnerCalorias = (Spinner) view.findViewById(R.id.spinnerCalorias);
         spinnerAlimento = (Spinner) view.findViewById(R.id.spinnerAlimento);
         spinnerCantidad = (Spinner) view.findViewById(R.id.spinnerCantidad);
+
+        spinnerEjercicio = (Spinner) view.findViewById(R.id.spinnerEjercicio);
+        spinnerMinutos = (Spinner) view.findViewById(R.id.spinnerMinutos);
 
         btnAgregarAlimento = (Button) view.findViewById(R.id.btnAgregarComida);
 
         listViewAlimentos = view.findViewById(R.id.listViewAlimentos);
         listViewEjericicios = view.findViewById(R.id.listViewEjercicios);
+
         btnAlimentacionMas = view.findViewById(R.id.btnAlimentacionMas);
+        btnEjercicioMas = view.findViewById(R.id.btnEjercicioMas);
+
+        listViewAlimentosAdapter = new ListViewAlimentosAdapter(getActivity(), listAlimentos);
+        listViewAlimentos.setAdapter(listViewAlimentosAdapter);
+
+        listViewEjerciciosAdapter = new ListViewEjerciciosAdapter(getActivity(), listEjercicios);
+        listViewEjericicios.setAdapter(listViewEjerciciosAdapter);
+
         btnAlimentacionMas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 agregarAlimento(view);
             }
         });
+        btnEjercicioMas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                agregarEjercicio(view);
+            }
+        });
         inicializarFirebase();
         listarAlimentos();
+        listarEjercicios();
+        listViewAlimentos.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+                mostrarDialogoBorrarAlimento(position);
+                return true;
+            }
+        });
+        listViewEjericicios.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
+                mostrarDialogoBorrarEjercicio(position);
+                return false;
+            }
+        });
         return view;
     }
 
@@ -141,14 +174,15 @@ public class Agregar_mas extends Fragment {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         // Obtener los datos de cada documento y agregarlos a la lista
                         Alimentos alimento = document.toObject(Alimentos.class);
+                        alimento.setId(document.getId());
                         alimento.setAlimento(document.getString("eat"));
-                        alimento.setCalorias(document.getString("category"));
+                        alimento.setCalorias(document.getString("calories")+" cal");
                         alimento.setCantidad(document.getString("amount"));
                         listAlimentos.add(alimento);
+                        listViewAlimentosAdapter.notifyDataSetChanged();
                     }
-                    // Crear el adaptador para el ListView y asignarlo
-                    listViewAlimentosAdapter = new ListViewAlimentosAdapter(getActivity(), listAlimentos);
-                    listViewAlimentos.setAdapter(listViewAlimentosAdapter);
+
+
                 } else {
                     // Manejar el caso de error
                     System.out.println("Error en el momento de mostar la lista de alimentos");
@@ -166,16 +200,12 @@ public class Agregar_mas extends Fragment {
         );
         View mView = getLayoutInflater().inflate(R.layout.agregar_comida,null);
         Button btnAgregarComida = (Button) mView.findViewById(R.id.btnAgregarComida);
-        Spinner spinnerCategoria = mView.findViewById(R.id.spinnerCategoria);
+        //Spinner spinnerCaloria = mView.findViewById(R.id.spinnerCalorias);
         Spinner spinnerAlimento = mView.findViewById(R.id.spinnerAlimento);
         Spinner spinnerCantidad = mView.findViewById(R.id.spinnerCantidad);
-        spinnerCategoria.setSelection(0);
+        
         spinnerAlimento.setSelection(0);
         spinnerCantidad.setSelection(0);
-        String categorias = spinnerCategoria.getSelectedItem().toString();
-        String alimentos = spinnerAlimento.getSelectedItem().toString();
-        String cantidades = spinnerCantidad.getSelectedItem().toString();
-
         mBuilder.setView(mView);
         final AlertDialog dialog = mBuilder.create();
         dialog.show();
@@ -183,19 +213,31 @@ public class Agregar_mas extends Fragment {
             @Override
             public void onClick(View view) {
                 userId = mAuth.getCurrentUser().getUid();
-                String categoria = categorias;
+                //String calorias = spinnerCaloria.getSelectedItem().toString();
+                String alimentos = spinnerAlimento.getSelectedItem().toString();
+                String cantidades = spinnerCantidad.getSelectedItem().toString();
+                int cantidadOperacion = Integer.parseInt(cantidades);
+                int calorias;
+                if(alimentos.equals("Arroz")){
+                    calorias = cantidadOperacion * 300;
+                } else if (alimentos.equals("Pieza de pollo")) {
+                    calorias = cantidadOperacion * 200;
+                } else {
+                    calorias = 0;
+                }
+                String caloriasString = String.valueOf(calorias);
                 String alimento = alimentos;
                 String cantidad = cantidades;
                 Alimentos alimentoss = new Alimentos();
                 alimentoss.setAlimento(alimento);
-                alimentoss.setCategoria(categoria);
+                alimentoss.setCaloria(caloriasString);
                 alimentoss.setCantidad(cantidad);
                 alimentoss.setFechaRegistro(getFechaNormal(getFechaMilisegundos()));
                 DocumentReference acountRef = db.collection("account").document(userId);
                 CollectionReference alimentosRef = acountRef.collection("eat");
                 DocumentReference nuevoAlimentoRef = alimentosRef.document();
                 Map<String,Object> alimentosDb=new HashMap<>();
-                alimentosDb.put("category",categoria);
+                alimentosDb.put("calories",caloriasString);
                 alimentosDb.put("eat",alimento);
                 alimentosDb.put("amount",cantidad);
                 //alimentosDb.put("day",1);
@@ -203,7 +245,14 @@ public class Agregar_mas extends Fragment {
                         new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
-                                System.out.println("Se agrego correctamente" + alimento);
+                                listAlimentos.add(alimentoss);
+                                dialog.dismiss();
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        listarAlimentos();
+                                    }
+                                }, 100);
                                 //Toast.makeText(Agregar_mas.this,"El alimento se agrego correctamente",Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -218,6 +267,7 @@ public class Agregar_mas extends Fragment {
         });
     }
 
+
     public long getFechaMilisegundos(){
         Calendar calendar = Calendar.getInstance();
         long timepoUnix = calendar.getTimeInMillis();
@@ -228,6 +278,206 @@ public class Agregar_mas extends Fragment {
         sdf.setTimeZone(TimeZone.getTimeZone("GTM-5"));
         String fecha = sdf.format(fechaMilisegundos);
         return fecha;
+    }
+    private void mostrarDialogoBorrarAlimento(int position) {
+        //listViewAlimentosAdapter.notifyDataSetChanged();
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("¿Desea borrar este registro?")
+                .setPositiveButton("Borrar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        borrarRegistroAlimento(position);
+
+                    }
+                })
+                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+
+
+    private void borrarRegistroAlimento(int position) {
+        userId = mAuth.getCurrentUser().getUid();
+        DocumentReference acountRef = db.collection("account").document(userId);
+        CollectionReference alimentosRef = acountRef.collection("eat");
+        // Obtener la referencia al documento específico que deseas eliminar
+        //DocumentReference alimentoRef = alimentosRef.document(listViewAlimentosAdapter.getItem(position).getId());
+        DocumentReference alimentoRef = alimentosRef.document(listAlimentos.get(position).getId());
+        //DocumentReference alimentoRef = alimentosRef.document(arrayAdapterPersona.getItem(position).getId());
+        alimentoRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                // Borrado exitoso, ahora puedes eliminar el registro de la lista
+                // Eliminar el registro de la lista
+                listAlimentos.remove(position);
+                // Notificar al adaptador que los datos han cambiado
+                listViewAlimentosAdapter.notifyDataSetChanged();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                // Manejar el caso de error en el borrado
+                System.out.println("Error al borrar el registro: " + e.getMessage());
+            }
+        });
+
+    }
+
+    //Inicia la funcionalidad y logica de los Ejercicios
+    private void listarEjercicios(){
+        try {
+            userId = mAuth.getCurrentUser().getUid();
+            DocumentReference acountRef = db.collection("account").document(userId);
+            CollectionReference ejerciciosRef = acountRef.collection("exercise");
+            ejerciciosRef.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    listEjercicios.clear(); // Limpiar la lista actual de alimentos
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        // Obtener los datos de cada documento y agregarlos a la lista
+                        Ejercicios ejercicio = document.toObject(Ejercicios.class);
+                        ejercicio.setId(document.getId());
+                        ejercicio.setEjercicio(document.getString("name_exercise"));
+                        ejercicio.setMinutos(document.getString("minutes")+ " min.");
+                        ejercicio.setCaloriasQuemadas(document.getString("calories_ex")+ " cal");
+                        listEjercicios.add(ejercicio);
+                        listViewEjerciciosAdapter.notifyDataSetChanged();
+                    }
+
+
+                } else {
+                    // Manejar el caso de error
+                    System.out.println("Error en el momento de mostar la lista de ejercicios");
+                }
+            });
+        } catch (Exception e){
+            System.out.println(e);
+        }
+    }
+
+    public void agregarEjercicio(View view){
+        Context context = getContext();
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(
+                context
+        );
+        View mView = getLayoutInflater().inflate(R.layout.agregar_ejercicio,null);
+        Button btnAgregarEjercicio = (Button) mView.findViewById(R.id.btnAgregarEjericio);
+        Spinner spinnerEjercicio = mView.findViewById(R.id.spinnerEjercicio);
+        Spinner spinnerMinutos = mView.findViewById(R.id.spinnerMinutos);
+
+        spinnerEjercicio.setSelection(0);
+        spinnerMinutos.setSelection(0);
+        mBuilder.setView(mView);
+        final AlertDialog dialog = mBuilder.create();
+        dialog.show();
+        btnAgregarEjercicio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                userId = mAuth.getCurrentUser().getUid();
+                //String calorias = spinnerCaloria.getSelectedItem().toString();
+                String ejercicios = spinnerEjercicio.getSelectedItem().toString();
+                String minutos = spinnerMinutos.getSelectedItem().toString();
+                int cantidadOperacion = Integer.parseInt(minutos);
+                int caloriasQuemadas;
+                if(ejercicios.equals("Caminata ligera")){
+                    caloriasQuemadas = cantidadOperacion * 300;
+                } else if (ejercicios.equals("Caminata rápida")) {
+                    caloriasQuemadas = cantidadOperacion * 200;
+                } else {
+                    caloriasQuemadas = 0;
+                }
+                String caloriasString = String.valueOf(caloriasQuemadas);
+                String ejericio = ejercicios;
+                String cantidad = minutos;
+                Ejercicios ejercicioss = new Ejercicios();
+                ejercicioss.setEjercicio(ejericio);
+                ejercicioss.setCaloriasQuemadas(caloriasString);
+                ejercicioss.setMinutos(minutos);
+                ejercicioss.setFechaRegistro(getFechaNormal(getFechaMilisegundos()));
+                DocumentReference acountRef = db.collection("account").document(userId);
+                CollectionReference ejerciciosRef = acountRef.collection("exercise");
+                DocumentReference nuevoEjercicioRef = ejerciciosRef.document();
+                Map<String,Object> ejerciciosDb=new HashMap<>();
+                ejerciciosDb.put("calories_ex",caloriasString);
+                ejerciciosDb.put("name_exercise",ejericio);
+                ejerciciosDb.put("minutes",cantidad);
+                //alimentosDb.put("day",1);
+                nuevoEjercicioRef.set(ejerciciosDb).addOnSuccessListener(
+                        new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                listEjercicios.add(ejercicioss);
+                                dialog.dismiss();
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        listarEjercicios();
+                                    }
+                                }, 100);
+                            }
+                        }
+                ).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        System.out.println("Ocurrio un error");
+                    }
+                });
+
+            }
+        });
+    }
+
+
+
+    private void mostrarDialogoBorrarEjercicio(int position) {
+        //listViewAlimentosAdapter.notifyDataSetChanged();
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("¿Desea borrar este registro?")
+                .setPositiveButton("Borrar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        borrarRegistroEjercicio(position);
+
+                    }
+                })
+                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+
+
+    private void borrarRegistroEjercicio(int position) {
+        userId = mAuth.getCurrentUser().getUid();
+        DocumentReference acountRef = db.collection("account").document(userId);
+        CollectionReference ejerciciosRef = acountRef.collection("exercise");
+        // Obtener la referencia al documento específico que deseas eliminar
+        //DocumentReference alimentoRef = alimentosRef.document(listViewAlimentosAdapter.getItem(position).getId());
+        DocumentReference ejercicioRef = ejerciciosRef.document(listEjercicios.get(position).getId());
+        //DocumentReference alimentoRef = alimentosRef.document(arrayAdapterPersona.getItem(position).getId());
+        ejercicioRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                // Borrado exitoso, ahora puedes eliminar el registro de la lista
+                // Eliminar el registro de la lista
+                listEjercicios.remove(position);
+                // Notificar al adaptador que los datos han cambiado
+                listViewEjerciciosAdapter.notifyDataSetChanged();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                // Manejar el caso de error en el borrado
+                System.out.println("Error al borrar el registro: " + e.getMessage());
+            }
+        });
+
     }
 
 }

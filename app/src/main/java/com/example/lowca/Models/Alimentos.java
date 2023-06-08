@@ -1,8 +1,9 @@
 package com.example.lowca.Models;
 
 public class Alimentos {
+    private String id;
     private String alimento;
-    private String categoria;
+    private String caloria;
     private String cantidad;
     private String calorias;
     private String fechaRegistro;
@@ -15,12 +16,12 @@ public class Alimentos {
         this.alimento = alimento;
     }
 
-    public String getCategoria() {
-        return categoria;
+    public String getCaloria() {
+        return caloria;
     }
 
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
+    public void setCaloria(String categoria) {
+        this.caloria = categoria;
     }
 
     public String getCantidad() {
@@ -52,8 +53,15 @@ public class Alimentos {
     public String toString() {
         return "Alimentos{" +
                 "alimento='" + alimento + '\'' +
-                ", categoria='" + categoria + '\'' +
+                ", categoria='" + caloria + '\'' +
                 '}';
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return  id;
+    }
 }

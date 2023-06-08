@@ -176,8 +176,8 @@ public class Inicio extends Fragment {
                         String nacido=documentSnapshot.getString("birth_date");
                         Double pesoObjetivo=documentSnapshot.getDouble("target_weight");
                         Double caloriasBasales=documentSnapshot.getDouble("calculated_calories");
-                        int calBal=Double.valueOf(caloriasBasales).intValue();
-                        tvCaloriasBasales.setText(String.valueOf(calBal));
+                        //int calBal=Double.valueOf(caloriasBasales).intValue();
+                        //tvCaloriasBasales.setText(String.valueOf(calBal));
 
                         //System.out.println("******NAcido: "+nacido+"************");
                        //Obtener la fecha actual
