@@ -1,14 +1,21 @@
 package com.example.lowca;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,11 +52,13 @@ public class Inicio extends Fragment {
     private String mParam1;
     private String mParam2;
     View vista;
-    TextView tvCaloriasDieta,tvCaloriasBasales;
+    TextView tvCaloriasDieta,tvCaloriasBasales,tvProgressRecomendadas;
     FirebaseFirestore db;
     FirebaseAuth mAuth;
     String userUid;
     long edad,hoy;
+    double mb;
+    ProgressBar progressBarRecomendadas;
 
     public Inicio() {
         // Required empty public constructor
@@ -89,10 +98,11 @@ public class Inicio extends Fragment {
         vista = inflater.inflate(R.layout.fragment_inicio, container, false);
         tvCaloriasDieta=vista.findViewById(R.id.tvReservadas);
         tvCaloriasBasales=vista.findViewById(R.id.tvCaloriasBasales);
+        tvProgressRecomendadas=vista.findViewById(R.id.tvProgressRecomendadas);
+        progressBarRecomendadas=vista.findViewById(R.id.progressBarRecomendadas);
         db=FirebaseFirestore.getInstance();
         mAuth=FirebaseAuth.getInstance();
         userUid = mAuth.getCurrentUser().getUid();
-
 
         CollectionReference parentCollectionRef = db.collection("account");
         DocumentReference documentRef = parentCollectionRef.document(userUid);
@@ -230,7 +240,7 @@ public class Inicio extends Fragment {
             Moderadamente activo (ejercicio moderado de 3-5 días por semana): MB x 1.55.
 
        */
-                    Double mb;
+                    //double mb;
                       //Hombre
                         if(genero.equals("Hombre")){
                             mb=66+(13.75*peso)+(5*altura)-(6.75*edad);
@@ -239,11 +249,25 @@ public class Inicio extends Fragment {
                                 mb=mb+(mb*0.15);
                                 System.out.println("*****Calorias para perder ganar: "+mb);
                             }else if(pesoObjetivo<peso){
-                                mb=mb-(mb*0.15);
+                                mb=mb-(mb*0.12);
 
                                 System.out.println("*****Calorias para perder peso: "+mb);
                             }
+                            if(nivelActividad.equals("Sedentaria")){
+                                mb=mb*1.2;
 
+                                System.out.println("****Calorias recomendadas segun el nivel de " +
+                                        "acividad: "+mb);
+                            }else if(nivelActividad.equals("Activa")){
+                                mb=mb*1.55;
+                                System.out.println("****Calorias recomendadas segun el nivel de " +
+                                        "acividad: "+mb);
+                            }
+                            int basales=(int) mb;
+                            String cal= String.valueOf(mb);
+                            progressBarRecomendadas.setProgress(100);
+                            tvProgressRecomendadas.setText(cal+" kcal recomendadas");
+                            progressBarRecomendadas.setVisibility(View.VISIBLE);
 
                             DocumentReference doc = db.collection("antropometric_dates").document(userUid);
                             Map<String, Object> campoNuevo = new HashMap<>();
@@ -269,18 +293,9 @@ public class Inicio extends Fragment {
 
 
 
-                            /*
-                            if(nivelActividad.equals("Sedentaria")){
-                                mb=mb*1.2;
 
-                                System.out.println("****Calorias recomendadas segun el nivel de " +
-                                        "acividad: "+mb);
-                            }else if(nivelActividad.equals("Activa")){
-                                mb=mb*1.55;
-                                System.out.println("****Calorias recomendadas segun el nivel de " +
-                                        "acividad: "+mb);
-                            }*/
 
+                    //Mujer
                         }else if(genero.equals("Mujer")){
                             mb=66+(9.56*peso)+(1.85*altura)-(4.68*edad);
                             System.out.println("****Calorias recomendadas: "+mb);
@@ -292,8 +307,22 @@ public class Inicio extends Fragment {
 
                                 System.out.println("*****Calorias para perder peso: "+mb);
                             }
+                            if(nivelActividad.equals("Sedentaria")){
+                                mb=mb*1.2;
 
+                                System.out.println("****Calorias recomendadas segun el nivel de " +
+                                        "acividad: "+mb);
+                            }else if(nivelActividad.equals("Activa")){
+                                mb=mb*1.55;
+                                System.out.println("****Calorias recomendadas segun el nivel de " +
+                                        "acividad: "+mb);
+                            }
 
+                            int basales=(int) mb;
+                            String cal= String.valueOf(mb);
+                            progressBarRecomendadas.setProgress(100);
+                            tvProgressRecomendadas.setText(cal+" kcal recomendadas");
+                            progressBarRecomendadas.setVisibility(View.VISIBLE);
                             DocumentReference doc = db.collection("antropometric_dates").document(userUid);
                             Map<String, Object> campoNuevo = new HashMap<>();
                             campoNuevo.put("calculated_calories", mb);
@@ -334,6 +363,8 @@ public class Inicio extends Fragment {
 
 
 
+
+
         return vista;
         //return inflater.inflate(R.layout.fragment_inicio, container, false);
 
@@ -341,4 +372,5 @@ public class Inicio extends Fragment {
 
 
     }
+
 }
