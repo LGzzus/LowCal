@@ -61,7 +61,7 @@ public class Dieta2 extends AppCompatActivity {
         }
 
         tvNombreDieta.setText(tvNombreDieta.getText().toString()+ datosRecibidos[0]);
-        tvTotalCalorias.setText(tvTotalCalorias.getText().toString()+datosRecibidos[1]);
+        tvTotalCalorias.setText(tvTotalCalorias.getText().toString()+datosRecibidos[1]+" Kcal");
 
         infoDieta=datosRecibidos[2];
         if(infoDieta.equals("dieta1")){
@@ -86,7 +86,20 @@ public class Dieta2 extends AppCompatActivity {
             calorias=datosRecibidos[1];
             int numCalorias=Integer.valueOf(calorias);
             System.out.println("\n********CALORIAS:  "+numCalorias+"*************");
-        }else{
+        } else if (infoDieta.equals("dieta4")) {
+            String string=getString(R.string.dieta4);
+            tvInfoDieta.setText(string);
+            //Convertir las calorias a entero
+            calorias=datosRecibidos[1];
+            int numCalorias=Integer.valueOf(calorias);
+        } else if (infoDieta.equals("dieta5")) {
+            String string=getString(R.string.dieta5);
+            tvInfoDieta.setText(string);
+            //Convertir las calorias a entero
+            calorias=datosRecibidos[1];
+            int numCalorias=Integer.valueOf(calorias);
+
+        } else{
             Toast.makeText(this,"No hay información",Toast.LENGTH_LONG).show();
 
         }
@@ -135,6 +148,7 @@ public class Dieta2 extends AppCompatActivity {
                             mDialog.show();
                             Toast.makeText(Dieta2.this,"Dieta asignada",Toast.LENGTH_LONG).show();
                             mDialog.dismiss();
+                            Dieta2.this.finish();
 
                         })
                         .addOnFailureListener(e -> {

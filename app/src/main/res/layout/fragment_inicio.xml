@@ -26,8 +26,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="6dp"
-                android:text="Perfil"
-                android:textColor="@color/white"
+                android:text="Tablero"
+                android:textColor="@color/black"
                 android:textSize="28sp"
                 android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
@@ -508,7 +508,9 @@
                             android:orientation="horizontal">
 
                             <ProgressBar
-                                android:id="@+id/progressBarReservadas"
+
+
+                                android:id="@+id/progressBarRecomendadas"
                                 style="?android:attr/progressBarStyleHorizontal"
                                 android:layout_width="304dp"
                                 android:layout_height="60dp"
@@ -520,7 +522,9 @@
                                 android:secondaryProgressTint="@color/azul_fuerte" />
 
                             <TextView
-                                android:id="@+id/textViewReservadasGraf"
+
+                                android:id="@+id/tvProgressRecomendadas"
+
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"

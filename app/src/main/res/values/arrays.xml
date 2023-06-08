@@ -77,6 +77,7 @@
         <item>9</item>
         <item>10</item>
     </string-array>
+
     <string-array name="Minutos">
         <item>1</item>
         <item>2</item>
@@ -140,3 +141,4 @@
         <item>60</item>
     </string-array>
 </resources>
+
