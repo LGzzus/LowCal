@@ -4,6 +4,8 @@ import static android.content.ContentValues.TAG;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -58,6 +60,24 @@ public class datos2 extends AppCompatActivity {
         rbMujer=(RadioButton) findViewById(R.id.radioBtnMujer);
         spinnerDatos=(Spinner) findViewById(R.id.spinnerDatos);
         btnSiguiente = (Button) findViewById(R.id.btnSiguiente);
+
+        //El peso objetivo solo acepta dos decimas
+        InputFilter decimalFilter = new InputFilter() {
+            @Override
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+                String inputText = dest.toString();
+                String newText = inputText.substring(0, dstart) + source.subSequence(start, end) + inputText.substring(dend);
+
+                // Verifica si el nuevo texto cumple con el formato de dos decimales después del punto
+                if (!newText.matches("^\\d+(\\.\\d{0,2})?$")) {
+                    return "";
+                }
+
+                return null; // Deja pasar el texto ingresado
+            }
+        };
+        etPesoObjetivo.setFilters(new InputFilter[]{decimalFilter});
+
         String[] opciones={"Sedentaria","Activa"};
         ArrayAdapter<String> adapter= new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,
                 opciones);
@@ -95,12 +115,14 @@ public class datos2 extends AppCompatActivity {
                     String pesoObjetivo=etPesoObjetivo.getText().toString();
                     pesoObjetivo2 = Integer.parseInt(pesoObjetivo);
                     String nivelAcF= spinnerDatos.getSelectedItem().toString();
+                    double caloriasBasales=0;
 
                     antropometric_dates.put("weight", pesoActual);
                     antropometric_dates.put("height",estatura2);
                     antropometric_dates.put("target_weight",pesoObjetivo2);
                     antropometric_dates.put("birth_date", nacido);
                     antropometric_dates.put("physical_activity_lever",nivelAcF);
+                    antropometric_dates.put("calculated_calories",caloriasBasales );
 
 
                     if(rbMujer.isChecked()){

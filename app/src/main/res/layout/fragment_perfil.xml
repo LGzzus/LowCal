@@ -15,12 +15,11 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
             <Button
                 android:id="@+id/cerrar_sesion"
                 android:layout_width="125dp"
                 android:layout_height="40dp"
-                android:layout_marginTop="564dp"
+                android:layout_marginTop="520dp"
                 android:background="@drawable/boton_redondo_azul"
                 android:onClick="cerrarSesion"
                 android:text="Cerrar Sesión"
@@ -137,7 +136,7 @@
                 app:layout_constraintTop_toTopOf="@+id/view3" />
 
             <Button
-                android:id="@+id/btnSiguiente"
+                android:id="@+id/btnExportarInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="126dp"
@@ -347,6 +346,7 @@
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toEndOf="@+id/textView38"
                 app:layout_constraintTop_toBottomOf="@+id/etFechaN" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
