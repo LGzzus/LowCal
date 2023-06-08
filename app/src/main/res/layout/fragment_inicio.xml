@@ -508,7 +508,7 @@
                             android:orientation="horizontal">
 
                             <ProgressBar
-                                android:id="@+id/progressBar1"
+                                android:id="@+id/progressBarReservadas"
                                 style="?android:attr/progressBarStyleHorizontal"
                                 android:layout_width="304dp"
                                 android:layout_height="60dp"
@@ -520,7 +520,7 @@
                                 android:secondaryProgressTint="@color/azul_fuerte" />
 
                             <TextView
-                                android:id="@+id/textView3"
+                                android:id="@+id/textViewReservadasGraf"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
@@ -535,7 +535,7 @@
                             android:orientation="horizontal">
 
                             <ProgressBar
-                                android:id="@+id/progressBar"
+                                android:id="@+id/progressBarConsumidas"
                                 style="?android:attr/progressBarStyleHorizontal"
                                 android:layout_width="304dp"
                                 android:layout_height="60dp"
@@ -547,7 +547,7 @@
                                 android:secondaryProgressTint="@color/azul_fuerte" />
 
                             <TextView
-                                android:id="@+id/textView30"
+                                android:id="@+id/textViewConsumidasGraf"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"

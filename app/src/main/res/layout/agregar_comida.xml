@@ -35,15 +35,17 @@
                 android:layout_margin="8dp"
                 ></Spinner>
 
-            <Spinner
-                android:id="@+id/spinnerCantidad"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:entries="@array/Cantidad"
-                android:layout_margin="8dp"
-                ></Spinner>
+
 
         </LinearLayout>
+        <Spinner
+            android:id="@+id/spinnerCantidad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/Cantidad"
+            android:layout_margin="8dp"
+            android:layout_gravity="right"
+            ></Spinner>
 
 
         <Button

@@ -7,11 +7,27 @@
         <item>Aperitivo</item>
     </string-array>
     <string-array name="Lista_de_comidas">
-        <item>Arroz</item>
+        <item>Plato de Arroz</item>
         <item>Pieza de pollo</item>
-        <item>Pechuga</item>
-        <item>Pechuga empanizada</item>
-        <item>Spaguetti</item>
+        <item>Tazón de avena con canela y edulcorante</item>
+        <item>Taza de fresas</item>
+        <item>Puñado de almendras (10 almendras)</item>
+        <item>Ensalada de pollo a la parrilla con vegetales mixtos y vinagreta baja en grasa</item>
+        <item>Sopa de verduras casera con una porción de pollo o pescado a la plancha</item>
+        <item>Palitos de zanahoria y apio con hummus</item>
+        <item>Yogur griego bajo en grasa con semillas de chía</item>
+        <item>Pechuga de pollo al horno con brócoli al vapor y media taza de arroz integral</item>
+        <item>Rodajas de pepino con salsa de yogur bajo en grasa y hierbas</item>
+        <item>Una porción de gelatina sin azúcar</item>
+        <item>Tortilla de claras de huevo con espinacas y queso bajo en grasa</item>
+        <item>Pechuga de pollo a la parrilla con espárragos y aguacate</item>
+        <item>Salmón al horno con brócoli al vapor y ensalada verde</item>
+        <item>Rodajas de pepino con salsa de yogur bajo en grasa</item>
+        <item>Batido de proteínas vegetales con espinacas, plátano y leche de almendras</item>
+        <item>Ensalada de garbanzos con vegetales, aceite de oliva y limón</item>
+        <item>Manzana con mantequilla de almendras</item>
+        <item>Tofu salteado con vegetales y arroz integral</item>
+        <item>Palitos de apio con hummus</item>
         <item>Manzana</item>
         <item>Piña</item>
         <item>Albaricoque</item>
@@ -31,16 +47,23 @@
         <item>Jengibre</item>
         <item>Kiwi</item>
         <item>Cerezas</item>
-        <item></item>
     </string-array>
     <string-array name="Lista_de_ejercicios">
         <item>Caminata ligera</item>
         <item>Caminata rápida</item>
-        <item>Correr</item>
+        <item>Correr a 8 km/h</item>
+        <item>Correr a 10 km/h</item>
         <item>Ciclismo ligero</item>
         <item>Ciclismo moderado</item>
         <item>Ciclismo intenso</item>
         <item>Natación ligera</item>
+        <item>Natación moderada</item>
+        <item>Natación intensa</item>
+        <item>Saltar la cuerda</item>
+        <item>Aeróbicos de bajo impacto</item>
+        <item>Aeróbicos de alto impacto</item>
+        <item>Levantamiento de pesas (ligero)</item>
+        <item>Levantamiento de pesas (intenso)</item>
     </string-array>
     <string-array name="Cantidad">
         <item>1</item>

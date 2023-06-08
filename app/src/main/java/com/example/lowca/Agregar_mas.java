@@ -218,11 +218,51 @@ public class Agregar_mas extends Fragment {
                 String cantidades = spinnerCantidad.getSelectedItem().toString();
                 int cantidadOperacion = Integer.parseInt(cantidades);
                 int calorias;
-                if(alimentos.equals("Arroz")){
-                    calorias = cantidadOperacion * 300;
+                if(alimentos.equals("Plato de Arroz")){
+                    calorias = cantidadOperacion * 130;
                 } else if (alimentos.equals("Pieza de pollo")) {
+                    calorias = cantidadOperacion * 176;
+                } else if (alimentos.equals("Tazón de avena con canela y edulcorante")) {
+                    calorias = cantidadOperacion * 170;
+                } else if (alimentos.equals("Taza de fresas")) {
+                    calorias = cantidadOperacion * 50;
+                } else if (alimentos.equals("Puñado de almendras (10 almendras)")) {
+                    calorias = cantidadOperacion * 75;
+                } else if (alimentos.equals("Ensalada de pollo a la parrilla con vegetales mixtos y vinagreta baja en grasa")) {
+                    calorias = cantidadOperacion * 250;
+                } else if (alimentos.equals("Sopa de verduras casera con una porción de pollo o pescado a la plancha")) {
+                    calorias = cantidadOperacion * 250;
+                } else if (alimentos.equals("Palitos de zanahoria y apio con hummus")) {
+                    calorias = cantidadOperacion * 130;
+                } else if (alimentos.equals("Yogur griego bajo en grasa con semillas de chía")) {
+                    calorias = cantidadOperacion * 150;
+                } else if (alimentos.equals("Pechuga de pollo al horno con brócoli al vapor y media taza de arroz integral")) {
+                    calorias = cantidadOperacion * 350;
+                } else if (alimentos.equals("Rodajas de pepino con salsa de yogur bajo en grasa y hierbas")) {
+                    calorias = cantidadOperacion * 70;
+                } else if (alimentos.equals("Una porción de gelatina sin azúcar")) {
+                    calorias = cantidadOperacion * 15;
+                } else if (alimentos.equals("Tortilla de claras de huevo con espinacas y queso bajo en grasa")) {
                     calorias = cantidadOperacion * 200;
-                } else if (alimentos.equals("Manzana")) {
+                } else if (alimentos.equals("Pechuga de pollo a la parrilla con espárragos y aguacate")) {
+                    calorias = cantidadOperacion * 350;
+                } else if (alimentos.equals("Salmón al horno con brócoli al vapor y ensalada verde")) {
+                    calorias = cantidadOperacion * 400;
+                } else if (alimentos.equals("Rodajas de pepino con salsa de yogur bajo en grasa")) {
+                    calorias = cantidadOperacion * 100;
+                } else if (alimentos.equals("Batido de proteínas vegetales con espinacas, plátano y leche de almendras")) {
+                    calorias = cantidadOperacion * 300;
+                } else if (alimentos.equals("Ensalada de garbanzos con vegetales, aceite de oliva y limón")) {
+                    calorias = cantidadOperacion * 400;
+                } else if (alimentos.equals("Manzana con mantequilla de almendras")) {
+                    calorias = cantidadOperacion * 200;
+                } else if (alimentos.equals("Tofu salteado con vegetales y arroz integral")) {
+                    calorias = cantidadOperacion * 500;
+                } else if (alimentos.equals("Palitos de apio con hummus")) {
+                    calorias = cantidadOperacion * 200;
+                } else
+                    //Areglar Array
+                    if (alimentos.equals("Manzana")) {
                     calorias = cantidadOperacion * 52;
                 } else if (alimentos.equals("Piña")) {
                     calorias = cantidadOperacion * 55;
@@ -421,12 +461,37 @@ public class Agregar_mas extends Fragment {
                 String minutos = spinnerMinutos.getSelectedItem().toString();
                 int cantidadOperacion = Integer.parseInt(minutos);
                 int caloriasQuemadas;
-                if(ejercicios.equals("Caminata ligera")){
-                    caloriasQuemadas = cantidadOperacion * 300;
+                if (ejercicios.equals("Caminata ligera")) {
+                    caloriasQuemadas = cantidadOperacion * 4;
                 } else if (ejercicios.equals("Caminata rápida")) {
-                    caloriasQuemadas = cantidadOperacion * 200;
-                }
-                else {
+                    caloriasQuemadas = cantidadOperacion * 6;
+                } else if (ejercicios.equals("Correr a 8 km/h")) {
+                    caloriasQuemadas = cantidadOperacion * 10;
+                } else if (ejercicios.equals("Correr a 10 km/h")) {
+                    caloriasQuemadas = cantidadOperacion * 12;
+                } else if (ejercicios.equals("Ciclismo ligero")) {
+                    caloriasQuemadas = cantidadOperacion * 6;
+                } else if (ejercicios.equals("Ciclismo moderado")) {
+                    caloriasQuemadas = cantidadOperacion * 8;
+                } else if (ejercicios.equals("Ciclismo intenso")) {
+                    caloriasQuemadas = cantidadOperacion * 10;
+                } else if (ejercicios.equals("Natación ligera")) {
+                    caloriasQuemadas = cantidadOperacion * 7;
+                } else if (ejercicios.equals("Natación moderada")) {
+                    caloriasQuemadas = cantidadOperacion * 10;
+                } else if (ejercicios.equals("Natación intensa")) {
+                    caloriasQuemadas = cantidadOperacion * 12;
+                } else if (ejercicios.equals("Saltar la cuerda")) {
+                    caloriasQuemadas = cantidadOperacion * 10;
+                } else if (ejercicios.equals("Aeróbicos de bajo impacto")) {
+                    caloriasQuemadas = cantidadOperacion * 5;
+                } else if (ejercicios.equals("Aeróbicos de alto impacto")) {
+                    caloriasQuemadas = cantidadOperacion * 7;
+                } else if (ejercicios.equals("Levantamiento de pesas (ligero)")) {
+                    caloriasQuemadas = cantidadOperacion * 4;
+                } else if (ejercicios.equals("Levantamiento de pesas (intenso)")) {
+                    caloriasQuemadas = cantidadOperacion * 6;
+                } else {
                     caloriasQuemadas = 0;
                 }
                 String caloriasString = String.valueOf(caloriasQuemadas);

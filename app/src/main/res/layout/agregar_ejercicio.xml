@@ -22,15 +22,17 @@
                 android:layout_margin="8dp"
                 android:entries="@array/Lista_de_ejercicios"></Spinner>
 
-            <Spinner
-                android:id="@+id/spinnerMinutos"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:entries="@array/Minutos"></Spinner>
+
 
 
         </LinearLayout>
+        <Spinner
+            android:id="@+id/spinnerMinutos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:entries="@array/Minutos"
+            android:layout_gravity="right"></Spinner>
 
 
         <Button
