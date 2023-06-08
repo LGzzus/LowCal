@@ -192,13 +192,13 @@ public class Perfil extends Fragment {
                         datosA.setFechaN(etFechan.getText().toString());
                         datosA.setGenero(spinnerGen.getSelectedItem().toString());
                         datosA.setEstatura(Integer.parseInt(etEstatura.getText().toString()));
-                        datosA.setPesoA(Float.parseFloat(etPesoA.getText().toString()));
+                        Float pesoA = Float.parseFloat(etPesoA.getText().toString());
                         datosA.setActividadF(spinnerAct.getSelectedItem().toString());
                         Map<String, Object> dat = new HashMap<>();
                         dat.put("birth_date",datosA.getFechaN());
                         dat.put("gender", datosA.getGenero());
                         dat.put("height", datosA.getEstatura());
-                        dat.put("weight",datosA.getPesoA());
+                        dat.put("weight",pesoA);
                         dat.put("physical_activity_lever",datosA.getActividadF());
 
                         db.collection("antropometric_dates").document(userUid).update(dat);
@@ -261,7 +261,7 @@ public class Perfil extends Fragment {
                     FechaND = value.getString("birth_date");
                     GeneroD = value.getString("gender");
                     EstaturaD = String.valueOf(value.getLong("height"));
-                    PesoAD = String.valueOf(value.getLong("weight"));
+                    PesoAD = String.valueOf(value.getLong("weight").floatValue());
                     PesoOD = String.valueOf(value.getLong("target_weight"));
                     ActividadD = value.getString("physical_activity_lever");
                     etFechan.setText(FechaND);
