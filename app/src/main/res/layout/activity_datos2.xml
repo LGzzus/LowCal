@@ -171,7 +171,8 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etPesoObjetivo"
             android:layout_width="280dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:inputType="number|numberDecimal" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
