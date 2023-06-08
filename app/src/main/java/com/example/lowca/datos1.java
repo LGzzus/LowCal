@@ -184,7 +184,7 @@ public class datos1 extends AppCompatActivity {
         DatePickerDialog fechaNacido = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int y, int m, int d) {
-                if(y>year || y>=year && d<=dia && m==mes){
+                if(y>year || y>=year && d==dia && m==mes){
                     dialogAlert();
                 }else{
                     etNacido.setText(String.valueOf(d)+"/"+String.valueOf(m+1)+"/"+String.valueOf(y));
