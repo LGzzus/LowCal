@@ -23,6 +23,8 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.os.Environment;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.text.TextPaint;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -127,6 +129,30 @@ public class Perfil extends Fragment {
         extraerDatos();
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+        //Establece que la alturo solo debe ser max de 3 cifras
+        InputFilter lengthFilter = new InputFilter.LengthFilter(3);
+        etEstatura.setFilters(new InputFilter[]{lengthFilter});
+        // Crea un InputFilter para limitar los decimales
+        InputFilter decimalFilter = new InputFilter() {
+            @Override
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+                String inputText = dest.toString();
+                String newText = inputText.substring(0, dstart) + source.subSequence(start, end) + inputText.substring(dend);
+
+                // Verifica si el nuevo texto cumple con el formato de dos decimales después del punto
+                if (!newText.matches("^\\d+(\\.\\d{0,2})?$")) {
+                    return "";
+                }
+
+                return null; // Deja pasar el texto ingresado
+            }
+        };
+
+
+
+// Agrega el InputFilter al TextInput
+        etPesoA.setFilters(new InputFilter[]{decimalFilter});
+
         etFechan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -166,7 +192,7 @@ public class Perfil extends Fragment {
                         datosA.setFechaN(etFechan.getText().toString());
                         datosA.setGenero(spinnerGen.getSelectedItem().toString());
                         datosA.setEstatura(Integer.parseInt(etEstatura.getText().toString()));
-                        datosA.setPesoA(Integer.parseInt(etPesoA.getText().toString()));
+                        datosA.setPesoA(Float.parseFloat(etPesoA.getText().toString()));
                         datosA.setActividadF(spinnerAct.getSelectedItem().toString());
                         Map<String, Object> dat = new HashMap<>();
                         dat.put("birth_date",datosA.getFechaN());
