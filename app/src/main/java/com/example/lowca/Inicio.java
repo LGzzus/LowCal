@@ -334,7 +334,8 @@ public class Inicio extends Fragment {
 
                             int basales=(int) mb;
                             String cal= String.valueOf(mb);
-                            progressBarRecomendadas.setProgress(100);
+
+                            //progressBarRecomendadas.setProgress(100);
                             tvProgressRecomendadas.setText(cal+" kcal recomendadas");
                             progressBarRecomendadas.setVisibility(View.VISIBLE);
                             DocumentReference doc = db.collection("antropometric_dates").document(userUid);
