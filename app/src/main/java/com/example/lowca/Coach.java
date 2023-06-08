@@ -19,6 +19,7 @@ import com.example.lowca.Models.Ejercicios;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -108,7 +109,8 @@ public class Coach extends Fragment {
          **/
 
         inicializarFirebase();
-        listarEjercicios();
+        listarEjerciciosRealizados();
+        //listarEjerciciosGenerales();
 
         return vista;
     }
@@ -117,7 +119,7 @@ public class Coach extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
     }
-    private void listarEjercicios(){
+    private void listarEjerciciosRealizados(){
         try {
             userId = mAuth.getCurrentUser().getUid();
             DocumentReference acountRef = db.collection("account").document(userId);
@@ -145,4 +147,34 @@ public class Coach extends Fragment {
             //System.out.println(e);
         }
     }
+/**
+    private void listarEjerciciosGenerales(){
+        try {
+            userId = mAuth.getCurrentUser().getUid();
+            DocumentReference ejerciciosRef = db.collection("exercise").document(userId);
+            //CollectionReference ejerciciosRef = acountRef.collection("ejercicio");
+            ejerciciosRef.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    listaEjercicios.clear(); // Limpiar la lista actual de alimentos
+                    for (DocumentSnapshot document : task.getResult()) {
+                        // Obtener los datos de cada documento y agregarlos a la lista
+                        Ejercicios ejercicio = document.toObject(Ejercicios.class);
+                        ejercicio.setEjercicio(document.getString("nombre"));
+
+                        listaEjercicios.add(ejercicio);
+                    }
+                    // Crear el adaptador para el ListView y asignarlo
+                    listViewEjerciciosAdapter = new ListViewEjerciciosAdapter(getActivity(), listaEjercicios);
+                    listViewEntrena.setAdapter(listViewEjerciciosAdapter);
+                } else {
+                    // Manejar el caso de error
+                    System.out.println("Error en el momento de mostar la lista de alimentos");
+                }
+            });
+        } catch (Exception e){
+            Toast.makeText(this.getContext(), "Error: "+e, Toast.LENGTH_SHORT).show();
+            //System.out.println(e);
+        }
+    }
+    **/
 }
