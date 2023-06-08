@@ -166,18 +166,20 @@ public class Coach extends Fragment {
         }
     }
 
+    //Esta funcion no esta completa...
+    //Al dar clic en el boton "+" se sale de la app
     public void agregarEjercicio(View view){
         View mView = getLayoutInflater().inflate(R.layout.agregar_ejercicio,null);
-        //Context context = getContext();
-        //AlertDialog.Builder mBuilder = new AlertDialog.Builder(context);
+        Context context = getContext();
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(context);
 
-        //spinnerEjercicio.setSelection(0);
+        spinnerEjercicio.setSelection(0);
         String ejercicios = spinnerEjercicio.getSelectedItem().toString();
         String duracion = String.valueOf(txtDuracion.getText());
 
-        //mBuilder.setView(mView);
-        //final AlertDialog dialog = mBuilder.create();
-        //dialog.show();
+        mBuilder.setView(mView);
+        final AlertDialog dialog = mBuilder.create();
+        dialog.show();
         btnAgregarEjercicio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
