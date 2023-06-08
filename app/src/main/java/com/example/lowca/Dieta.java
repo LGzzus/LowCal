@@ -1,12 +1,21 @@
 package com.example.lowca;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.Spinner;
+
+import com.google.android.material.snackbar.Snackbar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +32,12 @@ public class Dieta extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    Spinner spinnerDesayuno;
+    View vista,view;
+    Activity main;
+    private ImageButton btnDieta1,btnDieta2,btnDieta3;
+    String [] datos;
+    ConstraintLayout layoutDieta1,layouteDieta2,layouteDieta3,layouteDieta4,layouteDieta5;
 
     public Dieta() {
         // Required empty public constructor
@@ -49,16 +64,158 @@ public class Dieta extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //spinnerDesayuno=(Spinner) findViewById(R.id.spinnerDesayuno);
+
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_dieta, container, false);
+        main = getActivity();
+        vista = inflater.inflate(R.layout.fragment_dieta, container, false);
+        btnDieta1=vista.findViewById(R.id.btnDieta1);
+        btnDieta2=vista.findViewById(R.id.btnDieta2);
+        btnDieta3=vista.findViewById(R.id.btnDieta3);
+        layoutDieta1=vista.findViewById(R.id.layoutDieta1);
+        layouteDieta2=vista.findViewById(R.id.layoutDieta2);
+        layouteDieta3=vista.findViewById(R.id.layoutDieta3);
+        layouteDieta4=vista.findViewById(R.id.layoutDieta4);
+        layouteDieta5=vista.findViewById(R.id.layoutDieta5);
+
+
+
+
+        //Dieta 1: Baja en calorias  1325 calorias totales
+        /* btnDieta1.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+                 Bundle pasarDatos=new Bundle();
+                 String nombreDieta=" Baja en calorias";
+                 String totalCalorias="1325";
+                 String infoDieta="dieta1";
+                 datos= new String[]{nombreDieta,totalCalorias,infoDieta};
+
+                 Intent intent= new Intent(getContext(),Dieta2.class);
+                 pasarDatos.putStringArray("keyDatos",datos);
+                 intent.putExtras(pasarDatos);
+                 startActivity(intent);
+             }
+         });*/
+         layoutDieta1.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+                 Bundle pasarDatos=new Bundle();
+                 String nombreDieta=" Baja en calorias";
+                 String totalCalorias="1325";
+                 String infoDieta="dieta1";
+                 datos= new String[]{nombreDieta,totalCalorias,infoDieta};
+
+                 Intent intent= new Intent(getContext(),Dieta2.class);
+                 pasarDatos.putStringArray("keyDatos",datos);
+                 intent.putExtras(pasarDatos);
+                 startActivity(intent);
+             }
+         });
+
+
+        //Dieta 2:Baja en carbohidratos  1200 calorias totales
+       /* btnDieta2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle pasarDatos=new Bundle();
+                String nombreDieta=" Baja en carbohidratos";
+                String totalCalorias="1200";
+                String infoDieta="dieta2";
+                datos= new String[]{nombreDieta,totalCalorias,infoDieta};
+
+                Intent intent= new Intent(getContext(),Dieta2.class);
+                pasarDatos.putStringArray("keyDatos",datos);
+                intent.putExtras(pasarDatos);
+                startActivity(intent);
+            }
+        });*/
+        layouteDieta2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle pasarDatos=new Bundle();
+                String nombreDieta=" Baja en carbohidratos";
+                String totalCalorias="1200";
+                String infoDieta="dieta2";
+                datos= new String[]{nombreDieta,totalCalorias,infoDieta};
+
+                Intent intent= new Intent(getContext(),Dieta2.class);
+                pasarDatos.putStringArray("keyDatos",datos);
+                intent.putExtras(pasarDatos);
+                startActivity(intent);
+            }
+        });
+
+        //Dieta 3: Vegetariana   1600 calorias totales
+
+        /*btnDieta3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle pasarDatos=new Bundle();
+                String nombreDieta=" Vegetariana";
+                String totalCalorias="1600";
+                String infoDieta="dieta3";
+                datos= new String[]{nombreDieta,totalCalorias,infoDieta};
+                Intent intent= new Intent(getContext(),Dieta2.class);
+                pasarDatos.putStringArray("keyDatos",datos);
+                intent.putExtras(pasarDatos);
+                startActivity(intent);
+            }
+        });*/
+        layouteDieta3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle pasarDatos=new Bundle();
+                String nombreDieta=" Vegetariana";
+                String totalCalorias="1600";
+                String infoDieta="dieta3";
+                datos= new String[]{nombreDieta,totalCalorias,infoDieta};
+                Intent intent= new Intent(getContext(),Dieta2.class);
+                pasarDatos.putStringArray("keyDatos",datos);
+                intent.putExtras(pasarDatos);
+                startActivity(intent);
+            }
+        });
+        layouteDieta4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle pasarDatos=new Bundle();
+                String nombreDieta=" Alta en carbohidratos";
+                String totalCalorias="2700";
+                String infoDieta="dieta4";
+                datos= new String[]{nombreDieta,totalCalorias,infoDieta};
+                Intent intent= new Intent(getContext(),Dieta2.class);
+                pasarDatos.putStringArray("keyDatos",datos);
+                intent.putExtras(pasarDatos);
+                startActivity(intent);
+            }
+        });
+        layouteDieta5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle pasarDatos=new Bundle();
+                String nombreDieta=" Balanceada";
+                String totalCalorias="1520";
+                String infoDieta="dieta5";
+                datos= new String[]{nombreDieta,totalCalorias,infoDieta};
+                Intent intent= new Intent(getContext(),Dieta2.class);
+                pasarDatos.putStringArray("keyDatos",datos);
+                intent.putExtras(pasarDatos);
+                startActivity(intent);
+            }
+        });
+
+        return vista;
+       // return inflater.inflate(R.layout.fragment_dieta, container, false);
     }
 }

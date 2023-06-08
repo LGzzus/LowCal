@@ -124,7 +124,8 @@
             android:layout_width="280dp"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
-            android:maxLines="1"/>
+            android:maxLines="1"
+            android:maxLength="25"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -153,7 +154,8 @@
             android:layout_width="280dp"
             android:layout_height="wrap_content"
             android:inputType="text"
-            android:maxLines="1"/>
+            android:maxLines="1"
+            android:maxLength="50"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <TableRow

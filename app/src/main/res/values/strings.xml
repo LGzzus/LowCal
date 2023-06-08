@@ -38,4 +38,77 @@
    <string name="ayunaNombre">Ingresa tu nombre</string>
     <string name="alimentacion">Alimentación</string>
     <string name="ejercicio">Ejercicio</string>
+    <string name="dieta1"> \n<b> <u>Desayuno:</u></b>\n\nTazón de avena con canela y edulcorante: alrededor de <b><u>170 calorías.</u></b>
+\nTaza de fresas: alrededor de 50 calorías.\n
+<b>Total: 220 calorías.</b>\n\n<b>Merienda de la mañana: </b>\nManzana pequeña: aproximadamente 60 calorías.\n
+Puñado de almendras (10 almendras): alrededor de 75 calorías.\n
+Total: 135 calorías.\n\n<b>Almuerzo:</b>\nEnsalada de pollo a la parrilla con vegetales mixtos y vinagreta baja en grasa: alrededor de 250 calorías.\n
+Opción 2: Sopa de verduras casera con una porción de pollo o pescado a la plancha: aproximadamente 250 calorías.\n
+Total: 250 calorías.\n\n<b>Merienda de la tarde:</b>\nPalitos de zanahoria y apio con hummus: alrededor de 130 calorías.\n
+Yogur griego bajo en grasa con semillas de chía (una porción pequeña): aproximadamente 150 calorías.\n
+<b>Total: 255 calorías.</b>\n\n
+<b>Cena:</b>\nPechuga de pollo al horno con brócoli al vapor y media taza de arroz integral: aproximadamente 350 calorías.\n\n
+<b>Merienda nocturna:</b>\nRodajas de pepino con salsa de yogur bajo en grasa y hierbas: alrededor de 70 calorías.\n
+Una porción de gelatina sin azúcar: aproximadamente 15 calorías.\n
+<b>Total: 85 calorías.</b> </string>
+    <string name="dieta2">\n<b>Desayuno:</b>\n Tortilla de claras de huevo con espinacas y queso bajo en grasa (200 calorías).\n\n
+<b>Almuerzo:</b>\n Pechuga de pollo a la parrilla con espárragos y aguacate (350 calorías).\n\n
+<b>Merienda:</b>\n Yogur griego bajo en grasa con semillas de chía (150 calorías).\n\n
+<b>Cena:</b> \nSalmón al horno con brócoli al vapor y ensalada verde (400 calorías).\n\n
+<b>Merienda nocturna:</b> \nRodajas de pepino con salsa de yogur bajo en grasa (100 calorías).</string>
+    <string name="dieta3">\n<b>Desayuno:</b>\n Batido de proteínas vegetales con espinacas, plátano y leche de almendras (300 calorías).\n\n
+<b>Almuerzo:</b>\n Ensalada de garbanzos con vegetales, aceite de oliva y limón (400 calorías).\n\n
+<b>Merienda:</b>\n Manzana con mantequilla de almendras (200 calorías).\n\n
+<b>Cena:</b>\nTofu salteado con vegetales y arroz integral (500 calorías).\n\n
+<b>Merienda nocturna:</b>\n Palitos de apio con hummus (200 calorías).
+</string>
+    <string name="dieta4">Desayuno:\n\n
+Tazón de cereal integral con leche y plátano en rodajas:
+alrededor de 350 calorías.\n
+Jugo de naranja: aproximadamente 120 calorías.
+Total: 470 calorías.\n\n
+Merienda de la mañana:\n\n
+
+Pan integral con mantequilla de maní: alrededor de 250 calorías.\n
+Plátano: aproximadamente 120 calorías.
+Total: 370 calorías.\n\n
+Almuerzo:\n\n
+
+Sándwich de pavo con pan integral, lechuga, tomate y mostaza: alrededor de 400 calorías.\n
+Ensalada de pasta con vegetales y aderezo ligero: aproximadamente 300 calorías.\n
+Total: 700 calorías.\n\n
+Merienda de la tarde:\n
+
+Barra de granola: alrededor de 200 calorías.\n
+Yogur griego con frutas: aproximadamente 200 calorías.\n
+Total: 400 calorías.\n\n
+Cena:\n\n
+
+Pasta integral con salsa de tomate y verduras salteadas: alrededor de 450 calorías.\n\n
+Pechuga de pollo a la parrilla con arroz: aproximadamente 350 calorías.\n\n
+Total: 800 calorías.\n\n
+Merienda nocturna:\n\n
+
+Batido de proteínas con frutas y leche: alrededor de 250 calorías.\n\n
+Galletas de avena: aproximadamente 150 calorías.\n\n
+Total: 400 calorías.\n\n
+Total diario aproximado: 2,700 calorías.</string>
+    <string name="dieta5">Desayuno:\n\n
+Omelette de claras de huevo con espinacas, champiñones y queso fresco
+(300 calorías).\n\n
+Almuerzo:\n\n
+Tacos de pollo a la parrilla con tortillas de maíz, ensalada de aguacate, tomate y cilantro
+(400 calorías).\n\n
+Merienda:\n\n
+Yogur griego con frutas frescas y granola
+(250 calorías).\n\n
+Cena:\n\n
+Filete de pescado al horno con limón y especias, acompañado de arroz integral y vegetales al vapor
+(450 calorías).\n\n
+Merienda nocturna: Palitos de zanahoria con hummus
+(120 calorías).\n\n
+Total diario aproximado:1,520 calorías.</string>
+
+    <string name="agregar">Agregar</string>
+
 </resources>

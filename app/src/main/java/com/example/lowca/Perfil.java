@@ -1,12 +1,29 @@
 package com.example.lowca;
 
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Typeface;
+import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+
+import android.os.Environment;
+import android.text.TextPaint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +43,8 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,7 +59,7 @@ public class Perfil extends Fragment {
     View vista;
     TextView tvNombre, tvCorreo, tvPesoO;
     EditText etGenero, etPesoA, etEstatura, etActividadF, etFechan;
-    Button cerrarSesion, editarDatos, guardarDatos;
+    Button cerrarSesion, editarDatos, guardarDatos,btnExportarInfo;
     Spinner spinnerGen, spinnerAct;
     private FirebaseAuth mAuth;
     FirebaseFirestore db;
@@ -95,6 +114,9 @@ public class Perfil extends Fragment {
         spinnerGen.setVisibility(View.INVISIBLE);
         spinnerAct.setVisibility(View.INVISIBLE);
         String[] generos={"Seleccione su genero","Mujer","Hombre"};
+
+        btnExportarInfo=vista.findViewById(R.id.btnExportarInfo);
+        
         ArrayAdapter<String> adapter= new ArrayAdapter<String>(main,android.R.layout.simple_spinner_item,
                 generos);
         spinnerGen.setAdapter(adapter);
@@ -172,11 +194,20 @@ public class Perfil extends Fragment {
                 }
             }
         });
+        //Exportar informacion
+
+
+
 
         //extrae los datos para actualizarlos
 
         return vista;
     }
+
+
+
+
+
     private void extraerDatos(){
         try {
             userUid = mAuth.getCurrentUser().getUid();
