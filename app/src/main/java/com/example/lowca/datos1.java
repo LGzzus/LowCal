@@ -1,6 +1,7 @@
 package com.example.lowca;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -11,10 +12,13 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+
+import java.util.Calendar;
 
 public class datos1 extends AppCompatActivity {
     TextInputLayout tilEstatura, tilPeso, tilFechaNa;
@@ -124,15 +128,15 @@ public class datos1 extends AppCompatActivity {
         String fechan=etNacido.getText().toString();
         if(peso.isEmpty()){
             tilPeso.setError("Ingresa tu Peso Actual");
+            retorno = false;
         }else {
             tilPeso.setErrorEnabled(false);
-            retorno = false;
         }
         if (estatura.isEmpty() ) {
             tilEstatura.setError("Ingresa tu Estatura");
+            retorno = false;
         }else{
             tilEstatura.setErrorEnabled(false);
-            retorno = false;
         }
         if (fechan.isEmpty()) {
             tilFechaNa.setError("Ingresa tu Fecha de Nacimiento");
@@ -143,12 +147,35 @@ public class datos1 extends AppCompatActivity {
         return retorno;
     }
     public void openDialog(){
+        final Calendar c = Calendar.getInstance();
+        int y = c.get(Calendar.YEAR);
+        int m = c.get(Calendar.MONTH);
+        int d = c.get(Calendar.DAY_OF_MONTH);
+        int dia = d;
+        int year = y-15;
         DatePickerDialog fechaNacido = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker view, int year, int month, int day) {
-                etNacido.setText(String.valueOf(day)+"/"+String.valueOf(month+1)+"/"+String.valueOf(year));
+            public void onDateSet(DatePicker view, int y, int m, int d) {
+                if(y>year || dia<=d){
+                    dialogAlert();
+                }else{
+                    etNacido.setText(String.valueOf(d)+"/"+String.valueOf(m+1)+"/"+String.valueOf(y));
+                }
             }
-        }, 2023, 06, 03);
+        }, y-15, m, d);
         fechaNacido.show();
+    }
+    private void dialogAlert (){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("No eres apto")
+                .setMessage("Para poder crear una cuenta tienes que ser mayor de 15 años")
+                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        openDialog();
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        builder.show();
     }
 }
