@@ -222,7 +222,46 @@ public class Agregar_mas extends Fragment {
                     calorias = cantidadOperacion * 300;
                 } else if (alimentos.equals("Pieza de pollo")) {
                     calorias = cantidadOperacion * 200;
+                } else if (alimentos.equals("Manzana")) {
+                    calorias = cantidadOperacion * 52;
+                } else if (alimentos.equals("Piña")) {
+                    calorias = cantidadOperacion * 55;
+                } else if (alimentos.equals("Albaricoque")) {
+                    calorias = cantidadOperacion * 43;
+                } else if (alimentos.equals("Pera")) {
+                    calorias = cantidadOperacion * 55;
+                } else if (alimentos.equals("Plátano")) {
+                    calorias = cantidadOperacion * 88;
+                } else if (alimentos.equals("Arándanos")) {
+                    calorias = cantidadOperacion * 35;
+                } else if (alimentos.equals("Naranja sanguina")) {
+                    calorias = cantidadOperacion * 45;
+                } else if (alimentos.equals("Moras")) {
+                    calorias = cantidadOperacion * 43;
+                } else if (alimentos.equals("Arándanos rojos")) {
+                    calorias = cantidadOperacion * 46;
+                } else if (alimentos.equals("Fresas")) {
+                    calorias = cantidadOperacion * 32;
+                } else if (alimentos.equals("Higo")) {
+                    calorias = cantidadOperacion * 107;
+                } else if (alimentos.equals("Pomelo")) {
+                    calorias = cantidadOperacion * 50;
+                } else if (alimentos.equals("Granada")) {
+                    calorias = cantidadOperacion * 74;
+                } else if (alimentos.equals("Escaramujo")) {
+                    calorias = cantidadOperacion * 162;
+                } else if (alimentos.equals("Melón")) {
+                    calorias = cantidadOperacion * 54;
+                } else if (alimentos.equals("Frambuesas")) {
+                    calorias = cantidadOperacion * 36;
+                } else if (alimentos.equals("Jengibre")) {
+                    calorias = cantidadOperacion * 80;
+                } else if (alimentos.equals("Kiwi")) {
+                    calorias = cantidadOperacion * 51;
+                } else if (alimentos.equals("Cerezas")) {
+                    calorias = cantidadOperacion * 50;
                 } else {
+                    // Alimento no reconocido
                     calorias = 0;
                 }
                 String caloriasString = String.valueOf(calorias);
@@ -386,7 +425,8 @@ public class Agregar_mas extends Fragment {
                     caloriasQuemadas = cantidadOperacion * 300;
                 } else if (ejercicios.equals("Caminata rápida")) {
                     caloriasQuemadas = cantidadOperacion * 200;
-                } else {
+                }
+                else {
                     caloriasQuemadas = 0;
                 }
                 String caloriasString = String.valueOf(caloriasQuemadas);

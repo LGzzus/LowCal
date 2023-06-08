@@ -12,6 +12,26 @@
         <item>Pechuga</item>
         <item>Pechuga empanizada</item>
         <item>Spaguetti</item>
+        <item>Manzana</item>
+        <item>Piña</item>
+        <item>Albaricoque</item>
+        <item>Pera</item>
+        <item>Plátano</item>
+        <item>Arándanos</item>
+        <item>Naranja sanguina</item>
+        <item>Moras</item>
+        <item>Arándanos rojos</item>
+        <item>Fresas</item>
+        <item>Higo</item>
+        <item>Pomelo</item>
+        <item>Granada</item>
+        <item>Escaramujo</item>
+        <item>Melón</item>
+        <item>Frambuesas</item>
+        <item>Jengibre</item>
+        <item>Kiwi</item>
+        <item>Cerezas</item>
+        <item></item>
     </string-array>
     <string-array name="Lista_de_ejercicios">
         <item>Caminata ligera</item>
