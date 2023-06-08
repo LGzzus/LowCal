@@ -198,6 +198,7 @@ public class datos2 extends AppCompatActivity {
             retorno = false;
         }else{
             tilPesoObjetivo.setErrorEnabled(false);
+            retorno = true;
         }
         return retorno;
     }

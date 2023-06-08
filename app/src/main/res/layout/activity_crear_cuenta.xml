@@ -189,7 +189,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/boton_redondo_azul"
             android:onClick="datosPantalla"
-            android:text="@string/entrar"
+            android:text="CREAR"
             android:textColor="@color/white"
             app:layout_constraintBottom_toTopOf="@+id/cardView2"
             app:layout_constraintEnd_toEndOf="parent"
