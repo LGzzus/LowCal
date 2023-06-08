@@ -2,17 +2,21 @@ package com.example.lowca;
 
 import static android.content.ContentValues.TAG;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -29,6 +33,7 @@ public class CrearCuenta extends AppCompatActivity {
     Button btnEntrar;
     String[] datos;
     public FirebaseAuth mAuth;
+    boolean registrado;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,26 +59,30 @@ public class CrearCuenta extends AppCompatActivity {
                             addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
+
                                     if(task.isSuccessful()){
                                         Log.d(TAG,"createUserWithEmail:success");
                                         FirebaseUser user = mAuth.getCurrentUser();
+                                        registrado = true;
                                     }
                                     else {
                                         // If sign in fails, display a message to the user.
                                         Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                        Toast.makeText(CrearCuenta.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                                         // updateUI(null);
+                                        registrado = false;
                                     }
                                 }
                             });
-                    Bundle pasarDatos = new Bundle();
-                    pasarDatos.putStringArray("keyDatos", datos);
-                    Intent intent = new Intent(this, datos1.class);
-                    intent.putExtras(pasarDatos);
-                    startActivity(intent);
-                }
-                else{
-                    Toast.makeText(this,"LLene Todo",Toast.LENGTH_LONG).show();
+                    if (registrado){
+                        Bundle pasarDatos = new Bundle();
+                        pasarDatos.putStringArray("keyDatos", datos);
+                        Intent intent = new Intent(this, datos1.class);
+                        intent.putExtras(pasarDatos);
+                        startActivity(intent);
+                    }else {
+                        dialogAlert();
+                    }
+
                 }
             }catch (Exception e){
             }
@@ -144,11 +153,11 @@ public class CrearCuenta extends AppCompatActivity {
             tlNombre.setErrorEnabled(false);
         }
         if (correo.isEmpty()){
-            tlCorreo.setError("Llena este campo");
+            tlCorreo.setError("Escribe tu correo");
             retorno =false;
         }else{
-            if(!correo.contains("@")){
-                tlCorreo.setError("Escribe tu correo correctamente");
+            if(!Patterns.EMAIL_ADDRESS.matcher(correo).matches()){
+                tlCorreo.setError("Correo Incorrecto, Verifiquelo");
             }else{
                 tlCorreo.setErrorEnabled(false);
             }
@@ -169,4 +178,18 @@ public class CrearCuenta extends AppCompatActivity {
     public void atras(View view){
         this.finish();
     }
+    private void dialogAlert(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Usuario Registrado")
+                .setMessage("Su correo electronico ya ha sido registrado, intente nuevamente.")
+                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        builder.show();
+    }
+
 }

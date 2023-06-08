@@ -3,6 +3,8 @@ package com.example.lowca;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -57,6 +59,54 @@ public class datos1 extends AppCompatActivity {
             }catch (Exception e){
             }
         });
+        etEstatura.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                tilEstatura.setErrorEnabled(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        etPeso.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                tilPeso.setErrorEnabled(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        etNacido.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                tilFechaNa.setErrorEnabled(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         etNacido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,11 +126,13 @@ public class datos1 extends AppCompatActivity {
             tilPeso.setError("Ingresa tu Peso Actual");
         }else {
             tilPeso.setErrorEnabled(false);
+            retorno = false;
         }
         if (estatura.isEmpty() ) {
             tilEstatura.setError("Ingresa tu Estatura");
         }else{
             tilEstatura.setErrorEnabled(false);
+            retorno = false;
         }
         if (fechan.isEmpty()) {
             tilFechaNa.setError("Ingresa tu Fecha de Nacimiento");

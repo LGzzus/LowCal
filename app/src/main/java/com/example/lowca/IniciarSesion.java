@@ -2,17 +2,20 @@ package com.example.lowca;
 
 import static android.content.ContentValues.TAG;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,6 +30,7 @@ public class IniciarSesion extends AppCompatActivity {
     private FirebaseAuth mAuth;
     TextInputEditText etCorreo, etPassword;
     TextInputLayout tlCorreo, tlContraseña;
+    boolean logueado;
 
     Button Ingresa;
 
@@ -57,17 +61,25 @@ public class IniciarSesion extends AppCompatActivity {
                                         Log.d(TAG, "signInWithEmail:success");
                                         FirebaseUser user = mAuth.getCurrentUser();
                                         //updateUI(user);
-                                        Intent i = new Intent(IniciarSesion.this, MainActivity.class);
-                                        startActivity(i);
+
+
                                     } else {
                                         // If sign in fails, display a message to the user.
                                         Log.w(TAG, "signInWithEmail:failure", task.getException());
                                         Toast.makeText(IniciarSesion.this, "Authentication failed.",
                                                 Toast.LENGTH_SHORT).show();
                                         //updateUI(null);
+                                        logueado=false;
                                     }
                                 }
                             });
+                    if (logueado){
+                        Intent i = new Intent(IniciarSesion.this, MainActivity.class);
+                        startActivity(i);
+                        logueado=true;
+                    }else {
+                        dialogAlert();
+                    }
                 }
 
             }catch (Exception e){
@@ -159,11 +171,11 @@ public class IniciarSesion extends AppCompatActivity {
         String correo=etCorreo.getText().toString();
         String contraseña=etPassword.getText().toString();
         if (correo.isEmpty()){
-            tlCorreo.setError("Llena este campo");
+            tlCorreo.setError("Escribe tu correo");
             retorno =false;
         }else{
-            if(!correo.contains("@")){
-                tlCorreo.setError("Escribe tu correo correctamente");
+            if(!Patterns.EMAIL_ADDRESS.matcher(correo).matches()){
+                tlCorreo.setError("Correo Incorrecto, Verifiquelo");
             }else{
                 tlCorreo.setErrorEnabled(false);
             }
@@ -181,5 +193,18 @@ public class IniciarSesion extends AppCompatActivity {
         }
 
         return retorno;
+    }
+    private void dialogAlert(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Iniciar Sesion")
+                .setMessage("Su correo electronico o contraseña son incorrectos, intente nuevamente.")
+                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        builder.show();
     }
 }
