@@ -3,6 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+
 
     <application
         android:allowBackup="true"
@@ -13,6 +19,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LowCañ"
         tools:targetApi="31">
+        <activity
+            android:name=".Dieta2"
+            android:exported="true" />
+        <activity
+            android:name=".ElegirDieta"
+            android:exported="true" />
         <activity
             android:name=".RecuperarPassword2"
             android:exported="false" />
@@ -33,7 +45,7 @@
             android:exported="true" />
         <activity
             android:name=".MainActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".MenuInicial"
             android:exported="true">

@@ -27,7 +27,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="6dp"
                 android:text="Perfil"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="28sp"
                 android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
@@ -79,13 +79,13 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:paddingStart="5dp"
-                                    android:text="Pasos"
+                                    android:text="Calorias basales"
                                     android:textColor="@color/azul_fuerte"
                                     android:textSize="19sp"
                                     android:textStyle="bold" />
 
                                 <TextView
-                                    android:id="@+id/textView17"
+                                    android:id="@+id/tvCaloriasBasales"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:paddingStart="5dp"
@@ -118,7 +118,7 @@
                                     android:textStyle="bold" />
 
                                 <TextView
-                                    android:id="@+id/textView19"
+                                    android:id="@+id/tvReservadas"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:paddingEnd="8dp"
@@ -196,7 +196,7 @@
                                     android:textStyle="bold" />
 
                                 <TextView
-                                    android:id="@+id/textView10"
+                                    android:id="@+id/tvCaloriasDieta"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:paddingEnd="8dp"
@@ -508,7 +508,7 @@
                             android:orientation="horizontal">
 
                             <ProgressBar
-                                android:id="@+id/progressBar1"
+                                android:id="@+id/progressBarRecomendadas"
                                 style="?android:attr/progressBarStyleHorizontal"
                                 android:layout_width="304dp"
                                 android:layout_height="60dp"
@@ -520,7 +520,7 @@
                                 android:secondaryProgressTint="@color/azul_fuerte" />
 
                             <TextView
-                                android:id="@+id/textView3"
+                                android:id="@+id/tvProgressRecomendadas"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"

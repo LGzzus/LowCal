@@ -53,7 +53,7 @@
         tools:visibility="visible" />
 
     <View
-        android:id="@+id/rectangle_3"
+        android:id="@+id/rectangleSpinner"
         android:layout_width="248dp"
         android:layout_height="48dp"
 
@@ -171,7 +171,8 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etPesoObjetivo"
             android:layout_width="280dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:inputType="number|numberDecimal" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

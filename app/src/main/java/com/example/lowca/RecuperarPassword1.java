@@ -66,9 +66,10 @@ public class RecuperarPassword1 extends AppCompatActivity {
     }
 
 
-    public void avanzar(View v) {
+    public void atras(View v) {
         Intent i=new Intent(this,IniciarSesion.class);
         startActivity(i);
+        this.finish();
     }
 
 }
