@@ -131,6 +131,8 @@ public class Coach extends Fragment {
                         // Obtener los datos de cada documento y agregarlos a la lista
                         Ejercicios ejercicio = document.toObject(Ejercicios.class);
                         ejercicio.setEjercicio(document.getString("nombre"));
+                        ejercicio.setDuracion(document.getString("duracion"));
+                        ejercicio.setCalorias(document.getString("calorias_quemadas"));
 
                         listaEjercicios.add(ejercicio);
                     }
