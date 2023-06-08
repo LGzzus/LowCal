@@ -3,8 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/azul_coach"
-    android:backgroundTint="@color/azul_coach"
     app:cardCornerRadius="16dp"
     app:cardElevation="8dp">
 
@@ -34,7 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="50dp"
-                android:text="000 kcal"
+                android:text="000 kcal/min"
                 android:textColor="@color/black"
                 android:textSize="14sp" />
 
@@ -43,7 +41,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="50dp"
-                android:text="000 min"
+                android:text="00 R / "
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txtSets"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00 S"
                 android:textColor="@color/black"
                 android:textSize="14sp" />
 

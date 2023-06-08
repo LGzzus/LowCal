@@ -1,7 +1,10 @@
 package com.example.lowca;
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -9,21 +12,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.lowca.Adaptadores.ListViewEjerciciosAdapter;
+import com.example.lowca.Adaptadores.ListViewGeneralesAdapter;
 import com.example.lowca.Models.Ejercicios;
+import com.example.lowca.Models.Generales;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TimeZone;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,14 +52,13 @@ public class Coach extends Fragment {
     // TODO: Variables de entorno
     View vista;
     private ArrayList<Ejercicios> listaEjercicios = new ArrayList<>();
-    //ArrayAdapter<Ejercicios> arrayAdapterPersona;
+    //private ArrayList<Generales> listaGenerales = new ArrayList<>();
     ListViewEjerciciosAdapter listViewEjerciciosAdapter;
-    //LinearLayout linearEntrenado, linearEjercicio;
-    ListView listViewEntrena;
-    //Spinner spinnerCategoria, spinnerAlimento, spinnerCantidad;
-    //Button btnAgregarAlimento,btnAgregarEjercicio, btnAlimentacionMas , btnEjercicioMas;
-    //Se usara para que se identique el objeto
-    //Ejercicios ejercicioSelecicionado;
+    //ListViewGeneralesAdapter listViewGeneralesAdapter;
+    ListView listViewEntrena, listaViewEjercicios;
+    Spinner spinnerEjercicio;
+    EditText txtDuracion;
+    Button btnAgregarEjercicio, btnEjercicioMas;
 
     // TODO: Variables de conexion
     private FirebaseAuth mAuth;
@@ -95,18 +106,23 @@ public class Coach extends Fragment {
         // Inflate the layout for this fragment
         vista = inflater.inflate(R.layout.fragment_coach, container, false);
 
+        spinnerEjercicio = (Spinner) vista.findViewById(R.id.spinnerEjercicio);
+        txtDuracion = (EditText) vista.findViewById(R.id.txtDuracion);
+
+        btnAgregarEjercicio = (Button) vista.findViewById(R.id.btnAgregarEjercicio);
+        btnEjercicioMas = vista.findViewById(R.id.btnEjercicioMas3);
+
         // Ejercicios generales
-        //listaEjercicios = vista.findViewById(R.id.listaEjercicios);
+        listaViewEjercicios = vista.findViewById(R.id.listaEjercicios);
         // Ejercicios que ha hecho el usuario
         listViewEntrena = vista.findViewById(R.id.listaRealizados);
-        /**
-        btnAlimentacionMas.setOnClickListener(new View.OnClickListener() {
+
+        btnEjercicioMas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                agregarAlimento(view);
+                agregarEjercicio(view);
             }
         });
-         **/
 
         inicializarFirebase();
         listarEjerciciosRealizados();
@@ -149,25 +165,83 @@ public class Coach extends Fragment {
             //System.out.println(e);
         }
     }
-/**
+
+    public void agregarEjercicio(View view){
+        View mView = getLayoutInflater().inflate(R.layout.agregar_ejercicio,null);
+        //Context context = getContext();
+        //AlertDialog.Builder mBuilder = new AlertDialog.Builder(context);
+
+        //spinnerEjercicio.setSelection(0);
+        String ejercicios = spinnerEjercicio.getSelectedItem().toString();
+        String duracion = String.valueOf(txtDuracion.getText());
+
+        //mBuilder.setView(mView);
+        //final AlertDialog dialog = mBuilder.create();
+        //dialog.show();
+        btnAgregarEjercicio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                userId = mAuth.getCurrentUser().getUid();
+                String ejercicio = ejercicios;
+                int calxmin = Integer.parseInt(duracion);
+                calxmin = calxmin*12;
+
+                Ejercicios eje = new Ejercicios();
+                eje.setEjercicio(ejercicio);
+                eje.setDuracion(duracion);
+                eje.setCalorias(String.valueOf(calxmin));
+
+                DocumentReference acountRef = db.collection("account").document(userId);
+                CollectionReference ejercicioRef = acountRef.collection("ejercicio");
+                DocumentReference nuevoEjercicioRef = ejercicioRef.document();
+
+                Map<String,Object> ejerciciosDb = new HashMap<>();
+                ejerciciosDb.put("calorias_quemadas",String.valueOf(calxmin));
+                ejerciciosDb.put("duracion",duracion);
+                ejerciciosDb.put("ejercicio",ejercicio);
+
+                nuevoEjercicioRef.set(ejerciciosDb).addOnSuccessListener(
+                        new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                System.out.println("Se agrego correctamente" + ejercicio);
+                                //Toast.makeText(getContext(),"El alimento se agrego correctamente",Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                ).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        System.out.println("Ocurrio un error");
+                    }
+                });
+
+            }
+        });
+    }
+
+
+    /**
     private void listarEjerciciosGenerales(){
         try {
-            userId = mAuth.getCurrentUser().getUid();
-            DocumentReference ejerciciosRef = db.collection("exercise").document(userId);
-            //CollectionReference ejerciciosRef = acountRef.collection("ejercicio");
-            ejerciciosRef.get().addOnCompleteListener(task -> {
+            //userId = mAuth.getCurrentUser().getUid();
+            CollectionReference generalesRef = db.collection("exercise");
+            //CollectionReference ejerciciosRef = ejerciciosRef.collection("exercise");
+            generalesRef.get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    listaEjercicios.clear(); // Limpiar la lista actual de alimentos
+                    listaGenerales.clear(); // Limpiar la lista actual de alimentos
                     for (DocumentSnapshot document : task.getResult()) {
                         // Obtener los datos de cada documento y agregarlos a la lista
-                        Ejercicios ejercicio = document.toObject(Ejercicios.class);
-                        ejercicio.setEjercicio(document.getString("nombre"));
+                        Generales generales = document.toObject(Generales.class);
+                        generales.setNombre(document.getString("ejercicio"));
+                        generales.setCalxmin(document.getString("calxmin"));
+                        generales.setRepeticiones(document.getString("repeticiones"));
+                        generales.setSets(document.getString("series"));
 
-                        listaEjercicios.add(ejercicio);
+                        listaGenerales.add(generales);
                     }
                     // Crear el adaptador para el ListView y asignarlo
-                    listViewEjerciciosAdapter = new ListViewEjerciciosAdapter(getActivity(), listaEjercicios);
-                    listViewEntrena.setAdapter(listViewEjerciciosAdapter);
+                    listViewGeneralesAdapter = new ListViewGeneralesAdapter(getActivity(), listaGenerales);
+                    listaViewEjercicios.setAdapter(listViewGeneralesAdapter);
                 } else {
                     // Manejar el caso de error
                     System.out.println("Error en el momento de mostar la lista de alimentos");
@@ -177,6 +251,6 @@ public class Coach extends Fragment {
             Toast.makeText(this.getContext(), "Error: "+e, Toast.LENGTH_SHORT).show();
             //System.out.println(e);
         }
-    }
-    **/
+     }
+     **/
 }

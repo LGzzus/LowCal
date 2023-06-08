@@ -4,6 +4,7 @@ public class Ejercicios {
     String ejercicio;
     String duracion;
     String calorias;
+    String fechaRegistro;
 
     public String getEjercicio() {
         return ejercicio;
@@ -17,6 +18,10 @@ public class Ejercicios {
         return calorias;
     }
 
+    public String getFechaRegistro() {
+        return fechaRegistro;
+    }
+
     public void setEjercicio(String ejercicio){
         this.ejercicio = ejercicio;
     }
@@ -27,5 +32,9 @@ public class Ejercicios {
 
     public void setCalorias(String calorias) {
         this.calorias = calorias;
+    }
+
+    public void setFechaRegistro(String fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
     }
 }
