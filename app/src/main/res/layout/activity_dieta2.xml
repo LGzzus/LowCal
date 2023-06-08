@@ -57,18 +57,30 @@
             app:layout_constraintStart_toStartOf="parent">
 
 
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:id="@+id/tvTotalCalorias"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Calorias totales: "
+                    android:textColor="@color/black"
+                    android:textSize="17dp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/imageView5"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:translationX="120dp"
+                    app:srcCompat="@drawable/logo_lowcal" />
+            </TableRow>
+
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="15dp" />
-
-            <TextView
-                android:id="@+id/tvTotalCalorias"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Calorias totales: "
-                android:textColor="@color/black"
-                android:textSize="17dp"
-                android:textStyle="bold" />
 
             <Space
                 android:layout_width="match_parent"

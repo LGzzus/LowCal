@@ -16,13 +16,18 @@ public class ListViewEjerciciosAdapter extends BaseAdapter {
     ArrayList<Ejercicios> ejerciciosData;
     LayoutInflater layoutInflater;
     Ejercicios ejerciciosModel;
-
     public ListViewEjerciciosAdapter(Context context, ArrayList<Ejercicios> ejercicicosData){
         this.context = context;
         this.ejerciciosData = ejercicicosData;
         layoutInflater = (LayoutInflater) context.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE
         );
+    }
+
+    public ListViewEjerciciosAdapter(Context context, ArrayList<Ejercicios> ejerciciosData) {
+        this.context = context;
+        this.ejerciciosData = ejerciciosData;
+        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
 
@@ -55,6 +60,14 @@ public class ListViewEjerciciosAdapter extends BaseAdapter {
         ejercicio.setText(ejerciciosModel.getEjercicio());
         caloriasQuemadas.setText(ejerciciosModel.getCaloriasQuemadas());
         minutos.setText(ejerciciosModel.getMinutos());
+        TextView ejercicio = rowView.findViewById(R.id.txtEjercicio);
+        TextView calorias = rowView.findViewById(R.id.txtCalorias);
+        TextView duracion = rowView.findViewById(R.id.txtDuracion);
+
+        ejerciciosModel = ejerciciosData.get(i);
+        ejercicio.setText(ejerciciosModel.getEjercicio());
+        calorias.setText(ejerciciosModel.getCalorias()+" kcal");
+        duracion.setText(ejerciciosModel.getDuracion()+" min");
         return rowView;
     }
 }

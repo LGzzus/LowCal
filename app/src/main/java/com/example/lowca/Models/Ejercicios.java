@@ -1,6 +1,7 @@
 package com.example.lowca.Models;
 
 public class Ejercicios {
+
     private String id;
     private String ejercicio;
     private String minutos;
@@ -9,9 +10,16 @@ public class Ejercicios {
     private String caloriasQuemadas;
     private String fechaRegistro;
 
+    String ejercicio;
+    String duracion;
+    String calorias;
+    String fechaRegistro;
+
+
     public String getEjercicio() {
         return ejercicio;
     }
+
 
     public void setEjercicio(String ejercicio) {
         this.ejercicio = ejercicio;
@@ -39,6 +47,12 @@ public class Ejercicios {
 
     public void setCaloriasQuemadas(String caloriasQuemadas) {
         this.caloriasQuemadas = caloriasQuemadas;
+    public String getDuracion() {
+        return duracion;
+    }
+
+    public String getCalorias() {
+        return calorias;
     }
 
     public String getFechaRegistro() {
@@ -63,5 +77,20 @@ public class Ejercicios {
 
     public void setMinutos(String minutos) {
         this.minutos = minutos;
+
+    public void setEjercicio(String ejercicio){
+        this.ejercicio = ejercicio;
+    }
+
+    public void setDuracion(String duracion) {
+        this.duracion = duracion;
+    }
+
+    public void setCalorias(String calorias) {
+        this.calorias = calorias;
+    }
+
+    public void setFechaRegistro(String fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
     }
 }
