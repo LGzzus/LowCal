@@ -66,8 +66,6 @@ public class IniciarSesion extends AppCompatActivity {
                                     } else {
                                         // If sign in fails, display a message to the user.
                                         Log.w(TAG, "signInWithEmail:failure", task.getException());
-                                        Toast.makeText(IniciarSesion.this, "Authentication failed.",
-                                                Toast.LENGTH_SHORT).show();
                                         //updateUI(null);
                                         logueado=false;
                                     }
