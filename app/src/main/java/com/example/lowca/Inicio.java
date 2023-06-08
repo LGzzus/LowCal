@@ -52,7 +52,7 @@ public class Inicio extends Fragment {
     private String mParam1;
     private String mParam2;
     View vista;
-    TextView tvCaloriasDieta,tvCaloriasBasales,tvProgressRecomendadas;
+    TextView tvCaloriasDieta,tvCaloriasBasales,tvProgressRecomendadas,tvNombreDieta;
     FirebaseFirestore db;
     FirebaseAuth mAuth;
     String userUid;
@@ -99,6 +99,7 @@ public class Inicio extends Fragment {
         tvCaloriasDieta=vista.findViewById(R.id.tvReservadas);
         tvCaloriasBasales=vista.findViewById(R.id.tvCaloriasBasales);
         tvProgressRecomendadas=vista.findViewById(R.id.tvProgressRecomendadas);
+        tvNombreDieta=vista.findViewById(R.id.tvNombreDieta);
         progressBarRecomendadas=vista.findViewById(R.id.progressBarRecomendadas);
         db=FirebaseFirestore.getInstance();
         mAuth=FirebaseAuth.getInstance();
@@ -141,10 +142,12 @@ public class Inicio extends Fragment {
                             Map<String, Object> datos = documentSnapshot.getData();
                             // Accede a los campos específicos
                             String calorias = (String) datos.get("calorias_usuario");
+                            String nombreDieta=(String)datos.get("tipo_dieta");
 
 
                             // Realiza las operaciones necesarias con los datos
                             tvCaloriasDieta.setText(calorias+" kcal");
+                            tvNombreDieta.setText(nombreDieta);
                         } else {
                             // No se encontraron documentos en la colección
                             Log.d("TAG", "No se encontraron documentos en la colección");
@@ -174,6 +177,7 @@ public class Inicio extends Fragment {
             Moderadamente activo (ejercicio moderado de 3-5 días por semana): MB x 1.55.
 
        */
+
         DocumentReference documentReferencia=db.collection("antropometric_dates").document(userUid);
         documentReferencia.get()
                 .addOnSuccessListener(documentSnapshot -> {
@@ -186,8 +190,8 @@ public class Inicio extends Fragment {
                         String nacido=documentSnapshot.getString("birth_date");
                         Double pesoObjetivo=documentSnapshot.getDouble("target_weight");
                         Double caloriasBasales=documentSnapshot.getDouble("calculated_calories");
-                        int calBal=Double.valueOf(caloriasBasales).intValue();
-                        tvCaloriasBasales.setText(String.valueOf(calBal));
+                       // int calBal=Double.valueOf(caloriasBasales).intValue();
+                        tvCaloriasBasales.setText(String.valueOf(caloriasBasales+" kcal"));
 
                         //System.out.println("******NAcido: "+nacido+"************");
                        //Obtener la fecha actual

@@ -111,7 +111,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:paddingEnd="8dp"
-                                    android:text="@string/reservadas"
+                                    android:text="Calorias dieta"
                                     android:textAlignment="textEnd"
                                     android:textColor="@color/azul_fuerte"
                                     android:textSize="19sp"
@@ -157,17 +157,17 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:paddingStart="5dp"
-                                    android:text="@string/agua"
+                                    android:text="Dieta asignada"
                                     android:textColor="@color/azul_fuerte"
                                     android:textSize="19sp"
                                     android:textStyle="bold" />
 
                                 <TextView
-                                    android:id="@+id/textView15"
+                                    android:id="@+id/tvNombreDieta"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:paddingStart="5dp"
-                                    android:text="00000 ml"
+                                    android:text="dieta"
                                     android:textColor="@color/azul_fuerte" />
                             </LinearLayout>
 
