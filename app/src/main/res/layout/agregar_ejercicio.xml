@@ -8,12 +8,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
+
+        android:orientation="vertical"
+        >
         android:orientation="vertical">
+
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center">
+
 
             <TextView
                 android:id="@+id/label"
@@ -23,10 +28,31 @@
                 android:textColor="@color/black"
                 android:text="Ejercicio: "/>
 
+
             <Spinner
                 android:id="@+id/spinnerEjercicio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+
+                android:layout_margin="8dp"
+                android:entries="@array/Lista_de_ejercicios"></Spinner>
+
+
+
+
+        </LinearLayout>
+        <Spinner
+            android:id="@+id/spinnerMinutos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:entries="@array/Minutos"
+            android:layout_gravity="right"></Spinner>
+
+
+        <Button
+            android:id="@+id/btnAgregarEjericio"
+
                 android:entries="@array/Lista_de_ejercicios" />
 
             <TextView
@@ -53,6 +79,7 @@
 
         <Button
             android:id="@+id/btnAgregarEjercicio"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/boton_redondo_azul"
@@ -60,7 +87,11 @@
             android:textColor="@color/white"
             android:layout_gravity="center"
             android:layout_margin="10dp"
+
+        ></Button>
+    </LinearLayout>
             ></Button>
     </LinearLayout>
+
 
 </LinearLayout>

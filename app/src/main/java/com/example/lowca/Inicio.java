@@ -6,7 +6,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
+import androidx.annotation.NonNull;https://github.com/LGzzus/lowcal/pull/18/conflict?name=app%252Fsrc%252Fmain%252Fjava%252Fcom%252Fexample%252Flowca%252FInicio.java&ancestor_oid=40ecd598e16cc6eae6ea94b8c99122ebf0acb0dd&base_oid=b1b1bb0ba99cf2eb2e9032b2303440d7010402d3&head_oid=6665e72ffda927a2a15a4cbe09f26199631ee510
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
@@ -52,6 +52,9 @@ public class Inicio extends Fragment {
     private String mParam1;
     private String mParam2;
     View vista;
+
+    TextView tvCaloriasDieta,tvCaloriasBasales,txtViewCaloriasDieta, textViewConsumidasGraf, textViewReservadasGraf;
+    ProgressBar progressBarReservadas, progressBarConsumidas;
     TextView tvCaloriasDieta,tvCaloriasBasales,tvProgressRecomendadas,tvNombreDieta;
     FirebaseFirestore db;
     FirebaseAuth mAuth;
@@ -98,9 +101,19 @@ public class Inicio extends Fragment {
         vista = inflater.inflate(R.layout.fragment_inicio, container, false);
         tvCaloriasDieta=vista.findViewById(R.id.tvReservadas);
         tvCaloriasBasales=vista.findViewById(R.id.tvCaloriasBasales);
+
+        txtViewCaloriasDieta= vista.findViewById(R.id.tvCaloriasDieta);
+
+        textViewConsumidasGraf = vista.findViewById(R.id.textViewConsumidasGraf);
+        textViewReservadasGraf = vista.findViewById(R.id.textViewReservadasGraf);
+        progressBarConsumidas = vista.findViewById(R.id.progressBarConsumidas);
+        progressBarReservadas = vista.findViewById(R.id.progressBarReservadas);
+
+
         tvProgressRecomendadas=vista.findViewById(R.id.tvProgressRecomendadas);
         tvNombreDieta=vista.findViewById(R.id.tvNombreDieta);
         progressBarRecomendadas=vista.findViewById(R.id.progressBarRecomendadas);
+
         db=FirebaseFirestore.getInstance();
         mAuth=FirebaseAuth.getInstance();
         userUid = mAuth.getCurrentUser().getUid();
@@ -145,7 +158,6 @@ public class Inicio extends Fragment {
                             String nombreDieta=(String)datos.get("tipo_dieta");
 
 
-                            // Realiza las operaciones necesarias con los datos
                             tvCaloriasDieta.setText(calorias+" kcal");
                             tvNombreDieta.setText(nombreDieta);
                         } else {
@@ -354,7 +366,6 @@ public class Inicio extends Fragment {
 
 
 
-
                         // Realiza las operaciones necesarias con los datos del documento
                     } else {
                         // El documento no existe
@@ -363,6 +374,69 @@ public class Inicio extends Fragment {
                 .addOnFailureListener(e -> {
                     // Maneja el error en caso de que la lectura del documento falle
                 });
+        // Obtén la colección "dieta" del usuario actual
+        CollectionReference dietaCollectionRef = db.collection("account").document(userUid).collection("eat");
+
+        // Calorias consumidas
+        // Consulta todos los documentos en la colección "dieta"
+        dietaCollectionRef.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot querySnapshot) {
+                        int totalCalorias = 0;
+
+                        // Recorre cada documento en la colección
+                        for (QueryDocumentSnapshot documentSnapshot : querySnapshot) {
+                            // Obtiene el valor del campo "calories" como un entero
+                            String caloriesString = documentSnapshot.getString("calories");
+                            int calories = Integer.parseInt(caloriesString);
+                            // Suma las calorías al total
+                            totalCalorias += calories;
+                        }
+                        txtViewCaloriasDieta.setText(String.valueOf(totalCalorias) + " kcal");
+                        textViewConsumidasGraf.setText(String.valueOf(totalCalorias) + " kcal");
+
+                        CollectionReference basalesCollectionRef = db.collection("account").document(userUid).collection("antropometric_dates");
+                        int finalTotalCalorias = totalCalorias;
+                        basalesCollectionRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot querySnapshot) {
+                                if (!querySnapshot.isEmpty()) {
+                                    // Obtén el primer documento de la colección "basales"
+                                    DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
+                                    documentSnapshot.getDouble("calculated_calories");
+                                    Double caloriasBasales = documentSnapshot.getDouble("calculated_calories");
+                                    int calBal = Double.valueOf(caloriasBasales).intValue();
+                                     int progressConsumidas = (finalTotalCalorias * 100) / calBal;
+                                    // Establece el porcentaje de progreso en el ProgressBar de consumidas
+                                    progressBarConsumidas.setProgress(progressConsumidas);
+                                    actualizarProgresoConsumidas(finalTotalCalorias, calBal);
+
+                                } else {
+                                    // No se encontraron documentos en la colección "basales"
+                                    //Me falta arreglar esto
+                                    Toast.makeText(getContext(), "No se encontraron calorías basales para graficar", Toast.LENGTH_SHORT).show();
+                            }
+
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // Maneja el error en caso de que la consulta falle
+                                Toast.makeText(getContext(), "Error al obtener las calorías basales", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Maneja el error en caso de que la consulta falle
+                        Toast.makeText(getContext(), "Error al obtener las calorías", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
 
 
 
@@ -377,4 +451,8 @@ public class Inicio extends Fragment {
 
     }
 
+    private void actualizarProgresoConsumidas(int caloriasConsumidas, double caloriasBasales) {
+        int progress = (caloriasConsumidas * 100) / (int)caloriasBasales;
+        progressBarConsumidas.setProgress(progress);
+    }
 }

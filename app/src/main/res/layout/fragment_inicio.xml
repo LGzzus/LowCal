@@ -508,7 +508,11 @@
                             android:orientation="horizontal">
 
                             <ProgressBar
+
+                                android:id="@+id/progressBarReservadas"
+
                                 android:id="@+id/progressBarRecomendadas"
+
                                 style="?android:attr/progressBarStyleHorizontal"
                                 android:layout_width="304dp"
                                 android:layout_height="60dp"
@@ -520,7 +524,10 @@
                                 android:secondaryProgressTint="@color/azul_fuerte" />
 
                             <TextView
+
+                                android:id="@+id/textViewReservadasGraf"
                                 android:id="@+id/tvProgressRecomendadas"
+
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
@@ -530,12 +537,12 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="match_parent"https://github.com/LGzzus/lowcal/pull/18/conflict?name=app%252Fsrc%252Fmain%252Fjava%252Fcom%252Fexample%252Flowca%252FModels%252FEjercicios.java&base_oid=d77c5ed9959ca64ed4e18116e3dda9673bf7a6d4&head_oid=4b12226b8c47694e72d4afd11eddb556fca65dcf
                             android:layout_height="match_parent"
                             android:orientation="horizontal">
 
                             <ProgressBar
-                                android:id="@+id/progressBar"
+                                android:id="@+id/progressBarConsumidas"
                                 style="?android:attr/progressBarStyleHorizontal"
                                 android:layout_width="304dp"
                                 android:layout_height="60dp"
@@ -547,7 +554,7 @@
                                 android:secondaryProgressTint="@color/azul_fuerte" />
 
                             <TextView
-                                android:id="@+id/textView30"
+                                android:id="@+id/textViewConsumidasGraf"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"

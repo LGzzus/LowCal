@@ -7,11 +7,63 @@
         <item>Aperitivo</item>
     </string-array>
     <string-array name="Lista_de_comidas">
-        <item>Arroz</item>
+        <item>Plato de Arroz</item>
         <item>Pieza de pollo</item>
-        <item>Pechuga</item>
-        <item>Pechuga empanizada</item>
-        <item>Spaguetti</item>
+        <item>Tazón de avena con canela y edulcorante</item>
+        <item>Taza de fresas</item>
+        <item>Puñado de almendras (10 almendras)</item>
+        <item>Ensalada de pollo a la parrilla con vegetales mixtos y vinagreta baja en grasa</item>
+        <item>Sopa de verduras casera con una porción de pollo o pescado a la plancha</item>
+        <item>Palitos de zanahoria y apio con hummus</item>
+        <item>Yogur griego bajo en grasa con semillas de chía</item>
+        <item>Pechuga de pollo al horno con brócoli al vapor y media taza de arroz integral</item>
+        <item>Rodajas de pepino con salsa de yogur bajo en grasa y hierbas</item>
+        <item>Una porción de gelatina sin azúcar</item>
+        <item>Tortilla de claras de huevo con espinacas y queso bajo en grasa</item>
+        <item>Pechuga de pollo a la parrilla con espárragos y aguacate</item>
+        <item>Salmón al horno con brócoli al vapor y ensalada verde</item>
+        <item>Rodajas de pepino con salsa de yogur bajo en grasa</item>
+        <item>Batido de proteínas vegetales con espinacas, plátano y leche de almendras</item>
+        <item>Ensalada de garbanzos con vegetales, aceite de oliva y limón</item>
+        <item>Manzana con mantequilla de almendras</item>
+        <item>Tofu salteado con vegetales y arroz integral</item>
+        <item>Palitos de apio con hummus</item>
+        <item>Manzana</item>
+        <item>Piña</item>
+        <item>Albaricoque</item>
+        <item>Pera</item>
+        <item>Plátano</item>
+        <item>Arándanos</item>
+        <item>Naranja sanguina</item>
+        <item>Moras</item>
+        <item>Arándanos rojos</item>
+        <item>Fresas</item>
+        <item>Higo</item>
+        <item>Pomelo</item>
+        <item>Granada</item>
+        <item>Escaramujo</item>
+        <item>Melón</item>
+        <item>Frambuesas</item>
+        <item>Jengibre</item>
+        <item>Kiwi</item>
+        <item>Cerezas</item>
+    </string-array>
+    <string-array name="Lista_de_ejercicios">
+        <item>Caminata ligera</item>
+        <item>Caminata rápida</item>
+        <item>Correr a 8 km/h</item>
+        <item>Correr a 10 km/h</item>
+        <item>Ciclismo ligero</item>
+        <item>Ciclismo moderado</item>
+        <item>Ciclismo intenso</item>
+        <item>Natación ligera</item>
+        <item>Natación moderada</item>
+        <item>Natación intensa</item>
+        <item>Saltar la cuerda</item>
+        <item>Aeróbicos de bajo impacto</item>
+        <item>Aeróbicos de alto impacto</item>
+        <item>Levantamiento de pesas (ligero)</item>
+        <item>Levantamiento de pesas (intenso)</item>
     </string-array>
     <string-array name="Cantidad">
         <item>1</item>
@@ -25,9 +77,69 @@
         <item>9</item>
         <item>10</item>
     </string-array>
-    <string-array name="Lista_de_ejercicios">
-        <item>Abdominales</item>
-        <item>Burpy</item>
-        <item>Sentadillas</item>
+    <string-array name="Minutos">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+        <item>26</item>
+        <item>27</item>
+        <item>28</item>
+        <item>29</item>
+        <item>30</item>
+        <item>31</item>
+        <item>32</item>
+        <item>33</item>
+        <item>34</item>
+        <item>35</item>
+        <item>36</item>
+        <item>37</item>
+        <item>38</item>
+        <item>39</item>
+        <item>40</item>
+        <item>41</item>
+        <item>42</item>
+        <item>43</item>
+        <item>44</item>
+        <item>45</item>
+        <item>46</item>
+        <item>47</item>
+        <item>48</item>
+        <item>49</item>
+        <item>50</item>
+        <item>51</item>
+        <item>52</item>
+        <item>53</item>
+        <item>54</item>
+        <item>55</item>
+        <item>56</item>
+        <item>57</item>
+        <item>58</item>
+        <item>59</item>
+        <item>60</item>
     </string-array>
+</resources>
+
+  
 </resources>
