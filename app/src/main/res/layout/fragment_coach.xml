@@ -64,9 +64,16 @@
                 app:layout_constraintVertical_bias="0.0">
 
                 <LinearLayout
+                    android:id="@+id/linear_entrenado"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical" />
+                    android:orientation="vertical">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/listaEntrena"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
             </ScrollView>
 
             <ScrollView
@@ -81,9 +88,16 @@
                 app:layout_constraintStart_toStartOf="parent">
 
                 <LinearLayout
+                    android:id="@+id/linear_ejercicio"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical" />
+                    android:orientation="vertical">
+
+                    <ListView
+                        android:id="@+id/listaEjercicios"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
             </ScrollView>
 
             <TextView
