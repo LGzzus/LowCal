@@ -105,7 +105,7 @@ public class Agregar_mas extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_agregar_mas, container, false);
+        view = inflater.inflate(R.layout.fragment_agregar_mas1, container, false);
         spinnerCalorias = (Spinner) view.findViewById(R.id.spinnerCalorias);
         spinnerAlimento = (Spinner) view.findViewById(R.id.spinnerAlimento);
         spinnerCantidad = (Spinner) view.findViewById(R.id.spinnerCantidad);

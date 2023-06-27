@@ -278,10 +278,10 @@ public class Inicio extends Fragment {
                                         "acividad: "+mb);
                             }
                             int basales=(int) mb;
-                            String cal= String.valueOf(mb);
-                            progressBarRecomendadas.setProgress(100);
-                            tvProgressRecomendadas.setText(cal+" kcal recomendadas");
-                            progressBarRecomendadas.setVisibility(View.VISIBLE);
+                            //String cal= String.valueOf(mb);
+//                            progressBarRecomendadas.setProgress(100);
+//                            tvProgressRecomendadas.setText(cal+" kcal recomendadas");
+//                            progressBarRecomendadas.setVisibility(View.VISIBLE);
 
                             DocumentReference doc = db.collection("antropometric_dates").document(userUid);
                             Map<String, Object> campoNuevo = new HashMap<>();
@@ -336,8 +336,8 @@ public class Inicio extends Fragment {
                             String cal= String.valueOf(mb);
 
                             //progressBarRecomendadas.setProgress(100);
-                            tvProgressRecomendadas.setText(cal+" kcal recomendadas");
-                            progressBarRecomendadas.setVisibility(View.VISIBLE);
+                            //tvProgressRecomendadas.setText(cal+" kcal recomendadas");
+                            //progressBarRecomendadas.setVisibility(View.VISIBLE);
                             DocumentReference doc = db.collection("antropometric_dates").document(userUid);
                             Map<String, Object> campoNuevo = new HashMap<>();
                             campoNuevo.put("calculated_calories", mb);
