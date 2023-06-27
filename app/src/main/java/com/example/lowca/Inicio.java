@@ -204,15 +204,15 @@ public class Inicio extends Fragment {
                         tvCaloriasBasales.setText(String.valueOf(calBal));
 
                         //System.out.println("******NAcido: "+nacido+"************");
-                       //Obtener la fecha actual
-                         hoy = System.currentTimeMillis();
+                        //Obtener la fecha actual
+                        hoy = System.currentTimeMillis();
 
                         //System.out.println("****Ahora: "+ahora+"*******");
                         Date fechaActual = new Date(hoy);
-                       // System.out.println("****FechaActual: "+fechaActual+"*******");
+                        // System.out.println("****FechaActual: "+fechaActual+"*******");
                         // Crea un formato para mostrar la fecha
                         SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
-                       // System.out.println("****FormatoFecha: "+formatoFecha+"*******");
+                        // System.out.println("****FormatoFecha: "+formatoFecha+"*******");
                         // Convierte la fecha actual al formato deseado
                         String fechaFormateada = formatoFecha.format(fechaActual);
                         //System.out.println("****FechaFormateada: "+fechaFormateada+"*******");
@@ -221,19 +221,19 @@ public class Inicio extends Fragment {
                         System.out.println("Fecha actual: " + fechaFormateada);
 
                         //Obtener formato de la fecha del usuaario
-                       // String fechaString = "31/12/2022";
+                        // String fechaString = "31/12/2022";
 
                         long milisegundos = 0;
-                         long milisegundosEdad=0;
+                        long milisegundosEdad=0;
 
                         try {
-                           // SimpleDateFormat formatoFecha1 = new SimpleDateFormat("dd/MM/yyyy");
+                            // SimpleDateFormat formatoFecha1 = new SimpleDateFormat("dd/MM/yyyy");
                             java.util.Date fecha = formatoFecha.parse(nacido);
                             milisegundos = fecha.getTime();
                             System.out.println("Fecha Formato usuario: " + milisegundos);
                             milisegundosEdad= hoy-milisegundos;
                             long milisegundosPorAnio = 365 * 24 * 60 * 60 * 1000L;
-                             edad = milisegundosEdad / milisegundosPorAnio;
+                            edad = milisegundosEdad / milisegundosPorAnio;
                             System.out.println("******Edad: "+edad+"**********");
 
                         } catch (ParseException e) {
@@ -243,19 +243,19 @@ public class Inicio extends Fragment {
                         //Aplicamos la formula
                         /**
 
-            Calcula el metabolismo basal (MB):
+                         Calcula el metabolismo basal (MB):
 
-            Para hombres: MB = 66 + (13.75 x peso en kg) + (5 x altura en cm) - (6.75 x edad en años).
-            Para mujeres: MB = 655 + (9.56 x peso en kg) + (1.85 x altura en cm) - (4.68 x edad en años).
+                         Para hombres: MB = 66 + (13.75 x peso en kg) + (5 x altura en cm) - (6.75 x edad en años).
+                         Para mujeres: MB = 655 + (9.56 x peso en kg) + (1.85 x altura en cm) - (4.68 x edad en años).
 
-            Determina el nivel de actividad física:
+                         Determina el nivel de actividad física:
 
-            Sedentario (poco o ningún ejercicio): MB x 1.2.
-            Moderadamente activo (ejercicio moderado de 3-5 días por semana): MB x 1.55.
+                         Sedentario (poco o ningún ejercicio): MB x 1.2.
+                         Moderadamente activo (ejercicio moderado de 3-5 días por semana): MB x 1.55.
 
-       */
-                    //double mb;
-                      //Hombre
+                         */
+                        //double mb;
+                        //Hombre
                         if(genero.equals("Hombre")){
                             mb=66+(13.75*peso)+(5*altura)-(6.75*edad);
                             System.out.println("****Calorias recomendadas: "+mb);
@@ -309,7 +309,7 @@ public class Inicio extends Fragment {
 
 
 
-                    //Mujer
+                            //Mujer
                         }else if(genero.equals("Mujer")){
                             mb=66+(9.56*peso)+(1.85*altura)-(4.68*edad);
                             System.out.println("****Calorias recomendadas: "+mb);
@@ -406,7 +406,7 @@ public class Inicio extends Fragment {
                                     documentSnapshot.getDouble("calculated_calories");
                                     Double caloriasBasales = documentSnapshot.getDouble("calculated_calories");
                                     int calBal = Double.valueOf(caloriasBasales).intValue();
-                                     int progressConsumidas = (finalTotalCalorias * 100) / calBal;
+                                    int progressConsumidas = (finalTotalCalorias * 100) / calBal;
                                     // Establece el porcentaje de progreso en el ProgressBar de consumidas
                                     progressBarConsumidas.setProgress(progressConsumidas);
                                     actualizarProgresoConsumidas(finalTotalCalorias, calBal);
@@ -415,7 +415,7 @@ public class Inicio extends Fragment {
                                     // No se encontraron documentos en la colección "basales"
                                     //Me falta arreglar esto
                                     Toast.makeText(getContext(), "No se encontraron calorías basales para graficar", Toast.LENGTH_SHORT).show();
-                            }
+                                }
 
                             }
                         }).addOnFailureListener(new OnFailureListener() {
