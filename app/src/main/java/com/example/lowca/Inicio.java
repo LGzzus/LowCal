@@ -19,8 +19,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -118,76 +120,9 @@ public class Inicio extends Fragment {
         db=FirebaseFirestore.getInstance();
         mAuth=FirebaseAuth.getInstance();
         userUid = mAuth.getCurrentUser().getUid();
-
-        CollectionReference parentCollectionRef = db.collection("account");
-        DocumentReference documentRef = parentCollectionRef.document(userUid);
-        CollectionReference subCollectionRef = documentRef.collection("dieta");
-        Query query = subCollectionRef.orderBy("hora_registro", Query.Direction.DESCENDING).limit(3);
+        obtenerDietaAsignada();
 
 
-
-        /*subCollectionRef.get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                        //String documentId=documentSnapshot.getId();
-
-                        String dato = documentSnapshot.getString("calorias_usuario");
-                        // Realiza las operaciones necesarias con los datos obtenidos de la subcolección
-                        String  cal= dato;
-                        System.out.println("********Calorias tablero: "+cal+"**********");
-
-
-                        tvCaloriasDieta.setText(dato+" kcal");
-
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    // Maneja el error en caso de que la lectura de la subcolección falle
-                });*/
-
-        query.get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot querySnapshot) {
-                        if (!querySnapshot.isEmpty()) {
-                            DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
-                            String documentoId = documentSnapshot.getId();
-                            // Obtén los datos del documento
-                            Map<String, Object> datos = documentSnapshot.getData();
-                            // Accede a los campos específicos
-                            String calorias = (String) datos.get("calorias_usuario");
-
-
-                            tvCaloriasDieta.setText(calorias+" kcal");
-                        } else {
-                            // No se encontraron documentos en la colección
-                            Log.d("TAG", "No se encontraron documentos en la colección");
-                        }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // Ocurrió un error al obtener los documentos
-                        Log.w("TAG", "Error al obtener los documentos", e);
-                    }
-                });
-
-
-
-        /*
-
-            Calcula el metabolismo basal (MB):
-
-            Para hombres: MB = 66 + (13.75 x peso en kg) + (5 x altura en cm) - (6.75 x edad en años).
-            Para mujeres: MB = 655 + (9.56 x peso en kg) + (1.85 x altura en cm) - (4.68 x edad en años).
-
-            Determina el nivel de actividad física:
-
-            Sedentario (poco o ningún ejercicio): MB x 1.2.
-            Moderadamente activo (ejercicio moderado de 3-5 días por semana): MB x 1.55.
-
-       */
         DocumentReference documentReferencia=db.collection("antropometric_dates").document(userUid);
         documentReferencia.get()
                 .addOnSuccessListener(documentSnapshot -> {
@@ -201,27 +136,21 @@ public class Inicio extends Fragment {
                         Double pesoObjetivo=documentSnapshot.getDouble("target_weight");
                         Double caloriasBasales=documentSnapshot.getDouble("calculated_calories");
                         int calBal=Double.valueOf(caloriasBasales).intValue();
-                        tvCaloriasBasales.setText(String.valueOf(calBal));
+                        tvCaloriasBasales.setText(String.valueOf(calBal)+" Kcal");
 
-                        //System.out.println("******NAcido: "+nacido+"************");
                         //Obtener la fecha actual
                         hoy = System.currentTimeMillis();
 
-                        //System.out.println("****Ahora: "+ahora+"*******");
                         Date fechaActual = new Date(hoy);
-                        // System.out.println("****FechaActual: "+fechaActual+"*******");
+
                         // Crea un formato para mostrar la fecha
                         SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
-                        // System.out.println("****FormatoFecha: "+formatoFecha+"*******");
+
                         // Convierte la fecha actual al formato deseado
                         String fechaFormateada = formatoFecha.format(fechaActual);
-                        //System.out.println("****FechaFormateada: "+fechaFormateada+"*******");
 
                         // Imprime la fecha formateada
                         System.out.println("Fecha actual: " + fechaFormateada);
-
-                        //Obtener formato de la fecha del usuaario
-                        // String fechaString = "31/12/2022";
 
                         long milisegundos = 0;
                         long milisegundosEdad=0;
@@ -254,7 +183,7 @@ public class Inicio extends Fragment {
                          Moderadamente activo (ejercicio moderado de 3-5 días por semana): MB x 1.55.
 
                          */
-                        //double mb;
+
                         //Hombre
                         if(genero.equals("Hombre")){
                             mb=66+(13.75*peso)+(5*altura)-(6.75*edad);
@@ -305,10 +234,6 @@ public class Inicio extends Fragment {
                                         }
                                     });
 
-
-
-
-
                             //Mujer
                         }else if(genero.equals("Mujer")){
                             mb=66+(9.56*peso)+(1.85*altura)-(4.68*edad);
@@ -331,10 +256,8 @@ public class Inicio extends Fragment {
                                 System.out.println("****Calorias recomendadas segun el nivel de " +
                                         "acividad: "+mb);
                             }
-
                             int basales=(int) mb;
                             String cal= String.valueOf(mb);
-
                             //progressBarRecomendadas.setProgress(100);
                             //tvProgressRecomendadas.setText(cal+" kcal recomendadas");
                             //progressBarRecomendadas.setVisibility(View.VISIBLE);
@@ -362,9 +285,6 @@ public class Inicio extends Fragment {
                             System.out.println("Error");
                         }
 
-
-
-
                         // Realiza las operaciones necesarias con los datos del documento
                     } else {
                         // El documento no existe
@@ -373,6 +293,8 @@ public class Inicio extends Fragment {
                 .addOnFailureListener(e -> {
                     // Maneja el error en caso de que la lectura del documento falle
                 });
+
+
         // Obtén la colección "dieta" del usuario actual
         CollectionReference dietaCollectionRef = db.collection("account").document(userUid).collection("eat");
 
@@ -414,7 +336,7 @@ public class Inicio extends Fragment {
                                 } else {
                                     // No se encontraron documentos en la colección "basales"
                                     //Me falta arreglar esto
-                                    Toast.makeText(getContext(), "No se encontraron calorías basales para graficar", Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(getContext(), "No se encontraron calorías basales para graficar", Toast.LENGTH_SHORT).show();
                                 }
 
                             }
@@ -422,7 +344,7 @@ public class Inicio extends Fragment {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 // Maneja el error en caso de que la consulta falle
-                                Toast.makeText(getContext(), "Error al obtener las calorías basales", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getContext(), "Error al obtener las calorías basales", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -431,7 +353,7 @@ public class Inicio extends Fragment {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         // Maneja el error en caso de que la consulta falle
-                        Toast.makeText(getContext(), "Error al obtener las calorías", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getContext(), "Error al obtener las calorías", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -444,6 +366,34 @@ public class Inicio extends Fragment {
 
         return vista;
         //return inflater.inflate(R.layout.fragment_inicio, container, false);
+
+
+
+
+    }
+    public void obtenerDietaAsignada(){
+        DocumentReference userDocRef = db.collection("dieta_asignada").document(userUid);
+
+        userDocRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                       String calorias= document.getString("calorias");
+
+                        tvCaloriasDieta.setText(calorias);
+
+                    } else {
+                        // El documento no existe
+                        Log.d("Firestore", "El documento no existe");
+                    }
+                } else {
+                    // Error al obtener el documento
+                    Log.e("Firestore", "Error al obtener el documento", task.getException());
+                }
+            }
+        });
 
 
 
