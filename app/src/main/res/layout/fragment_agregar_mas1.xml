@@ -37,10 +37,11 @@
 
             <Button
                 android:id="@+id/btnSeleccionarFecha"
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Fecha"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/baseline_calendar_month_24"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cardView" />
             <androidx.cardview.widget.CardView
@@ -58,7 +59,7 @@
                 android:id="@+id/txtViewAlimentacion2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="28dp"
+                android:layout_marginStart="14dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/ejercicio"
                 android:textSize="30sp"
@@ -79,12 +80,24 @@
                 android:id="@+id/txtViewAlimentacion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="28dp"
+                android:layout_marginStart="14dp"
                 android:layout_marginTop="12dp"
                 android:text="@string/alimentacion"
                 android:textSize="30sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView" />
+
+            <TextView
+                android:id="@+id/txtViewFecha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="26dp"
+                android:text="@string/fecha"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@id/btnAlimentacionMas"
                 app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
             <androidx.cardview.widget.CardView

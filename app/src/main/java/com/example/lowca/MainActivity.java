@@ -32,6 +32,7 @@ Perfil perfil = new Perfil();
         BottomNavigationView nav = findViewById(R.id.botom_navigacion);
         nav.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         loadFragment(inicio);
+        //CollectionReference exercises_dbCollection = db.collection("excercises_db");
         /*
         CollectionReference foodCollection = db.collection("food");
 
@@ -72,15 +73,42 @@ Perfil perfil = new Perfil();
         agregarAlimento(foodCollection, "Kiwi", 51);
         agregarAlimento(foodCollection, "Cerezas", 50);
         */
-
-
+        /*
+        agregarEjercicio(exercises_dbCollection, "Caminata ligera", 3);
+        agregarEjercicio(exercises_dbCollection, "Caminata rápida", 6);
+        agregarEjercicio(exercises_dbCollection, "Correr", 10);
+        agregarEjercicio(exercises_dbCollection, "Correr", 12);
+        agregarEjercicio(exercises_dbCollection, "Ciclismo ligero", 6);
+        agregarEjercicio(exercises_dbCollection, "Ciclismo moderado", 8);
+        agregarEjercicio(exercises_dbCollection, "Ciclismo intenso", 10);
+        agregarEjercicio(exercises_dbCollection, "Natación ligera", 7);
+        agregarEjercicio(exercises_dbCollection, "Natación moderada", 10);
+        agregarEjercicio(exercises_dbCollection, "Natación intensa", 12);
+        agregarEjercicio(exercises_dbCollection, "Saltar la cuerda", 10);
+        agregarEjercicio(exercises_dbCollection, "Aeróbicos de bajo impacto", 5);
+        agregarEjercicio(exercises_dbCollection, "Aeróbicos de alto impacto", 7);
+        agregarEjercicio(exercises_dbCollection, "Levantamiento de pesas (ligero)", 4);
+        agregarEjercicio(exercises_dbCollection, "Levantamiento de pesas (intenso)", 6);
+         */
     }
-    /*private void agregarAlimento(CollectionReference collection, String nombre, int caloriasU) {
+    /*
+    private void agregarAlimento(CollectionReference collection, String nombre, int caloriasU) {
         Map<String, Object> food = new HashMap<>();
         food.put("name", nombre);
         food.put("caloriesU", caloriasU);
         collection.add(food);
-    }*/
+    }
+    */
+    /*
+    private void agregarEjercicio(CollectionReference collection, String nombre, int caloriasU) {
+        Map<String, Object> excercises = new HashMap<>();
+        excercises.put("name_excercise", nombre);
+        excercises.put("caloriesU", caloriasU);
+        collection.add(excercises);
+    }
+
+     */
+
     private final BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {

@@ -20,11 +20,18 @@ import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.lowca.Adaptadores.ListViewAlimentosAdapter;
 import com.example.lowca.Adaptadores.ListViewEjerciciosAdapter;
 import com.example.lowca.Models.Alimentos;
 import com.example.lowca.Models.Ejercicios;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -61,12 +68,12 @@ public class Agregar_mas extends Fragment {
     ListView listViewAlimentos, listViewEjericicios;
     Spinner spinnerCalorias, spinnerAlimento, spinnerCantidad, spinnerEjercicio, spinnerMinutos;
     Button btnAgregarAlimento,btnAgregarEjercicio, btnAlimentacionMas , btnEjercicioMas, btnSeleccionarFecha;
-
+    TextView txtViewFecha;
     //Se usara para que se identique el objeto
     private FirebaseAuth mAuth;
     FirebaseFirestore db;
     public String userId;
-    int caloriasAlimentos;
+    int caloriasAlimentos, caloriasEjercicio;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -122,6 +129,9 @@ public class Agregar_mas extends Fragment {
         spinnerMinutos = (Spinner) view.findViewById(R.id.spinnerMinutos);
 
         btnAgregarAlimento = (Button) view.findViewById(R.id.btnAgregarComida);
+        btnAgregarEjercicio = (Button) view.findViewById(R.id.btnAgregarEjericio);
+
+        txtViewFecha = view.findViewById(R.id.txtViewFecha);
 
         listViewAlimentos = view.findViewById(R.id.listViewAlimentos);
         listViewEjericicios = view.findViewById(R.id.listViewEjercicios);
@@ -160,6 +170,7 @@ public class Agregar_mas extends Fragment {
 
         inicializarFirebase();
         cargarAlimentosDisponibles();
+        cargarEjerciciosDisponibles();
         listarAlimentos();
         listarEjercicios();
         listViewAlimentos.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -173,7 +184,7 @@ public class Agregar_mas extends Fragment {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
                 mostrarDialogoBorrarEjercicio(position);
-                return false;
+                return true;
             }
         });
         return view;
@@ -187,9 +198,16 @@ public class Agregar_mas extends Fragment {
         try {
             String userId = mAuth.getCurrentUser().getUid();
             String userIdPrefix = userId.substring(0, 4); // Obtener los primeros 4 caracteres del userId
-
+            Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int monthOfYear = calendar.get(Calendar.MONTH);
+            int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+            String fecha = String.format(Locale.getDefault(), "%04d-%02d-%02d", year, monthOfYear + 1, dayOfMonth);
+            txtViewFecha.setText(fecha);
             CollectionReference alimentosRef = db.collection("eat");
-            Query query = alimentosRef.whereGreaterThanOrEqualTo(FieldPath.documentId(), userIdPrefix)
+            Query query = alimentosRef
+                    .whereEqualTo("date", fecha)
+                    .whereGreaterThanOrEqualTo(FieldPath.documentId(), userIdPrefix)
                     .whereLessThan(FieldPath.documentId(), userIdPrefix + "\uf8ff");
 
             query.get().addOnCompleteListener(task -> {
@@ -225,6 +243,7 @@ public class Agregar_mas extends Fragment {
         Button btnAgregarComida = (Button) mView.findViewById(R.id.btnAgregarComida);
         Spinner spinnerAlimento = mView.findViewById(R.id.spinnerAlimento);
         Spinner spinnerCantidad = mView.findViewById(R.id.spinnerCantidad);
+
         ArrayAdapter<String> adapterAlimentos = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, listAlimentosDisponibles);
         adapterAlimentos.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerAlimento.setAdapter(adapterAlimentos);
@@ -242,20 +261,14 @@ public class Agregar_mas extends Fragment {
                 String alimentos = spinnerAlimento.getSelectedItem().toString();
                 String cantidades = spinnerCantidad.getSelectedItem().toString();
                 db.collection("food").document();
+                System.out.println("boton 2 <<<<<<<<<<<<<<<<<<<<<<<<<<");
                 obtenerCaloriasAlimento(alimentos, cantidades, new OnCaloriasObtenidasListener() {
                     @Override
                     public void onCaloriasObtenidas(int calorias) {
+                        System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<boton 2");
                         // Realizar el resto de las operaciones con las calorías obtenidas
                         caloriasAlimentos = calorias;
-                        System.out.println("btn Agregar comida" + caloriasAlimentos);
-
-                        //int cantidadOperacion = Integer.parseInt(cantidades);
-                        //int calorias;
-                        //cantidadOperacion= 1;
-                        System.out.println("btn Agregar comida" + caloriasAlimentos);
                         String caloriasString = String.valueOf(caloriasAlimentos);
-                        //String alimento = alimentos;
-                        //String cantidad = cantidades;
                         Alimentos alimentoss = new Alimentos();
                         alimentoss.setAlimento(alimentos);
                         alimentoss.setCalorias(caloriasString);
@@ -265,10 +278,8 @@ public class Agregar_mas extends Fragment {
                         alimentoss.setFechaRegistro(getFechaNormal(getFechaMilisegundos()));
                         Map<String,Object> alimentosDb=new HashMap<>();
                         alimentosDb.put("calories",String.valueOf(caloriasAlimentos));
-                        System.out.println("Calorias String db" + String.valueOf(caloriasAlimentos));
                         alimentosDb.put("eat",alimentos);
                         alimentosDb.put("amount",cantidades);
-                        System.out.println("Cantidades db" + cantidades);
                         alimentosDb.put("date", fechaNormal);
                         String documentId = userIdPrefix + "-" + UUID.randomUUID().toString(); // Generar un ID único combinando los primeros 4 caracteres del userId y un identificador aleatorio
                         db.collection("eat").document(documentId).set(alimentosDb).addOnSuccessListener(
@@ -299,7 +310,6 @@ public class Agregar_mas extends Fragment {
         });
     }
     private ArrayList<String> listAlimentosDisponibles = new ArrayList<>();
-
     private void cargarAlimentosDisponibles() {
         CollectionReference alimentosRef = db.collection("food");
         alimentosRef.get().addOnCompleteListener(task -> {
@@ -320,30 +330,28 @@ public class Agregar_mas extends Fragment {
         void onCaloriasObtenidas(int calorias);
     }
 
+    interface OnCaloriasObtenidasEjercicioListener {
+        void onCaloriasObtenidasEjericicio(int caloriasEjer);
+    }
+
+
 
 
     public void obtenerCaloriasAlimento(String nombreAlimento, String cantidadSeleccionada, OnCaloriasObtenidasListener listener) {
         CollectionReference alimentosRef = db.collection("food");
         Query query = alimentosRef.whereEqualTo("name", nombreAlimento);
-        System.out.println(nombreAlimento);
-        System.out.println(cantidadSeleccionada);
         query.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     Long caloriasLong = document.getLong("caloriesU");
                     if (caloriasLong != null) {
                         int caloriasUnidad = caloriasLong.intValue();
-                        System.out.println(caloriasUnidad);
                         int cantidad = Integer.parseInt(cantidadSeleccionada);
                          caloriasAlimentos = caloriasUnidad * cantidad;
-                        System.out.println("Calorias alimentos en el obtener calorias" + caloriasAlimentos);
-                        // Realizar el resto de las operaciones con las calorías obtenidas
-                        // ...
                         if (listener != null) {
                             listener.onCaloriasObtenidas(caloriasAlimentos);
                         }
-
-                        return; // Finalizar la función después de obtener las calorías
+                        return;
                     }
                 }
 
@@ -361,13 +369,12 @@ public class Agregar_mas extends Fragment {
         return timepoUnix;
     }
     public String getFechaNormal(long fechaMilisegundos){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         sdf.setTimeZone(TimeZone.getTimeZone("GTM-5"));
         String fecha = sdf.format(fechaMilisegundos);
         return fecha;
     }
     private void mostrarDialogoBorrarAlimento(int position) {
-        //listViewAlimentosAdapter.notifyDataSetChanged();
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage("¿Desea borrar este registro?")
                 .setPositiveButton("Borrar", new DialogInterface.OnClickListener() {
@@ -414,8 +421,15 @@ public class Agregar_mas extends Fragment {
         try {
             userId = mAuth.getCurrentUser().getUid();
             CollectionReference ejerciciosRef = db.collection("exercise");
-            String userIdPrefix = userId.substring(0, 4); // Obtener los primeros 4 caracteres del userId
-            Query query = ejerciciosRef.whereGreaterThanOrEqualTo(FieldPath.documentId(), userIdPrefix)
+            String userIdPrefix = userId.substring(0, 4);
+            Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int monthOfYear = calendar.get(Calendar.MONTH);
+            int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+            String fecha = String.format(Locale.getDefault(), "%04d-%02d-%02d", year, monthOfYear + 1, dayOfMonth);
+            Query query = ejerciciosRef
+            //        .whereEqualTo("date", fecha)
+                    .whereGreaterThanOrEqualTo(FieldPath.documentId(), userIdPrefix)
                     .whereLessThan(FieldPath.documentId(), userIdPrefix + "\uf8ff");
             query.get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
@@ -452,6 +466,10 @@ public class Agregar_mas extends Fragment {
         Spinner spinnerEjercicio = mView.findViewById(R.id.spinnerEjercicio);
         Spinner spinnerMinutos = mView.findViewById(R.id.spinnerMinutos);
 
+        ArrayAdapter<String> adapterEjercicios = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, listEjerciciosDisponibles);
+        adapterEjercicios.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerEjercicio.setAdapter(adapterEjercicios);
+
         spinnerEjercicio.setSelection(0);
         spinnerMinutos.setSelection(0);
         mBuilder.setView(mView);
@@ -462,84 +480,102 @@ public class Agregar_mas extends Fragment {
             public void onClick(View view) {
                 userId = mAuth.getCurrentUser().getUid();
                 String userIdPrefix = userId.substring(0, 4); // Obtener los primeros 4 caracteres del userId
-                //String calorias = spinnerCaloria.getSelectedItem().toString();
                 String ejercicios = spinnerEjercicio.getSelectedItem().toString();
                 String minutos = spinnerMinutos.getSelectedItem().toString();
-                int cantidadOperacion = Integer.parseInt(minutos);
-                int caloriasQuemadas;
-                if (ejercicios.equals("Caminata ligera")) {
-                    caloriasQuemadas = cantidadOperacion * 4;
-                } else if (ejercicios.equals("Caminata rápida")) {
-                    caloriasQuemadas = cantidadOperacion * 6;
-                } else if (ejercicios.equals("Correr a 8 km/h")) {
-                    caloriasQuemadas = cantidadOperacion * 10;
-                } else if (ejercicios.equals("Correr a 10 km/h")) {
-                    caloriasQuemadas = cantidadOperacion * 12;
-                } else if (ejercicios.equals("Ciclismo ligero")) {
-                    caloriasQuemadas = cantidadOperacion * 6;
-                } else if (ejercicios.equals("Ciclismo moderado")) {
-                    caloriasQuemadas = cantidadOperacion * 8;
-                } else if (ejercicios.equals("Ciclismo intenso")) {
-                    caloriasQuemadas = cantidadOperacion * 10;
-                } else if (ejercicios.equals("Natación ligera")) {
-                    caloriasQuemadas = cantidadOperacion * 7;
-                } else if (ejercicios.equals("Natación moderada")) {
-                    caloriasQuemadas = cantidadOperacion * 10;
-                } else if (ejercicios.equals("Natación intensa")) {
-                    caloriasQuemadas = cantidadOperacion * 12;
-                } else if (ejercicios.equals("Saltar la cuerda")) {
-                    caloriasQuemadas = cantidadOperacion * 10;
-                } else if (ejercicios.equals("Aeróbicos de bajo impacto")) {
-                    caloriasQuemadas = cantidadOperacion * 5;
-                } else if (ejercicios.equals("Aeróbicos de alto impacto")) {
-                    caloriasQuemadas = cantidadOperacion * 7;
-                } else if (ejercicios.equals("Levantamiento de pesas (ligero)")) {
-                    caloriasQuemadas = cantidadOperacion * 4;
-                } else if (ejercicios.equals("Levantamiento de pesas (intenso)")) {
-                    caloriasQuemadas = cantidadOperacion * 6;
-                } else {
-                    caloriasQuemadas = 0;
-                }
-                String caloriasString = String.valueOf(caloriasQuemadas);
-                String ejericio = ejercicios;
-                String cantidad = minutos;
-                Ejercicios ejercicioss = new Ejercicios();
-                ejercicioss.setEjercicio(ejericio);
-                ejercicioss.setCaloriasQuemadas(caloriasString);
-                long fechaMilisegundos = getFechaMilisegundos();
-                String fechaNormal = getFechaNormal(fechaMilisegundos);
-                Map<String,Object> ejerciciosDb=new HashMap<>();
-                ejerciciosDb.put("calories_ex",caloriasString);
-                ejerciciosDb.put("name_exercise",ejericio);
-                ejerciciosDb.put("minutes",cantidad);
-                ejerciciosDb.put("date",fechaNormal);
-                String documentId = userIdPrefix + "-" + UUID.randomUUID().toString(); // Generar un ID único combinando los primeros 4 caracteres del userId y un identificador aleatorio
-                db.collection("exercise").document(documentId).set(ejerciciosDb).addOnSuccessListener(
-                        new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                listEjercicios.add(ejercicioss);
-                                dialog.dismiss();
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        listarEjercicios();
-                                    }
-                                }, 100);
-                            }
-                        }
-                ).addOnFailureListener(new OnFailureListener() {
+                db.collection("excercises_db").document();
+                System.out.println("boton<<<<<<<<<<<<<<<<<<<<<<<<<<");
+                obtenerCaloriasEjercicio(ejercicios, minutos, new OnCaloriasObtenidasEjercicioListener() {
                     @Override
-                    public void onFailure(@NonNull Exception e) {
-                        System.out.println("Ocurrio un error");
+                    public void onCaloriasObtenidasEjericicio(int caloriasEjer) {
+                        System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<boton");
+                        caloriasEjercicio = caloriasEjer;
+                        String caloriasString = String.valueOf(caloriasEjercicio);
+                        Ejercicios ejercicioss = new Ejercicios();
+                        ejercicioss.setEjercicio(ejercicios);
+                        ejercicioss.setCaloriasQuemadas(caloriasString);
+                        ejercicioss.setMinutos(minutos);
+                        long fechaMilisegundos = getFechaMilisegundos();
+                        String fechaNormal = getFechaNormal(fechaMilisegundos);
+                        ejercicioss.setFechaRegistro(getFechaNormal(getFechaMilisegundos()));
+                        Map<String,Object> ejerciciosDb=new HashMap<>();
+                        ejerciciosDb.put("calories_ex",String.valueOf(caloriasEjercicio));
+                        ejerciciosDb.put("name_exercise",ejercicios);
+                        ejerciciosDb.put("minutes",minutos);
+                        ejerciciosDb.put("date",fechaNormal);
+                        String documentId = userIdPrefix + "-" + UUID.randomUUID().toString(); // Generar un ID único combinando los primeros 4 caracteres del userId y un identificador aleatorio
+                        db.collection("exercise").document(documentId).set(ejerciciosDb).addOnSuccessListener(
+                                new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        listEjercicios.add(ejercicioss);
+                                        dialog.dismiss();
+                                        new Handler().postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                listarEjercicios();
+                                            }
+                                        }, 100);
+                                    }
+                                }
+                        ).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                System.out.println("Ocurrio un error al registrar ejercicio");
+                            }
+                        });
                     }
                 });
 
+
+
+            }
+        });
+    }
+    private ArrayList<String> listEjerciciosDisponibles = new ArrayList<>();
+
+    private void cargarEjerciciosDisponibles() {
+        CollectionReference ejerciciosRef = db.collection("excercises_db");
+        ejerciciosRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                listEjerciciosDisponibles.clear();
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    String ejercicio = document.getString("name_excercise");
+                    listEjerciciosDisponibles.add(ejercicio);
+                }
+            } else {
+                // Manejar el caso de error
+                System.out.println("Error al cargar los alimentos disponibles");
             }
         });
     }
 
 
+
+
+    public void obtenerCaloriasEjercicio(String nombreEjercicio, String cantidadSeleccionada, OnCaloriasObtenidasEjercicioListener listener) {
+        CollectionReference ejerciciosRef = db.collection("excercises_db");
+        Query query = ejerciciosRef.whereEqualTo("name_excercise", nombreEjercicio);
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    Long caloriasLong = document.getLong("caloriesU");
+                    if (caloriasLong != null) {
+                        int caloriasUnidad = caloriasLong.intValue();
+                        int cantidad = Integer.parseInt(cantidadSeleccionada);
+                        caloriasEjercicio = caloriasUnidad * cantidad;
+                        if (listener != null) {
+                            listener.onCaloriasObtenidasEjericicio(caloriasEjercicio);
+                        }
+                        return;
+                    }
+                }
+
+            } else {
+                // Manejar el caso de error en la consulta a la base de datos
+                System.out.println("Error al consultar las calorias");
+            }
+        });
+    }
 
     private void mostrarDialogoBorrarEjercicio(int position) {
         //listViewAlimentosAdapter.notifyDataSetChanged();
@@ -563,7 +599,7 @@ public class Agregar_mas extends Fragment {
 
 
     private void borrarRegistroEjercicio(int position) {
-        userId = mAuth.getCurrentUser().getUid();
+        //userId = mAuth.getCurrentUser().getUid();
         CollectionReference ejerciciosRef = db.collection("exercise");
         DocumentReference ejercicioRef = ejerciciosRef.document(listEjercicios.get(position).getId());
         ejercicioRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -599,6 +635,8 @@ public class Agregar_mas extends Fragment {
                         // Obtener la fecha seleccionada en el formato deseado ("yyyy-MM-dd")
                         String selectedDate = String.format(Locale.getDefault(), "%04d-%02d-%02d", year, monthOfYear + 1, dayOfMonth);
                         listarAlimentosPorFecha(selectedDate);
+                        listarEjerciciosPorFecha(selectedDate);
+                        txtViewFecha.setText(selectedDate);
                     }
                 },
                 initialYear, initialMonth, initialDay
@@ -614,11 +652,9 @@ public class Agregar_mas extends Fragment {
             String userIdPrefix = userId.substring(0, 4);
             CollectionReference alimentosRef = db.collection("eat");
             Query query = alimentosRef
-                    .whereGreaterThanOrEqualTo("date", selectedDate + " 00:00:00")
-                    .whereLessThanOrEqualTo("date", selectedDate + " 23:59:59")
+                    .whereEqualTo("date", selectedDate)
                     .whereGreaterThanOrEqualTo(FieldPath.documentId(), userIdPrefix)
                     .whereLessThan(FieldPath.documentId(), userIdPrefix + "\uf8ff");
-            System.out.println("fecha seleccionada" + selectedDate);
             query.get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     listAlimentos.clear();
@@ -631,7 +667,6 @@ public class Agregar_mas extends Fragment {
                         listAlimentos.add(alimento);
                     }
                     listViewAlimentosAdapter.notifyDataSetChanged();
-                    System.out.println("filtro por fecha");
                 } else {
                     // Manejar el caso de error
                     System.out.println("Error en el momento de mostrar la lista de alimentos");
@@ -643,6 +678,37 @@ public class Agregar_mas extends Fragment {
 
     }
 
+    private void listarEjerciciosPorFecha(String selectedDate) {
+        try {
+            userId = mAuth.getCurrentUser().getUid();
+            String userIdPrefix = userId.substring(0, 4);
+            CollectionReference ejerciciosRef = db.collection("excercises_db");
+            Query query = ejerciciosRef
+                    .whereEqualTo("date", selectedDate)
+                    .whereGreaterThanOrEqualTo(FieldPath.documentId(), userIdPrefix)
+                    .whereLessThan(FieldPath.documentId(), userIdPrefix + "\uf8ff");
+            query.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    listEjercicios.clear();
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Ejercicios ejercicio = document.toObject(Ejercicios.class);
+                        ejercicio.setId(document.getId());
+                        ejercicio.setEjercicio(document.getString("name_excersice"));
+                        ejercicio.setCaloriasQuemadas(document.getString("calories_ex") + " cal");
+                        ejercicio.setMinutos(document.getString("minutes"));
+                        listEjercicios.add(ejercicio);
+                    }
+                    listViewEjerciciosAdapter.notifyDataSetChanged();
+                } else {
+                    // Manejar el caso de error
+                    System.out.println("Error en el momento de mostrar la lista de alimentos");
+                }
+            });
+        } catch (Exception e){
+            System.out.println(e);
+        }
+
+    }
 
 
 }

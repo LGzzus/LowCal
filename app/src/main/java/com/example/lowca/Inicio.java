@@ -18,7 +18,17 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 
+
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,6 +44,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -65,6 +76,7 @@ public class Inicio extends Fragment {
     String userUid;
     long edad,hoy;
     double mb;
+    int calBal , totalConsumidas;
 
     ProgressBar progressBarRecomendadas;
 
@@ -114,8 +126,8 @@ public class Inicio extends Fragment {
         progressBarConsumidas = vista.findViewById(R.id.progressBarConsumidas);
         progressBarReservadas = vista.findViewById(R.id.progressBarRecomendadas);
 
-        //tvProgressRecomendadas=vista.findViewById(R.id.textview);
-        //progressBarRecomendadas=vista.findViewById(R.id.progressBarRecomendadas);
+        tvProgressRecomendadas=vista.findViewById(R.id.tvProgressRecomendadas);
+        progressBarRecomendadas=vista.findViewById(R.id.progressBarRecomendadas);
 
         db=FirebaseFirestore.getInstance();
         mAuth=FirebaseAuth.getInstance();
@@ -280,11 +292,13 @@ public class Inicio extends Fragment {
                                 System.out.println("****Calorias recomendadas segun el nivel de " +
                                         "acividad: "+mb);
                             }
-                            int basales=(int) mb;
-                            //String cal= String.valueOf(mb);
-//                            progressBarRecomendadas.setProgress(100);
-//                            tvProgressRecomendadas.setText(cal+" kcal recomendadas");
-//                            progressBarRecomendadas.setVisibility(View.VISIBLE);
+
+                            String cal= String.valueOf(mb);
+                            int basales=Integer.parseInt(cal);
+                            progressBarRecomendadas.setProgress(100);
+                            tvProgressRecomendadas.setText(basales+" kcal Recomendadas");
+                            progressBarRecomendadas.setVisibility(View.VISIBLE);
+
 
                             DocumentReference doc = db.collection("antropometric_dates").document(userUid);
                             Map<String, Object> campoNuevo = new HashMap<>();
@@ -335,12 +349,14 @@ public class Inicio extends Fragment {
                                         "acividad: "+mb);
                             }
 
-                            int basales=(int) mb;
-                            String cal= String.valueOf(mb);
 
-                            //progressBarRecomendadas.setProgress(100);
-                            //tvProgressRecomendadas.setText(cal+" kcal recomendadas");
-                            //progressBarRecomendadas.setVisibility(View.VISIBLE);
+
+                            int calBasales = Double.valueOf(mb).intValue();
+                            tvCaloriasBasales.setText(String.valueOf(calBasales));
+
+                            progressBarRecomendadas.setProgress(100);
+                            tvProgressRecomendadas.setText(calBasales+" kcal recomendadas");
+                            progressBarRecomendadas.setVisibility(View.VISIBLE);
                             DocumentReference doc = db.collection("antropometric_dates").document(userUid);
                             Map<String, Object> campoNuevo = new HashMap<>();
                             campoNuevo.put("calculated_calories", mb);
@@ -378,7 +394,12 @@ public class Inicio extends Fragment {
                 });
         // Obtén la colección "dieta" del usuario actual
 
-
+        BarChart barChart = vista.findViewById(R.id.barChart);
+        barChart.getDescription().setEnabled(false);
+        barChart.getAxisLeft().setEnabled(false);
+        barChart.getAxisRight().setEnabled(false);
+        barChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        cargarYMostrarGrafico(barChart);
 
 
         return vista;
@@ -390,55 +411,51 @@ public class Inicio extends Fragment {
     }
 
     private void actualizarProgresoConsumidas(int caloriasConsumidas, double caloriasBasales) {
-        int progress = (caloriasConsumidas * 100) / (int)caloriasBasales;
+        int progress = (int) ((caloriasConsumidas * 100) / caloriasBasales);
         progressBarConsumidas.setProgress(progress);
     }
     private void graficar(){
-
-
         try {
-            System.out.println(">>>>>>>>>>>>>>>"+ userUid);
             String userId = mAuth.getCurrentUser().getUid();
-            System.out.println("<<<<<<<<<<<<<<<<"+userId);
             String userIdPrefix = userId.substring(0, 4);
             CollectionReference comidaCollectionRef = db.collection("eat");
+            Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int monthOfYear = calendar.get(Calendar.MONTH);
+            int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+            String fecha = String.format(Locale.getDefault(), "%04d-%02d-%02d", year, monthOfYear + 1, dayOfMonth);
             Query query = comidaCollectionRef.whereGreaterThanOrEqualTo(FieldPath.documentId(), userIdPrefix)
+                    .whereEqualTo("date", fecha)
                     .whereLessThan(FieldPath.documentId(), userIdPrefix + "\uf8ff");
             // Calorias consumidas
             // Consulta todos los documentos en la colección "dieta"
             query.get().addOnCompleteListener(task -> {
                 if (task.isSuccessful())
                 {
-                    int totalCalorias = 0;
-                    int totalConsumidas = 0;
+                     totalConsumidas = 0;
                     // Recorre cada documento en la colección
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         // Obtiene el valor del campo "calories" como un entero
-                        //if (document.getId().startsWith(userIdPrefix)){
                             String caloriesString = document.getString("calories");
                             int calories = Integer.parseInt(caloriesString);
                             // Suma las calorías al total
                             totalConsumidas += calories;
-                        //}
                     }
-                    System.out.println("total consumidas >>>>>>>>>>>>>>>>>>>>>>>>>> " + totalConsumidas);
                     txtViewCaloriasDieta.setText(String.valueOf(totalConsumidas) + " kcal");
-                    textViewConsumidasGraf.setText(String.valueOf(totalCalorias) + " kcal");
-                    CollectionReference basalesCollectionRef = db.collection("account").document(userUid).collection("antropometric_dates");
-                    int finalTotalCalorias = totalCalorias;
-                    basalesCollectionRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                        @Override
-                        public void onSuccess(QuerySnapshot querySnapshot) {
-                            if (!querySnapshot.isEmpty()) {
+                    textViewConsumidasGraf.setText(String.valueOf(totalConsumidas) + " kcal Consumidas");
+
+                    actualizarProgresoConsumidas(totalConsumidas,calBal);
+                    DocumentReference basalesDocumentRef = db.collection("antropometric_dates").document(userUid);
+                    basalesDocumentRef.get()
+                        .addOnSuccessListener(documentSnapshot -> {
+                                if (documentSnapshot.exists()) {
                                 // Obtén el primer documento de la colección "basales"
-                                DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
                                 documentSnapshot.getDouble("calculated_calories");
                                 Double caloriasBasales = documentSnapshot.getDouble("calculated_calories");
-                                int calBal = Double.valueOf(caloriasBasales).intValue();
-                                int progressConsumidas = (finalTotalCalorias * 100) / calBal;
-                                // Establece el porcentaje de progreso en el ProgressBar de consumidas
-                                progressBarConsumidas.setProgress(progressConsumidas);
-                                actualizarProgresoConsumidas(finalTotalCalorias, calBal);
+                                calBal = Double.valueOf(caloriasBasales).intValue();
+                                    int progressConsumidas = (totalConsumidas * 100) / calBal;
+                                    // Establece el porcentaje de progreso en el ProgressBar de consumidas
+                                    progressBarConsumidas.setProgress(progressConsumidas);
 
                             } else {
                                 // No se encontraron documentos en la colección "basales"
@@ -446,23 +463,122 @@ public class Inicio extends Fragment {
                                 Toast.makeText(getContext(), "No se encontraron calorías basales para graficar", Toast.LENGTH_SHORT).show();
                             }
 
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            // Maneja el error en caso de que la consulta falle
-                            Toast.makeText(getContext(), "Error al obtener las calorías basales", Toast.LENGTH_SHORT).show();
-                        }
+                        })
+                            .addOnFailureListener(e -> {
+                                    // Maneja el error en caso de que la lectura del documento falle
+
                     });
+            }else {
+                    // El documento no existe
                 }
-
-            });
-
-        }   catch (Exception e ) {
+                    })
+                    .addOnFailureListener(e -> {
+                        // Maneja el error en caso de que la lectura del documento falle
+                    });
+    } catch (Exception e){
             System.out.println(e);
         }
-    }
+
 
 
 
 }
+    private void cargarYMostrarGrafico(BarChart barChart) {
+        Calendar calendar = Calendar.getInstance();
+        int currentDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+
+// Calcula el índice del domingo como 1 y el sábado como 7
+        int sundayIndex = 1;
+        int saturdayIndex = 7;
+
+// Calcula el índice del día actual (resta 1 porque los índices en la lista de entradas comienzan en 0)
+        int todayIndex = currentDayOfWeek - 1;
+
+// Calcula el índice del día anterior al domingo de la semana actual
+        int startDayIndex = todayIndex - (currentDayOfWeek - sundayIndex);
+
+// Si el índice es negativo, ajusta para volver a la semana pasada
+        if (startDayIndex < 0) {
+            startDayIndex += 7;
+        }
+
+        List<QueryDocumentSnapshot> documentsThisWeek = new ArrayList<>();
+        for (QueryDocumentSnapshot document : documentsThisWeek) {
+            // Obtiene la fecha del documento y extrae el día de la semana
+            String userId = mAuth.getCurrentUser().getUid();
+            String userIdPrefix = userId.substring(0, 4); // Obtener los primeros 4 caracteres del userId
+            Calendar calendario = Calendar.getInstance();
+            int year = calendario.get(Calendar.YEAR);
+            int monthOfYear = calendario.get(Calendar.MONTH);
+            int dayOfMonth = calendario.get(Calendar.DAY_OF_MONTH);
+            String fecha = String.format(Locale.getDefault(), "%04d-%02d-%02d", year, monthOfYear + 1, dayOfMonth);
+
+            String dateString = document.getString("date"); // Asegúrate de tener el campo de fecha en tu documento
+            //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            try {
+                Date date = Date.valueOf(dateString);
+                calendar.setTime(date);
+                int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+
+                // Si el día de la semana está dentro del rango de domingo a sábado, agrega el documento
+                if (dayOfWeek >= sundayIndex && dayOfWeek <= saturdayIndex) {
+                    documentsThisWeek.add(document);
+                }
+            } catch (Exception e) {
+                // Manejo de la excepción, podrías mostrar un mensaje de error o realizar alguna acción apropiada
+                System.out.println(e);
+                e.printStackTrace(); // Opcional: Puedes quitar esta línea si no deseas imprimir el stack trace
+            }
+        }
+
+        ArrayList<BarEntry> entries = new ArrayList<>();
+
+        // Aquí debes cargar los datos de calorías basales y consumidas por día en "entries"
+        // Puedes utilizar un bucle para agregar cada entrada
+
+        for (int i = sundayIndex; i <= saturdayIndex; i++) {
+            List<QueryDocumentSnapshot> documentsForDay = new ArrayList<>();
+            for (QueryDocumentSnapshot document : documentsThisWeek) {
+                //SimpleDateFormat fecha = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                try {
+                    String dateString = document.getString("date"); // Asegúrate de tener el campo de fecha en tu documento
+                    Date date = Date.valueOf(dateString);
+                    int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+                    // Si el día de la semana coincide con "i", agrega el documento a documentsForDay
+                    if (dayOfWeek == i) {
+                        documentsForDay.add(document);
+                    }
+                } catch (Exception e) {
+                    System.out.println(e);
+                    e.printStackTrace();
+                }
+                // Parsea la fecha del documento y obtén el día de la semana
+                // Si el día de la semana coincide con "i", agrega el documento a documentsForDay
+                int totalConsumidasDia = 0;
+                // Calcula las calorías consumidas y las calorías basales para ese día
+                for (QueryDocumentSnapshot doc : documentsForDay) {
+                    // Parsea las calorías consumidas y las calorías basales desde los documentos y suma a los totales
+                    String calConsumidasStr = doc.getString("calories");
+                    int calConsumidasDia = Integer.parseInt(calConsumidasStr);
+                    totalConsumidasDia += calConsumidasDia;
+                }
+                // Luego, calcula las calorías consumidas y las calorías basales para ese día
+                entries.add(new BarEntry(i, totalConsumidasDia));
+                entries.add(new BarEntry(i + 0.2f , calBal ));
+
+            }
+        }
+        entries.add(new BarEntry(0,calBal));
+
+        BarDataSet barDataSet = new BarDataSet(entries, "Calorías");
+        barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+
+        BarData barData = new BarData(barDataSet);
+        barData.setBarWidth(0.4f);
+
+        barChart.setData(barData);
+        barChart.setFitBars(true);
+        barChart.invalidate();
+    }
+}
+
