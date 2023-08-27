@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -64,6 +65,7 @@ public class Inicio extends Fragment {
     String userUid;
     long edad,hoy;
     double mb;
+
     ProgressBar progressBarRecomendadas;
 
     public Inicio() {
@@ -124,6 +126,7 @@ public class Inicio extends Fragment {
         CollectionReference subCollectionRef = documentRef.collection("dieta");
         Query query = subCollectionRef.orderBy("hora_registro", Query.Direction.DESCENDING).limit(3);
 
+        graficar();
 
 
         /*subCollectionRef.get()
@@ -374,70 +377,6 @@ public class Inicio extends Fragment {
                     // Maneja el error en caso de que la lectura del documento falle
                 });
         // Obtén la colección "dieta" del usuario actual
-        CollectionReference dietaCollectionRef = db.collection("account").document(userUid).collection("eat");
-
-        // Calorias consumidas
-        // Consulta todos los documentos en la colección "dieta"
-        dietaCollectionRef.get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot querySnapshot) {
-                        int totalCalorias = 0;
-
-                        // Recorre cada documento en la colección
-                        for (QueryDocumentSnapshot documentSnapshot : querySnapshot) {
-                            // Obtiene el valor del campo "calories" como un entero
-                            String caloriesString = documentSnapshot.getString("calories");
-                            int calories = Integer.parseInt(caloriesString);
-                            // Suma las calorías al total
-                            totalCalorias += calories;
-                        }
-                        txtViewCaloriasDieta.setText(String.valueOf(totalCalorias) + " kcal");
-                        textViewConsumidasGraf.setText(String.valueOf(totalCalorias) + " kcal");
-
-                        CollectionReference basalesCollectionRef = db.collection("account").document(userUid).collection("antropometric_dates");
-                        int finalTotalCalorias = totalCalorias;
-                        basalesCollectionRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                            @Override
-                            public void onSuccess(QuerySnapshot querySnapshot) {
-                                if (!querySnapshot.isEmpty()) {
-                                    // Obtén el primer documento de la colección "basales"
-                                    DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
-                                    documentSnapshot.getDouble("calculated_calories");
-                                    Double caloriasBasales = documentSnapshot.getDouble("calculated_calories");
-                                    int calBal = Double.valueOf(caloriasBasales).intValue();
-                                    int progressConsumidas = (finalTotalCalorias * 100) / calBal;
-                                    // Establece el porcentaje de progreso en el ProgressBar de consumidas
-                                    progressBarConsumidas.setProgress(progressConsumidas);
-                                    actualizarProgresoConsumidas(finalTotalCalorias, calBal);
-
-                                } else {
-                                    // No se encontraron documentos en la colección "basales"
-                                    //Me falta arreglar esto
-                                    Toast.makeText(getContext(), "No se encontraron calorías basales para graficar", Toast.LENGTH_SHORT).show();
-                                }
-
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                // Maneja el error en caso de que la consulta falle
-                                Toast.makeText(getContext(), "Error al obtener las calorías basales", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // Maneja el error en caso de que la consulta falle
-                        Toast.makeText(getContext(), "Error al obtener las calorías", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-
-
-
 
 
 
@@ -453,6 +392,75 @@ public class Inicio extends Fragment {
     private void actualizarProgresoConsumidas(int caloriasConsumidas, double caloriasBasales) {
         int progress = (caloriasConsumidas * 100) / (int)caloriasBasales;
         progressBarConsumidas.setProgress(progress);
+    }
+    private void graficar(){
+
+
+        try {
+            System.out.println(">>>>>>>>>>>>>>>"+ userUid);
+            String userId = mAuth.getCurrentUser().getUid();
+            System.out.println("<<<<<<<<<<<<<<<<"+userId);
+            String userIdPrefix = userId.substring(0, 4);
+            CollectionReference comidaCollectionRef = db.collection("eat");
+            Query query = comidaCollectionRef.whereGreaterThanOrEqualTo(FieldPath.documentId(), userIdPrefix)
+                    .whereLessThan(FieldPath.documentId(), userIdPrefix + "\uf8ff");
+            // Calorias consumidas
+            // Consulta todos los documentos en la colección "dieta"
+            query.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful())
+                {
+                    int totalCalorias = 0;
+                    int totalConsumidas = 0;
+                    // Recorre cada documento en la colección
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        // Obtiene el valor del campo "calories" como un entero
+                        //if (document.getId().startsWith(userIdPrefix)){
+                            String caloriesString = document.getString("calories");
+                            int calories = Integer.parseInt(caloriesString);
+                            // Suma las calorías al total
+                            totalConsumidas += calories;
+                        //}
+                    }
+                    System.out.println("total consumidas >>>>>>>>>>>>>>>>>>>>>>>>>> " + totalConsumidas);
+                    txtViewCaloriasDieta.setText(String.valueOf(totalConsumidas) + " kcal");
+                    textViewConsumidasGraf.setText(String.valueOf(totalCalorias) + " kcal");
+                    CollectionReference basalesCollectionRef = db.collection("account").document(userUid).collection("antropometric_dates");
+                    int finalTotalCalorias = totalCalorias;
+                    basalesCollectionRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot querySnapshot) {
+                            if (!querySnapshot.isEmpty()) {
+                                // Obtén el primer documento de la colección "basales"
+                                DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
+                                documentSnapshot.getDouble("calculated_calories");
+                                Double caloriasBasales = documentSnapshot.getDouble("calculated_calories");
+                                int calBal = Double.valueOf(caloriasBasales).intValue();
+                                int progressConsumidas = (finalTotalCalorias * 100) / calBal;
+                                // Establece el porcentaje de progreso en el ProgressBar de consumidas
+                                progressBarConsumidas.setProgress(progressConsumidas);
+                                actualizarProgresoConsumidas(finalTotalCalorias, calBal);
+
+                            } else {
+                                // No se encontraron documentos en la colección "basales"
+                                //Me falta arreglar esto
+                                Toast.makeText(getContext(), "No se encontraron calorías basales para graficar", Toast.LENGTH_SHORT).show();
+                            }
+
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            // Maneja el error en caso de que la consulta falle
+                            Toast.makeText(getContext(), "Error al obtener las calorías basales", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
+            });
+
+        }   catch (Exception e ) {
+            System.out.println(e);
+        }
     }
 
 

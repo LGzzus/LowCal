@@ -1,6 +1,7 @@
 package com.example.lowca;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -37,6 +39,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.UUID;
@@ -57,7 +60,8 @@ public class Agregar_mas extends Fragment {
 
     ListView listViewAlimentos, listViewEjericicios;
     Spinner spinnerCalorias, spinnerAlimento, spinnerCantidad, spinnerEjercicio, spinnerMinutos;
-    Button btnAgregarAlimento,btnAgregarEjercicio, btnAlimentacionMas , btnEjercicioMas;
+    Button btnAgregarAlimento,btnAgregarEjercicio, btnAlimentacionMas , btnEjercicioMas, btnSeleccionarFecha;
+
     //Se usara para que se identique el objeto
     private FirebaseAuth mAuth;
     FirebaseFirestore db;
@@ -125,6 +129,8 @@ public class Agregar_mas extends Fragment {
         btnAlimentacionMas = view.findViewById(R.id.btnAlimentacionMas);
         btnEjercicioMas = view.findViewById(R.id.btnEjercicioMas);
 
+        btnSeleccionarFecha = view.findViewById(R.id.btnSeleccionarFecha);
+
         listViewAlimentosAdapter = new ListViewAlimentosAdapter(getActivity(), listAlimentos);
         listViewAlimentos.setAdapter(listViewAlimentosAdapter);
 
@@ -142,6 +148,16 @@ public class Agregar_mas extends Fragment {
                 agregarEjercicio(view);
             }
         });
+
+        btnSeleccionarFecha.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog();
+            }
+        });
+
+
+
         inicializarFirebase();
         cargarAlimentosDisponibles();
         listarAlimentos();
@@ -207,7 +223,6 @@ public class Agregar_mas extends Fragment {
         );
         View mView = getLayoutInflater().inflate(R.layout.agregar_comida,null);
         Button btnAgregarComida = (Button) mView.findViewById(R.id.btnAgregarComida);
-        //Spinner spinnerCaloria = mView.findViewById(R.id.spinnerCalorias);
         Spinner spinnerAlimento = mView.findViewById(R.id.spinnerAlimento);
         Spinner spinnerCantidad = mView.findViewById(R.id.spinnerCantidad);
         ArrayAdapter<String> adapterAlimentos = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, listAlimentosDisponibles);
@@ -227,48 +242,58 @@ public class Agregar_mas extends Fragment {
                 String alimentos = spinnerAlimento.getSelectedItem().toString();
                 String cantidades = spinnerCantidad.getSelectedItem().toString();
                 db.collection("food").document();
-                obtenerCaloriasAlimento(alimentos, cantidades);
-                //int cantidadOperacion = Integer.parseInt(cantidades);
-                //int calorias;
-                //cantidadOperacion= 1;
-                System.out.println(caloriasAlimentos);
-                String caloriasString = String.valueOf(caloriasAlimentos);
-                String alimento = alimentos;
-                String cantidad = cantidades;
-                Alimentos alimentoss = new Alimentos();
-                alimentoss.setAlimento(alimento);
-                alimentoss.setCaloria(caloriasString);
-                alimentoss.setCantidad(cantidad);
-                long fechaMilisegundos = getFechaMilisegundos();
-                String fechaNormal = getFechaNormal(fechaMilisegundos);
-                alimentoss.setFechaRegistro(getFechaNormal(getFechaMilisegundos()));
-                Map<String,Object> alimentosDb=new HashMap<>();
-                alimentosDb.put("calories",caloriasString);
-                alimentosDb.put("eat",alimento);
-                alimentosDb.put("amount",cantidad);
-                alimentosDb.put("date", fechaNormal);
-                String documentId = userIdPrefix + "-" + UUID.randomUUID().toString(); // Generar un ID único combinando los primeros 4 caracteres del userId y un identificador aleatorio
-                db.collection("eat").document(documentId).set(alimentosDb).addOnSuccessListener(
-                        new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                listAlimentos.add(alimentoss);
-                                dialog.dismiss();
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        listarAlimentos();
-                                    }
-                                }, 100);
-                                //Toast.makeText(Agregar_mas.this,"El alimento se agrego correctamente",Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                ).addOnFailureListener(new OnFailureListener() {
+                obtenerCaloriasAlimento(alimentos, cantidades, new OnCaloriasObtenidasListener() {
                     @Override
-                    public void onFailure(@NonNull Exception e) {
-                        System.out.println("Ocurrio un error");
+                    public void onCaloriasObtenidas(int calorias) {
+                        // Realizar el resto de las operaciones con las calorías obtenidas
+                        caloriasAlimentos = calorias;
+                        System.out.println("btn Agregar comida" + caloriasAlimentos);
+
+                        //int cantidadOperacion = Integer.parseInt(cantidades);
+                        //int calorias;
+                        //cantidadOperacion= 1;
+                        System.out.println("btn Agregar comida" + caloriasAlimentos);
+                        String caloriasString = String.valueOf(caloriasAlimentos);
+                        //String alimento = alimentos;
+                        //String cantidad = cantidades;
+                        Alimentos alimentoss = new Alimentos();
+                        alimentoss.setAlimento(alimentos);
+                        alimentoss.setCalorias(caloriasString);
+                        alimentoss.setCantidad(cantidades);
+                        long fechaMilisegundos = getFechaMilisegundos();
+                        String fechaNormal = getFechaNormal(fechaMilisegundos);
+                        alimentoss.setFechaRegistro(getFechaNormal(getFechaMilisegundos()));
+                        Map<String,Object> alimentosDb=new HashMap<>();
+                        alimentosDb.put("calories",String.valueOf(caloriasAlimentos));
+                        System.out.println("Calorias String db" + String.valueOf(caloriasAlimentos));
+                        alimentosDb.put("eat",alimentos);
+                        alimentosDb.put("amount",cantidades);
+                        System.out.println("Cantidades db" + cantidades);
+                        alimentosDb.put("date", fechaNormal);
+                        String documentId = userIdPrefix + "-" + UUID.randomUUID().toString(); // Generar un ID único combinando los primeros 4 caracteres del userId y un identificador aleatorio
+                        db.collection("eat").document(documentId).set(alimentosDb).addOnSuccessListener(
+                                new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        listAlimentos.add(alimentoss);
+                                        dialog.dismiss();
+                                        new Handler().postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                listarAlimentos();
+                                            }
+                                        }, 100);
+                                    }
+                                }
+                        ).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                System.out.println("Ocurrio un error");
+                            }
+                        });
                     }
                 });
+
 
             }
         });
@@ -291,7 +316,13 @@ public class Agregar_mas extends Fragment {
         });
     }
 
-    private void obtenerCaloriasAlimento(String nombreAlimento, String cantidadSeleccionada) {
+    interface OnCaloriasObtenidasListener {
+        void onCaloriasObtenidas(int calorias);
+    }
+
+
+
+    public void obtenerCaloriasAlimento(String nombreAlimento, String cantidadSeleccionada, OnCaloriasObtenidasListener listener) {
         CollectionReference alimentosRef = db.collection("food");
         Query query = alimentosRef.whereEqualTo("name", nombreAlimento);
         System.out.println(nombreAlimento);
@@ -299,23 +330,26 @@ public class Agregar_mas extends Fragment {
         query.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : task.getResult()) {
-                    String caloriasString = document.getString("caloriesU");
-                    if (caloriasString != null) {
-                        int caloriasUnidad = Integer.parseInt(caloriasString);
+                    Long caloriasLong = document.getLong("caloriesU");
+                    if (caloriasLong != null) {
+                        int caloriasUnidad = caloriasLong.intValue();
+                        System.out.println(caloriasUnidad);
                         int cantidad = Integer.parseInt(cantidadSeleccionada);
                          caloriasAlimentos = caloriasUnidad * cantidad;
-                        System.out.println(caloriasAlimentos);
+                        System.out.println("Calorias alimentos en el obtener calorias" + caloriasAlimentos);
                         // Realizar el resto de las operaciones con las calorías obtenidas
                         // ...
+                        if (listener != null) {
+                            listener.onCaloriasObtenidas(caloriasAlimentos);
+                        }
 
                         return; // Finalizar la función después de obtener las calorías
                     }
                 }
 
-                // El alimento seleccionado no se encontró en la base de datos
-                // Manejar el caso de error
             } else {
                 // Manejar el caso de error en la consulta a la base de datos
+                System.out.println("Error al consultar las calorias");
             }
         });
     }
@@ -550,5 +584,65 @@ public class Agregar_mas extends Fragment {
         });
 
     }
+    private void showDatePickerDialog() {
+        // Obtener la fecha actual como valores iniciales del selector
+        Calendar calendar = Calendar.getInstance();
+        int initialYear = calendar.get(Calendar.YEAR);
+        int initialMonth = calendar.get(Calendar.MONTH);
+        int initialDay = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                getContext(),
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        // Obtener la fecha seleccionada en el formato deseado ("yyyy-MM-dd")
+                        String selectedDate = String.format(Locale.getDefault(), "%04d-%02d-%02d", year, monthOfYear + 1, dayOfMonth);
+                        listarAlimentosPorFecha(selectedDate);
+                    }
+                },
+                initialYear, initialMonth, initialDay
+        );
+
+        datePickerDialog.show();
+    }
+
+
+    private void listarAlimentosPorFecha(String selectedDate) {
+        try {
+            userId = mAuth.getCurrentUser().getUid();
+            String userIdPrefix = userId.substring(0, 4);
+            CollectionReference alimentosRef = db.collection("eat");
+            Query query = alimentosRef
+                    .whereGreaterThanOrEqualTo("date", selectedDate + " 00:00:00")
+                    .whereLessThanOrEqualTo("date", selectedDate + " 23:59:59")
+                    .whereGreaterThanOrEqualTo(FieldPath.documentId(), userIdPrefix)
+                    .whereLessThan(FieldPath.documentId(), userIdPrefix + "\uf8ff");
+            System.out.println("fecha seleccionada" + selectedDate);
+            query.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    listAlimentos.clear();
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Alimentos alimento = document.toObject(Alimentos.class);
+                        alimento.setId(document.getId());
+                        alimento.setAlimento(document.getString("eat"));
+                        alimento.setCalorias(document.getString("calories") + " cal");
+                        alimento.setCantidad(document.getString("amount"));
+                        listAlimentos.add(alimento);
+                    }
+                    listViewAlimentosAdapter.notifyDataSetChanged();
+                    System.out.println("filtro por fecha");
+                } else {
+                    // Manejar el caso de error
+                    System.out.println("Error en el momento de mostrar la lista de alimentos");
+                }
+            });
+        } catch (Exception e){
+            System.out.println(e);
+        }
+
+    }
+
+
 
 }
