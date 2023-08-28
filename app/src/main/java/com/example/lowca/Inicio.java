@@ -1,14 +1,8 @@
 package com.example.lowca;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -19,7 +13,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 
 
@@ -28,6 +21,7 @@ import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -399,7 +393,7 @@ public class Inicio extends Fragment {
         barChart.getAxisLeft().setEnabled(false);
         barChart.getAxisRight().setEnabled(false);
         barChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-        cargarYMostrarGrafico(barChart);
+        cargarYMostrarGraficoBarras(barChart);
 
 
         return vista;
@@ -427,7 +421,6 @@ public class Inicio extends Fragment {
             Query query = comidaCollectionRef.whereGreaterThanOrEqualTo(FieldPath.documentId(), userIdPrefix)
                     .whereEqualTo("date", fecha)
                     .whereLessThan(FieldPath.documentId(), userIdPrefix + "\uf8ff");
-            // Calorias consumidas
             // Consulta todos los documentos en la colección "dieta"
             query.get().addOnCompleteListener(task -> {
                 if (task.isSuccessful())
@@ -483,102 +476,91 @@ public class Inicio extends Fragment {
 
 
 }
-    private void cargarYMostrarGrafico(BarChart barChart) {
+    private void cargarYMostrarGraficoBarras(BarChart barChart) {
         Calendar calendar = Calendar.getInstance();
-        int currentDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
 
-// Calcula el índice del domingo como 1 y el sábado como 7
-        int sundayIndex = 1;
-        int saturdayIndex = 7;
+            calendar.add(Calendar.DAY_OF_YEAR, -7);
+            java.util.Date lastWeek = calendar.getTime();
 
-// Calcula el índice del día actual (resta 1 porque los índices en la lista de entradas comienzan en 0)
-        int todayIndex = currentDayOfWeek - 1;
+            Map<String, Integer> caloriasPorDia = new HashMap<>();
 
-// Calcula el índice del día anterior al domingo de la semana actual
-        int startDayIndex = todayIndex - (currentDayOfWeek - sundayIndex);
+            CollectionReference eatCollectionRef = db.collection("eat");
+        String userId = mAuth.getCurrentUser().getUid();
+        String userIdPrefix = userId.substring(0, 4);
+        int year = calendar.get(Calendar.YEAR);
+        int monthOfYear = calendar.get(Calendar.MONTH);
+        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        //String fecha = String.format(Locale.getDefault(), "%04d-%02d-%02d", year, monthOfYear + 1, dayOfMonth);
 
-// Si el índice es negativo, ajusta para volver a la semana pasada
-        if (startDayIndex < 0) {
-            startDayIndex += 7;
-        }
+            eatCollectionRef.whereGreaterThanOrEqualTo(FieldPath.documentId(), userIdPrefix)
+                    //.whereEqualTo("date", fecha)
+                    .whereLessThan(FieldPath.documentId(), userIdPrefix + "\uf8ff")
+                    .get()
+                    .addOnSuccessListener(querySnapshot -> {
+                        //Map<String, Integer> caloriasPorDia = new HashMap<>();
+                        for (QueryDocumentSnapshot document : querySnapshot) {
+                            String fecha = document.getString("date");
+                            String caloriasString = document.getString("calories");
+                            int calorias = Integer.parseInt(caloriasString);
+                            // Si ya existe una entrada para esta fecha, suma las calorías
+                            if (caloriasPorDia.containsKey(fecha)) {
+                                calorias += caloriasPorDia.get(fecha);
+                            }
+                            caloriasPorDia.put(fecha, calorias);
+                        }
+                        ArrayList<BarEntry> entries = new ArrayList<>();
+                        ArrayList<String> labels = new ArrayList<>();
 
-        List<QueryDocumentSnapshot> documentsThisWeek = new ArrayList<>();
-        for (QueryDocumentSnapshot document : documentsThisWeek) {
-            // Obtiene la fecha del documento y extrae el día de la semana
-            String userId = mAuth.getCurrentUser().getUid();
-            String userIdPrefix = userId.substring(0, 4); // Obtener los primeros 4 caracteres del userId
-            Calendar calendario = Calendar.getInstance();
-            int year = calendario.get(Calendar.YEAR);
-            int monthOfYear = calendario.get(Calendar.MONTH);
-            int dayOfMonth = calendario.get(Calendar.DAY_OF_MONTH);
-            String fecha = String.format(Locale.getDefault(), "%04d-%02d-%02d", year, monthOfYear + 1, dayOfMonth);
+                        int index = 0;
+                        for (Map.Entry<String, Integer> entry : caloriasPorDia.entrySet()) {
+                            String fecha = entry.getKey();
+                            int calorias = entry.getValue();
 
-            String dateString = document.getString("date"); // Asegúrate de tener el campo de fecha en tu documento
-            //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-            try {
-                Date date = Date.valueOf(dateString);
-                calendar.setTime(date);
-                int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+                            entries.add(new BarEntry(index, calorias));
+                            labels.add(fecha);
+                            index++;
+                        }
 
-                // Si el día de la semana está dentro del rango de domingo a sábado, agrega el documento
-                if (dayOfWeek >= sundayIndex && dayOfWeek <= saturdayIndex) {
-                    documentsThisWeek.add(document);
-                }
-            } catch (Exception e) {
-                // Manejo de la excepción, podrías mostrar un mensaje de error o realizar alguna acción apropiada
-                System.out.println(e);
-                e.printStackTrace(); // Opcional: Puedes quitar esta línea si no deseas imprimir el stack trace
-            }
-        }
+                        BarDataSet barDataSet = new BarDataSet(entries, "Calorías");
+                        barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
 
-        ArrayList<BarEntry> entries = new ArrayList<>();
+                        barDataSet.setValueTextSize(12f);
 
-        // Aquí debes cargar los datos de calorías basales y consumidas por día en "entries"
-        // Puedes utilizar un bucle para agregar cada entrada
+                        BarData barData = new BarData(barDataSet);
+                        barData.setBarWidth(0.8f);
 
-        for (int i = sundayIndex; i <= saturdayIndex; i++) {
-            List<QueryDocumentSnapshot> documentsForDay = new ArrayList<>();
-            for (QueryDocumentSnapshot document : documentsThisWeek) {
-                //SimpleDateFormat fecha = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                try {
-                    String dateString = document.getString("date"); // Asegúrate de tener el campo de fecha en tu documento
-                    Date date = Date.valueOf(dateString);
-                    int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-                    // Si el día de la semana coincide con "i", agrega el documento a documentsForDay
-                    if (dayOfWeek == i) {
-                        documentsForDay.add(document);
-                    }
-                } catch (Exception e) {
-                    System.out.println(e);
-                    e.printStackTrace();
-                }
-                // Parsea la fecha del documento y obtén el día de la semana
-                // Si el día de la semana coincide con "i", agrega el documento a documentsForDay
-                int totalConsumidasDia = 0;
-                // Calcula las calorías consumidas y las calorías basales para ese día
-                for (QueryDocumentSnapshot doc : documentsForDay) {
-                    // Parsea las calorías consumidas y las calorías basales desde los documentos y suma a los totales
-                    String calConsumidasStr = doc.getString("calories");
-                    int calConsumidasDia = Integer.parseInt(calConsumidasStr);
-                    totalConsumidasDia += calConsumidasDia;
-                }
-                // Luego, calcula las calorías consumidas y las calorías basales para ese día
-                entries.add(new BarEntry(i, totalConsumidasDia));
-                entries.add(new BarEntry(i + 0.2f , calBal ));
+                        ViewGroup.LayoutParams layoutParams = barChart.getLayoutParams();
+                        layoutParams.height = 800;
 
-            }
-        }
-        entries.add(new BarEntry(0,calBal));
+                        barChart.setLayoutParams(layoutParams);
+                        barChart.setData(barData);
+                        barChart.setFitBars(true);
+                        barChart.invalidate();
 
-        BarDataSet barDataSet = new BarDataSet(entries, "Calorías");
-        barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-
-        BarData barData = new BarData(barDataSet);
-        barData.setBarWidth(0.4f);
-
-        barChart.setData(barData);
-        barChart.setFitBars(true);
-        barChart.invalidate();
+                        XAxis xAxis = barChart.getXAxis();
+                        xAxis.setValueFormatter(new ValueFormatter() {
+                            @Override
+                            public String getFormattedValue(float value) {
+                                int intValue = (int) value;
+                                if (intValue >= 0 && intValue < labels.size()) {
+                                    String fecha = labels.get(intValue);
+                                    // Supongamos que la fecha tiene el formato "yyyy-MM-dd"
+                                    SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                                    SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM", Locale.getDefault());
+                                    try {
+                                        java.util.Date date = inputFormat.parse(fecha);
+                                        return outputFormat.format(date);
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                return "";
+                            }
+                        });
+                    })
+                    .addOnFailureListener(e -> {
+                        System.out.println("error al graficar con barras" +e);
+                    });
     }
 }
 

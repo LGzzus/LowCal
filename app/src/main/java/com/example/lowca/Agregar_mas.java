@@ -203,7 +203,8 @@ public class Agregar_mas extends Fragment {
             int monthOfYear = calendar.get(Calendar.MONTH);
             int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
             String fecha = String.format(Locale.getDefault(), "%04d-%02d-%02d", year, monthOfYear + 1, dayOfMonth);
-            txtViewFecha.setText(fecha);
+            String fechaMexico = String.format(Locale.getDefault(), "%02d-%02d-%04d", dayOfMonth , monthOfYear + 1, year);
+            txtViewFecha.setText(fechaMexico);
             CollectionReference alimentosRef = db.collection("eat");
             Query query = alimentosRef
                     .whereEqualTo("date", fecha)
@@ -261,11 +262,9 @@ public class Agregar_mas extends Fragment {
                 String alimentos = spinnerAlimento.getSelectedItem().toString();
                 String cantidades = spinnerCantidad.getSelectedItem().toString();
                 db.collection("food").document();
-                System.out.println("boton 2 <<<<<<<<<<<<<<<<<<<<<<<<<<");
                 obtenerCaloriasAlimento(alimentos, cantidades, new OnCaloriasObtenidasListener() {
                     @Override
                     public void onCaloriasObtenidas(int calorias) {
-                        System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<boton 2");
                         // Realizar el resto de las operaciones con las calorías obtenidas
                         caloriasAlimentos = calorias;
                         String caloriasString = String.valueOf(caloriasAlimentos);
@@ -483,11 +482,9 @@ public class Agregar_mas extends Fragment {
                 String ejercicios = spinnerEjercicio.getSelectedItem().toString();
                 String minutos = spinnerMinutos.getSelectedItem().toString();
                 db.collection("excercises_db").document();
-                System.out.println("boton<<<<<<<<<<<<<<<<<<<<<<<<<<");
                 obtenerCaloriasEjercicio(ejercicios, minutos, new OnCaloriasObtenidasEjercicioListener() {
                     @Override
                     public void onCaloriasObtenidasEjericicio(int caloriasEjer) {
-                        System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<boton");
                         caloriasEjercicio = caloriasEjer;
                         String caloriasString = String.valueOf(caloriasEjercicio);
                         Ejercicios ejercicioss = new Ejercicios();
@@ -682,7 +679,7 @@ public class Agregar_mas extends Fragment {
         try {
             userId = mAuth.getCurrentUser().getUid();
             String userIdPrefix = userId.substring(0, 4);
-            CollectionReference ejerciciosRef = db.collection("excercises_db");
+            CollectionReference ejerciciosRef = db.collection("exercise");
             Query query = ejerciciosRef
                     .whereEqualTo("date", selectedDate)
                     .whereGreaterThanOrEqualTo(FieldPath.documentId(), userIdPrefix)
