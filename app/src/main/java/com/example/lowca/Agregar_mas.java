@@ -369,7 +369,7 @@ public class Agregar_mas extends Fragment {
     }
     public String getFechaNormal(long fechaMilisegundos){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        sdf.setTimeZone(TimeZone.getTimeZone("GTM-5"));
+        //sdf.setTimeZone(TimeZone.getTimeZone("GTM-5"));
         String fecha = sdf.format(fechaMilisegundos);
         return fecha;
     }
@@ -427,7 +427,7 @@ public class Agregar_mas extends Fragment {
             int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
             String fecha = String.format(Locale.getDefault(), "%04d-%02d-%02d", year, monthOfYear + 1, dayOfMonth);
             Query query = ejerciciosRef
-            //        .whereEqualTo("date", fecha)
+                    .whereEqualTo("date", fecha)
                     .whereGreaterThanOrEqualTo(FieldPath.documentId(), userIdPrefix)
                     .whereLessThan(FieldPath.documentId(), userIdPrefix + "\uf8ff");
             query.get().addOnCompleteListener(task -> {

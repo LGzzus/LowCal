@@ -13,6 +13,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.Calendar;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -25,6 +27,8 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -41,6 +45,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -477,53 +483,54 @@ public class Inicio extends Fragment {
 
 }
     private void cargarYMostrarGraficoBarras(BarChart barChart) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Calendar calendar = Calendar.getInstance();
+        java.util.Date currentDate = calendar.getTime();
+        calendar.add(Calendar.DAY_OF_YEAR, -6);
+        java.util.Date lastWeek = calendar.getTime();
 
-            calendar.add(Calendar.DAY_OF_YEAR, -7);
-            java.util.Date lastWeek = calendar.getTime();
+        Map<String, Integer> caloriasPorDia = new HashMap<>();
 
-            Map<String, Integer> caloriasPorDia = new HashMap<>();
-
-            CollectionReference eatCollectionRef = db.collection("eat");
+        CollectionReference eatCollectionRef = db.collection("eat");
         String userId = mAuth.getCurrentUser().getUid();
         String userIdPrefix = userId.substring(0, 4);
-        int year = calendar.get(Calendar.YEAR);
-        int monthOfYear = calendar.get(Calendar.MONTH);
-        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-        //String fecha = String.format(Locale.getDefault(), "%04d-%02d-%02d", year, monthOfYear + 1, dayOfMonth);
 
-            eatCollectionRef.whereGreaterThanOrEqualTo(FieldPath.documentId(), userIdPrefix)
-                    //.whereEqualTo("date", fecha)
-                    .whereLessThan(FieldPath.documentId(), userIdPrefix + "\uf8ff")
-                    .get()
-                    .addOnSuccessListener(querySnapshot -> {
-                        //Map<String, Integer> caloriasPorDia = new HashMap<>();
-                        for (QueryDocumentSnapshot document : querySnapshot) {
-                            String fecha = document.getString("date");
-                            String caloriasString = document.getString("calories");
-                            int calorias = Integer.parseInt(caloriasString);
-                            // Si ya existe una entrada para esta fecha, suma las calorías
-                            if (caloriasPorDia.containsKey(fecha)) {
-                                calorias += caloriasPorDia.get(fecha);
+        eatCollectionRef.whereGreaterThanOrEqualTo(FieldPath.documentId(), userIdPrefix)
+                .whereLessThan(FieldPath.documentId(), userIdPrefix + "\uf8ff")
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    for (QueryDocumentSnapshot document : querySnapshot) {
+                        String fecha = document.getString("date");
+                        String caloriasString = document.getString("calories");
+                        int calorias = Integer.parseInt(caloriasString);
+                        try {
+                            java.util.Date date = dateFormat.parse(fecha);
+                            if (date.after(lastWeek) && date.before(currentDate)) {
+                                // Si la fecha está en el rango, suma las calorías
+                                if (caloriasPorDia.containsKey(fecha)) {
+                                    int caloriasExistente = caloriasPorDia.get(fecha);
+                                    caloriasPorDia.put(fecha, caloriasExistente + calorias);
+                                } else {
+                                    caloriasPorDia.put(fecha, calorias);
+                                }
                             }
-                            caloriasPorDia.put(fecha, calorias);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
                         }
-                        ArrayList<BarEntry> entries = new ArrayList<>();
-                        ArrayList<String> labels = new ArrayList<>();
-
-                        int index = 0;
-                        for (Map.Entry<String, Integer> entry : caloriasPorDia.entrySet()) {
-                            String fecha = entry.getKey();
-                            int calorias = entry.getValue();
-
-                            entries.add(new BarEntry(index, calorias));
-                            labels.add(fecha);
-                            index++;
-                        }
+                    }
+                    ArrayList<BarEntry> entries = new ArrayList<>();
+                    ArrayList<String> labels = new ArrayList<>();
+                    int index = 0;
+                    for (Map.Entry<String, Integer> entry : caloriasPorDia.entrySet()) {
+                        String fecha = entry.getKey();
+                        int calorias = entry.getValue();
+                        entries.add(new BarEntry(index, calorias));
+                        labels.add(fecha);
+                        index++;
+                    }
 
                         BarDataSet barDataSet = new BarDataSet(entries, "Calorías");
                         barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-
                         barDataSet.setValueTextSize(12f);
 
                         BarData barData = new BarData(barDataSet);
@@ -544,7 +551,6 @@ public class Inicio extends Fragment {
                                 int intValue = (int) value;
                                 if (intValue >= 0 && intValue < labels.size()) {
                                     String fecha = labels.get(intValue);
-                                    // Supongamos que la fecha tiene el formato "yyyy-MM-dd"
                                     SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                                     SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM", Locale.getDefault());
                                     try {
