@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:contentPaddingBottom="15dp"
+        app:contentPaddingLeft="15dp"
+        app:contentPaddingRight="15dp"
+        app:contentPaddingTop="15dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txtNombre"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Nombre"
+                    android:textAlignment="center"
+                    android:textSize="16sp"
+                    android:textStyle="normal|bold" />
+
+                <TextView
+                    android:id="@+id/txtAreas"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Areas de beneficio"
+                    android:textAlignment="center" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:paddingTop="7dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:textAlignment="center">
+
+                        <TextView
+                            android:id="@+id/textView17"
+                            android:layout_width="32dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="EJERCICIO"
+                            android:textAlignment="center"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/textView10"
+                            android:layout_width="1dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="REP"
+                            android:textAlignment="center"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/textView3"
+                            android:layout_width="3dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="SETS"
+                            android:textAlignment="center"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/txtNombreEje1"
+                            android:layout_width="89dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="TextView"
+                            android:textAlignment="textStart"
+                            android:textStyle="normal" />
+
+                        <TextView
+                            android:id="@+id/txtRepeEje1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="TextView"
+                            android:textAlignment="center"
+                            android:textStyle="normal" />
+
+                        <TextView
+                            android:id="@+id/txtSetsEje1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="TextView"
+                            android:textAlignment="center"
+                            android:textStyle="normal" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/txtNombreEje3"
+                            android:layout_width="89dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="TextView"
+                            android:textAlignment="textStart"
+                            android:textStyle="normal" />
+
+                        <TextView
+                            android:id="@+id/txtRepeEje3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="TextView"
+                            android:textAlignment="center"
+                            android:textStyle="normal" />
+
+                        <TextView
+                            android:id="@+id/txtSetsEje3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="TextView"
+                            android:textAlignment="center"
+                            android:textStyle="normal" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/txtNombreEje2"
+                            android:layout_width="89dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="TextView"
+                            android:textAlignment="textStart"
+                            android:textStyle="normal" />
+
+                        <TextView
+                            android:id="@+id/txtRepeEje2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="TextView"
+                            android:textAlignment="center"
+                            android:textStyle="normal" />
+
+                        <TextView
+                            android:id="@+id/txtSetsEje2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="TextView"
+                            android:textAlignment="center"
+                            android:textStyle="normal" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:paddingTop="5dp">
+
+                    <TextView
+                        android:id="@+id/textView19"
+                        android:layout_width="68dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Cal."
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/txtCalQuemadas"
+                        android:layout_width="121dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Calorias quemadas"
+                        android:textAlignment="textStart"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/txtDiaAsignado"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Fecha"
+                        android:textAlignment="textStart" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

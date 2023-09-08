@@ -1,14 +1,8 @@
 package com.example.lowca;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -19,14 +13,32 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+
+import java.util.Calendar;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
+
+
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.android.gms.tasks.Tasks;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -35,8 +47,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -66,6 +81,8 @@ public class Inicio extends Fragment {
     String userUid;
     long edad,hoy;
     double mb;
+    int calBal , totalConsumidas;
+
     ProgressBar progressBarRecomendadas;
 
     public Inicio() {
@@ -114,14 +131,80 @@ public class Inicio extends Fragment {
         progressBarConsumidas = vista.findViewById(R.id.progressBarConsumidas);
         progressBarReservadas = vista.findViewById(R.id.progressBarRecomendadas);
 
-        //tvProgressRecomendadas=vista.findViewById(R.id.textview);
-        //progressBarRecomendadas=vista.findViewById(R.id.progressBarRecomendadas);
+        tvProgressRecomendadas=vista.findViewById(R.id.tvProgressRecomendadas);
+        progressBarRecomendadas=vista.findViewById(R.id.progressBarRecomendadas);
 
         db=FirebaseFirestore.getInstance();
         mAuth=FirebaseAuth.getInstance();
         userUid = mAuth.getCurrentUser().getUid();
         obtenerDietaAsignada();
 
+
+        graficar();
+
+
+        /*subCollectionRef.get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        //String documentId=documentSnapshot.getId();
+
+                        String dato = documentSnapshot.getString("calorias_usuario");
+                        // Realiza las operaciones necesarias con los datos obtenidos de la subcolección
+                        String  cal= dato;
+                        System.out.println("********Calorias tablero: "+cal+"**********");
+
+
+                        tvCaloriasDieta.setText(dato+" kcal");
+
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    // Maneja el error en caso de que la lectura de la subcolección falle
+                });*/
+
+        query.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot querySnapshot) {
+                        if (!querySnapshot.isEmpty()) {
+                            DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
+                            String documentoId = documentSnapshot.getId();
+                            // Obtén los datos del documento
+                            Map<String, Object> datos = documentSnapshot.getData();
+                            // Accede a los campos específicos
+                            String calorias = (String) datos.get("calorias_usuario");
+
+
+                            tvCaloriasDieta.setText(calorias+" kcal");
+                        } else {
+                            // No se encontraron documentos en la colección
+                            Log.d("TAG", "No se encontraron documentos en la colección");
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Ocurrió un error al obtener los documentos
+                        Log.w("TAG", "Error al obtener los documentos", e);
+                    }
+                });
+
+
+
+        /*
+
+            Calcula el metabolismo basal (MB):
+
+            Para hombres: MB = 66 + (13.75 x peso en kg) + (5 x altura en cm) - (6.75 x edad en años).
+            Para mujeres: MB = 655 + (9.56 x peso en kg) + (1.85 x altura en cm) - (4.68 x edad en años).
+
+            Determina el nivel de actividad física:
+
+            Sedentario (poco o ningún ejercicio): MB x 1.2.
+            Moderadamente activo (ejercicio moderado de 3-5 días por semana): MB x 1.55.
+
+       */
 
         DocumentReference documentReferencia=db.collection("antropometric_dates").document(userUid);
         documentReferencia.get()
@@ -206,11 +289,13 @@ public class Inicio extends Fragment {
                                 System.out.println("****Calorias recomendadas segun el nivel de " +
                                         "acividad: "+mb);
                             }
-                            int basales=(int) mb;
-                            //String cal= String.valueOf(mb);
-//                            progressBarRecomendadas.setProgress(100);
-//                            tvProgressRecomendadas.setText(cal+" kcal recomendadas");
-//                            progressBarRecomendadas.setVisibility(View.VISIBLE);
+
+                            String cal= String.valueOf(mb);
+                            int basales=Integer.parseInt(cal);
+                            progressBarRecomendadas.setProgress(100);
+                            tvProgressRecomendadas.setText(basales+" kcal Recomendadas");
+                            progressBarRecomendadas.setVisibility(View.VISIBLE);
+
 
                             DocumentReference doc = db.collection("antropometric_dates").document(userUid);
                             Map<String, Object> campoNuevo = new HashMap<>();
@@ -256,11 +341,18 @@ public class Inicio extends Fragment {
                                 System.out.println("****Calorias recomendadas segun el nivel de " +
                                         "acividad: "+mb);
                             }
-                            int basales=(int) mb;
-                            String cal= String.valueOf(mb);
-                            //progressBarRecomendadas.setProgress(100);
-                            //tvProgressRecomendadas.setText(cal+" kcal recomendadas");
-                            //progressBarRecomendadas.setVisibility(View.VISIBLE);
+                            //int basales=(int) mb;
+                            //String cal= String.valueOf(mb);
+
+
+
+
+                            int calBasales = Double.valueOf(mb).intValue();
+                            tvCaloriasBasales.setText(String.valueOf(calBasales));
+
+                            progressBarRecomendadas.setProgress(100);
+                            tvProgressRecomendadas.setText(calBasales+" kcal recomendadas");
+                            progressBarRecomendadas.setVisibility(View.VISIBLE);
                             DocumentReference doc = db.collection("antropometric_dates").document(userUid);
                             Map<String, Object> campoNuevo = new HashMap<>();
                             campoNuevo.put("calculated_calories", mb);
@@ -296,72 +388,13 @@ public class Inicio extends Fragment {
 
 
         // Obtén la colección "dieta" del usuario actual
-        CollectionReference dietaCollectionRef = db.collection("account").document(userUid).collection("eat");
 
-        // Calorias consumidas
-        // Consulta todos los documentos en la colección "dieta"
-        dietaCollectionRef.get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot querySnapshot) {
-                        int totalCalorias = 0;
-
-                        // Recorre cada documento en la colección
-                        for (QueryDocumentSnapshot documentSnapshot : querySnapshot) {
-                            // Obtiene el valor del campo "calories" como un entero
-                            String caloriesString = documentSnapshot.getString("calories");
-                            int calories = Integer.parseInt(caloriesString);
-                            // Suma las calorías al total
-                            totalCalorias += calories;
-                        }
-                        txtViewCaloriasDieta.setText(String.valueOf(totalCalorias) + " kcal");
-                        textViewConsumidasGraf.setText(String.valueOf(totalCalorias) + " kcal");
-
-                        CollectionReference basalesCollectionRef = db.collection("account").document(userUid).collection("antropometric_dates");
-                        int finalTotalCalorias = totalCalorias;
-                        basalesCollectionRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                            @Override
-                            public void onSuccess(QuerySnapshot querySnapshot) {
-                                if (!querySnapshot.isEmpty()) {
-                                    // Obtén el primer documento de la colección "basales"
-                                    DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
-                                    documentSnapshot.getDouble("calculated_calories");
-                                    Double caloriasBasales = documentSnapshot.getDouble("calculated_calories");
-                                    int calBal = Double.valueOf(caloriasBasales).intValue();
-                                    int progressConsumidas = (finalTotalCalorias * 100) / calBal;
-                                    // Establece el porcentaje de progreso en el ProgressBar de consumidas
-                                    progressBarConsumidas.setProgress(progressConsumidas);
-                                    actualizarProgresoConsumidas(finalTotalCalorias, calBal);
-
-                                } else {
-                                    // No se encontraron documentos en la colección "basales"
-                                    //Me falta arreglar esto
-                                    //Toast.makeText(getContext(), "No se encontraron calorías basales para graficar", Toast.LENGTH_SHORT).show();
-                                }
-
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                // Maneja el error en caso de que la consulta falle
-                                //Toast.makeText(getContext(), "Error al obtener las calorías basales", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // Maneja el error en caso de que la consulta falle
-                        //Toast.makeText(getContext(), "Error al obtener las calorías", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-
-
-
-
-
+        BarChart barChart = vista.findViewById(R.id.barChart);
+        barChart.getDescription().setEnabled(false);
+        barChart.getAxisLeft().setEnabled(false);
+        barChart.getAxisRight().setEnabled(false);
+        barChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        cargarYMostrarGraficoBarras(barChart);
 
 
         return vista;
@@ -371,6 +404,12 @@ public class Inicio extends Fragment {
 
 
     }
+
+    private void actualizarProgresoConsumidas(int caloriasConsumidas, double caloriasBasales) {
+        int progress = (int) ((caloriasConsumidas * 100) / caloriasBasales);
+        progressBarConsumidas.setProgress(progress);
+    }
+  
     public void obtenerDietaAsignada(){
         DocumentReference userDocRef = db.collection("dieta_asignada").document(userUid);
 
@@ -399,12 +438,158 @@ public class Inicio extends Fragment {
 
 
     }
+  
+    private void graficar(){
+        try {
+            String userId = mAuth.getCurrentUser().getUid();
+            String userIdPrefix = userId.substring(0, 4);
+            CollectionReference comidaCollectionRef = db.collection("eat");
+            Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int monthOfYear = calendar.get(Calendar.MONTH);
+            int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+            String fecha = String.format(Locale.getDefault(), "%04d-%02d-%02d", year, monthOfYear + 1, dayOfMonth);
+            Query query = comidaCollectionRef.whereGreaterThanOrEqualTo(FieldPath.documentId(), userIdPrefix)
+                    .whereEqualTo("date", fecha)
+                    .whereLessThan(FieldPath.documentId(), userIdPrefix + "\uf8ff");
+            // Consulta todos los documentos en la colección "dieta"
+            query.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful())
+                {
+                     totalConsumidas = 0;
+                    // Recorre cada documento en la colección
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        // Obtiene el valor del campo "calories" como un entero
+                            String caloriesString = document.getString("calories");
+                            int calories = Integer.parseInt(caloriesString);
+                            // Suma las calorías al total
+                            totalConsumidas += calories;
+                    }
+                    txtViewCaloriasDieta.setText(String.valueOf(totalConsumidas) + " kcal");
+                    textViewConsumidasGraf.setText(String.valueOf(totalConsumidas) + " kcal Consumidas");
 
-    private void actualizarProgresoConsumidas(int caloriasConsumidas, double caloriasBasales) {
-        int progress = (caloriasConsumidas * 100) / (int)caloriasBasales;
-        progressBarConsumidas.setProgress(progress);
-    }
+                    actualizarProgresoConsumidas(totalConsumidas,calBal);
+                    DocumentReference basalesDocumentRef = db.collection("antropometric_dates").document(userUid);
+                    basalesDocumentRef.get()
+                        .addOnSuccessListener(documentSnapshot -> {
+                                if (documentSnapshot.exists()) {
+                                // Obtén el primer documento de la colección "basales"
+                                documentSnapshot.getDouble("calculated_calories");
+                                Double caloriasBasales = documentSnapshot.getDouble("calculated_calories");
+                                calBal = Double.valueOf(caloriasBasales).intValue();
+                                    int progressConsumidas = (totalConsumidas * 100) / calBal;
+                                    // Establece el porcentaje de progreso en el ProgressBar de consumidas
+                                    progressBarConsumidas.setProgress(progressConsumidas);
+                            } else {
+                                // No se encontraron documentos en la colección "basales"
+                                //Me falta arreglar esto
+                                Toast.makeText(getContext(), "No se encontraron calorías basales para graficar", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                            .addOnFailureListener(e -> {
+                                    // Maneja el error en caso de que la lectura del documento falle
+
+                    });
+            }else {
+                    // El documento no existe
+                }
+                    })
+                    .addOnFailureListener(e -> {
+                        // Maneja el error en caso de que la lectura del documento falle
+                    });
+    } catch (Exception e){
+            System.out.println(e);
+        }
+
 
 
 
 }
+    private void cargarYMostrarGraficoBarras(BarChart barChart) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Calendar calendar = Calendar.getInstance();
+        java.util.Date currentDate = calendar.getTime();
+        calendar.add(Calendar.DAY_OF_YEAR, -6);
+        java.util.Date lastWeek = calendar.getTime();
+
+        Map<String, Integer> caloriasPorDia = new HashMap<>();
+
+        CollectionReference eatCollectionRef = db.collection("eat");
+        String userId = mAuth.getCurrentUser().getUid();
+        String userIdPrefix = userId.substring(0, 4);
+
+        eatCollectionRef.whereGreaterThanOrEqualTo(FieldPath.documentId(), userIdPrefix)
+                .whereLessThan(FieldPath.documentId(), userIdPrefix + "\uf8ff")
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    for (QueryDocumentSnapshot document : querySnapshot) {
+                        String fecha = document.getString("date");
+                        String caloriasString = document.getString("calories");
+                        int calorias = Integer.parseInt(caloriasString);
+                        try {
+                            java.util.Date date = dateFormat.parse(fecha);
+                            if (date.after(lastWeek) && date.before(currentDate)) {
+                                // Si la fecha está en el rango, suma las calorías
+                                if (caloriasPorDia.containsKey(fecha)) {
+                                    int caloriasExistente = caloriasPorDia.get(fecha);
+                                    caloriasPorDia.put(fecha, caloriasExistente + calorias);
+                                } else {
+                                    caloriasPorDia.put(fecha, calorias);
+                                }
+                            }
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    ArrayList<BarEntry> entries = new ArrayList<>();
+                    ArrayList<String> labels = new ArrayList<>();
+                    int index = 0;
+                    for (Map.Entry<String, Integer> entry : caloriasPorDia.entrySet()) {
+                        String fecha = entry.getKey();
+                        int calorias = entry.getValue();
+                        entries.add(new BarEntry(index, calorias));
+                        labels.add(fecha);
+                        index++;
+                    }
+
+                        BarDataSet barDataSet = new BarDataSet(entries, "Calorías");
+                        barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+                        barDataSet.setValueTextSize(12f);
+
+                        BarData barData = new BarData(barDataSet);
+                        barData.setBarWidth(0.8f);
+
+                        ViewGroup.LayoutParams layoutParams = barChart.getLayoutParams();
+                        layoutParams.height = 800;
+  
+                        barChart.setLayoutParams(layoutParams);
+                        barChart.setData(barData);
+                        barChart.setFitBars(true);
+                        barChart.invalidate();
+
+                        XAxis xAxis = barChart.getXAxis();
+                        xAxis.setValueFormatter(new ValueFormatter() {
+                            @Override
+                            public String getFormattedValue(float value) {
+                                int intValue = (int) value;
+                                if (intValue >= 0 && intValue < labels.size()) {
+                                    String fecha = labels.get(intValue);
+                                    SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                                    SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM", Locale.getDefault());
+                                    try {
+                                        java.util.Date date = inputFormat.parse(fecha);
+                                        return outputFormat.format(date);
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                return "";
+                            }
+                        });
+                    })
+                    .addOnFailureListener(e -> {
+                        System.out.println("error al graficar con barras" +e);
+                    });
+    }
+}
+
