@@ -293,8 +293,10 @@ public class Inicio extends Fragment {
                                         "acividad: "+mb);
                             }
 
-                            String cal= String.valueOf(mb);
-                            int basales=Integer.parseInt(cal);
+                            //String cal= String.valueOf(mb);
+                            //int basales=Integer.parseInt(cal);
+                            //
+                            int basales=(int) mb;
                             progressBarRecomendadas.setProgress(100);
                             tvProgressRecomendadas.setText(basales+" kcal Recomendadas");
                             progressBarRecomendadas.setVisibility(View.VISIBLE);

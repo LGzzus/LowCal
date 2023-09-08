@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +37,7 @@ public class Dieta2 extends AppCompatActivity {
     private FirebaseAuth mAuth;
     String userUid,tipoDieta,idDieta,calorias,numDieta;
     Button btnAsignarDieta;
+    ImageButton btnRegresarDieta;
 
     private ProgressDialog mDialog;
 
@@ -55,6 +58,7 @@ public class Dieta2 extends AppCompatActivity {
         tvAlmuerzo=(TextView)findViewById(R.id.tvAlmuerzo);
         tvCena=(TextView)findViewById(R.id.tvCena);
         btnAsignarDieta=(Button) findViewById(R.id.btnAsignarDieta);
+        btnRegresarDieta=(ImageButton)findViewById(R.id.btnRegresarDieta);
         mAuth=FirebaseAuth.getInstance();
         mDialog= new ProgressDialog(this);
 
@@ -146,6 +150,9 @@ public class Dieta2 extends AppCompatActivity {
             }
         });
 
+    }
+    public void regresar(View view){
+        this.finish();
     }
     private void iniciarFirebase(){
         mAuth=FirebaseAuth.getInstance();
