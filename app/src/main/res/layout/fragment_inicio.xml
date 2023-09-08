@@ -122,7 +122,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:paddingEnd="8dp"
-                                    android:text="00000 kcal"
+                                    android:text="00000 Kcal"
                                     android:textAlignment="textEnd"
                                     android:textColor="@color/azul_fuerte" />
                             </LinearLayout>

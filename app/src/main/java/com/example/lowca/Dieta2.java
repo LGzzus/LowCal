@@ -1,17 +1,24 @@
 package com.example.lowca;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.lowca.Adaptadores.ListAdapterDietas;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.sql.Date;
@@ -21,15 +28,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Dieta2 extends AppCompatActivity {
-     Bundle recibirDatos;
+     //Bundle recibirDatos;
      String [] datosRecibidos;
-    private TextView tvNombreDieta,tvTotalCalorias,tvInfoDieta;
+    private TextView tvNombreDieta,tvTotalCalorias,tvDesayuno,tvAlmuerzo,tvCena;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
-    String userUid;
+    String userUid,tipoDieta,idDieta,calorias,numDieta;
     Button btnAsignarDieta;
-    Boolean estadoBoton;
+
     private ProgressDialog mDialog;
+
+    //Cambiar de color
+    private ListAdapterDietas mAdapter;
+    private RecyclerView mRecyclerView;
 
 
 
@@ -40,128 +51,106 @@ public class Dieta2 extends AppCompatActivity {
 
         tvNombreDieta=(TextView) findViewById(R.id.tvNombreDieta);
         tvTotalCalorias=(TextView) findViewById(R.id.tvTotalCalorias);
-        tvInfoDieta=(TextView)findViewById(R.id.tvInfoDieta);
+        tvDesayuno=(TextView)findViewById(R.id.tvDesayuno);
+        tvAlmuerzo=(TextView)findViewById(R.id.tvAlmuerzo);
+        tvCena=(TextView)findViewById(R.id.tvCena);
         btnAsignarDieta=(Button) findViewById(R.id.btnAsignarDieta);
-        String calorias;
-
-        recibirDatos= getIntent().getExtras();
         mAuth=FirebaseAuth.getInstance();
         mDialog= new ProgressDialog(this);
 
         db = FirebaseFirestore.getInstance();
-        estadoBoton=true;
 
+        Bundle recibirDatos = getIntent().getExtras();
+        if (recibirDatos != null) {
+            iniciarFirebase();
+            tipoDieta = recibirDatos.getString("tipo_dieta");
+            calorias = recibirDatos.getString("calorias");
+            numDieta=recibirDatos.getString("num_dieta");
+            //String infoDieta = recibirDatos.getString("info_dieta");
+            String desayuno=recibirDatos.getString("desayuno");
+            String almuerzo=recibirDatos.getString("almuerzo");
+            String cena=recibirDatos.getString("cena");
+            idDieta=recibirDatos.getString("id_dieta");
+            System.out.println("ID dieta: "+idDieta);
 
-        String infoDieta;
-        if(recibirDatos!=null) {
-            datosRecibidos = recibirDatos.getStringArray("keyDatos");
-
-        }else{
-            Toast.makeText(this,"Bundle nulo",Toast.LENGTH_LONG).show();
+            // Ahora puedes usar estos valores para mostrarlos en la interfaz o realizar otras operaciones
+            tvNombreDieta.setText(tvNombreDieta.getText()+tipoDieta);
+            tvTotalCalorias.setText(tvTotalCalorias.getText()+calorias);
+            tvDesayuno.setText(desayuno);
+            tvAlmuerzo.setText(almuerzo);
+            tvCena.setText(cena);
+        } else {
+            // Si no se recibieron datos, muestra un mensaje o realiza alguna acción
+            System.out.println("Datos nulos");
         }
 
-        tvNombreDieta.setText(tvNombreDieta.getText().toString()+ datosRecibidos[0]);
-        tvTotalCalorias.setText(tvTotalCalorias.getText().toString()+datosRecibidos[1]+" Kcal");
 
-        infoDieta=datosRecibidos[2];
-        if(infoDieta.equals("dieta1")){
-            String string=getString(R.string.dieta1);
-            tvInfoDieta.setText(string);
-            //Convertir las calorias a entero
-            calorias=datosRecibidos[1];
-            int numCalorias=Integer.valueOf(calorias);
-            System.out.println("\n********CALORIAS:  "+numCalorias+"*************");
-        }else if (infoDieta.equals("dieta2")){
+        /** Revisar el layout */
 
-            String string=getString(R.string.dieta2);
-            tvInfoDieta.setText(string);
-            //Convertir las calorias a entero
-            calorias=datosRecibidos[1];
-            int numCalorias=Integer.valueOf(calorias);
-            System.out.println("\n********CALORIAS:  "+numCalorias+"*************");
-        }else if(infoDieta.equals("dieta3")){
-            String string=getString(R.string.dieta3);
-            tvInfoDieta.setText(string);
-            //Convertir las calorias a entero
-            calorias=datosRecibidos[1];
-            int numCalorias=Integer.valueOf(calorias);
-            System.out.println("\n********CALORIAS:  "+numCalorias+"*************");
-        } else if (infoDieta.equals("dieta4")) {
-            String string=getString(R.string.dieta4);
-            tvInfoDieta.setText(string);
-            //Convertir las calorias a entero
-            calorias=datosRecibidos[1];
-            int numCalorias=Integer.valueOf(calorias);
-        } else if (infoDieta.equals("dieta5")) {
-            String string=getString(R.string.dieta5);
-            tvInfoDieta.setText(string);
-            //Convertir las calorias a entero
-            calorias=datosRecibidos[1];
-            int numCalorias=Integer.valueOf(calorias);
-
-        } else{
-            Toast.makeText(this,"No hay información",Toast.LENGTH_LONG).show();
-
-        }
 
 
         btnAsignarDieta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                long hoy = System.currentTimeMillis();
-
-                //System.out.println("****Ahora: "+ahora+"*******");
-                Date fechaActual = new Date(hoy);
-                // System.out.println("****FechaActual: "+fechaActual+"*******");
-                // Crea un formato para mostrar la fecha
-                SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
-                // System.out.println("****FormatoFecha: "+formatoFecha+"*******");
-                // Convierte la fecha actual al formato deseado
-                String fechaFormateada = formatoFecha.format(fechaActual);
-
-                userUid = mAuth.getCurrentUser().getUid();
-                CollectionReference parentCollectionRef=db.collection("account");
-                DocumentReference documentRef= parentCollectionRef.document(userUid);
-                CollectionReference subCollectionRef = documentRef.collection("dieta");
 
                 // Obtiene la hora actual
                 Calendar calendar = Calendar.getInstance();
                 java.util.Date horaActual =  calendar.getTime();
 
-               // Formatea la fecha en el formato deseado
                 SimpleDateFormat formatoFecha2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String horaActualFormateada = formatoFecha2.format(horaActual);
-                Map<String, Object> tipo_dieta = new HashMap<>();
-                /*Map<String, Object> calorias_usuario = new HashMap<>();
-                Map<String, Object> fecha = new HashMap<>();*/
-
-                tipo_dieta.put("tipo_dieta",datosRecibidos[0]);
-                tipo_dieta.put("calorias_usuario",datosRecibidos[1]);
-                tipo_dieta.put("fecha",fechaFormateada);
-                tipo_dieta.put("hora_registro",horaActualFormateada);
-
-                subCollectionRef.add(tipo_dieta)
-                        .addOnSuccessListener(documentReference -> {
-                            // Documento agregado exitosamente a la subcolección
-                            mDialog.setMessage("Asignado dieta...");
-                            mDialog.setCanceledOnTouchOutside(false);
-                            mDialog.show();
-                            Toast.makeText(Dieta2.this,"Dieta asignada",Toast.LENGTH_LONG).show();
-                            mDialog.dismiss();
-                            Dieta2.this.finish();
-
-                        })
-                        .addOnFailureListener(e -> {
-                            // Error al agregar el documento a la subcolección
-
-                        });
-                //btnAsignarDieta.setEnabled(false);
+                Map<String, Object> dieta_registrada = new HashMap<>();
+                dieta_registrada.put("tipo", tipoDieta);
+                dieta_registrada.put("id_dieta", idDieta);
+                dieta_registrada.put("calorias",calorias);
+                dieta_registrada.put("registro",horaActualFormateada);
+                dieta_registrada.put("num_dieta",numDieta);
 
 
+                DocumentReference userDocRef = db.collection("dieta_asignada").document(userUid);
+
+
+                // Agregar el documento a la colección
+                userDocRef.get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            // El documento existe, actualizar los campos
+                            userDocRef.update(dieta_registrada)
+                                    .addOnSuccessListener(aVoid -> {
+                                        Log.d("Firestore", "Documento actualizado correctamente");
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Log.e("Firestore", "Error al actualizar el documento", e);
+                                    });
+                        } else {
+                            // El documento no existe, crearlo con los datos proporcionados
+                            userDocRef.set(dieta_registrada)
+                                    .addOnSuccessListener(aVoid -> {
+                                        Log.d("Firestore", "Documento creado correctamente");
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Log.e("Firestore", "Error al crear el documento", e);
+                                    });
+                        }
+                    } else {
+                        Log.e("Firestore", "Error al verificar el documento", task.getException());
+                    }
+                });
+
+
+
+
+                Toast.makeText(Dieta2.this,"Dieta asignada",Toast.LENGTH_LONG).show();
+                finish();
             }
-
         });
 
+    }
+    private void iniciarFirebase(){
+        mAuth=FirebaseAuth.getInstance();
+        userUid = mAuth.getCurrentUser().getUid();
+        db=FirebaseFirestore.getInstance();
     }
 
 }

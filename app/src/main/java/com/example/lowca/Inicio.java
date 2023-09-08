@@ -12,6 +12,13 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.List;
@@ -25,10 +32,8 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -132,11 +137,8 @@ public class Inicio extends Fragment {
         db=FirebaseFirestore.getInstance();
         mAuth=FirebaseAuth.getInstance();
         userUid = mAuth.getCurrentUser().getUid();
+        obtenerDietaAsignada();
 
-        CollectionReference parentCollectionRef = db.collection("account");
-        DocumentReference documentRef = parentCollectionRef.document(userUid);
-        CollectionReference subCollectionRef = documentRef.collection("dieta");
-        Query query = subCollectionRef.orderBy("hora_registro", Query.Direction.DESCENDING).limit(3);
 
         graficar();
 
@@ -203,6 +205,7 @@ public class Inicio extends Fragment {
             Moderadamente activo (ejercicio moderado de 3-5 días por semana): MB x 1.55.
 
        */
+
         DocumentReference documentReferencia=db.collection("antropometric_dates").document(userUid);
         documentReferencia.get()
                 .addOnSuccessListener(documentSnapshot -> {
@@ -216,27 +219,21 @@ public class Inicio extends Fragment {
                         Double pesoObjetivo=documentSnapshot.getDouble("target_weight");
                         Double caloriasBasales=documentSnapshot.getDouble("calculated_calories");
                         int calBal=Double.valueOf(caloriasBasales).intValue();
-                        tvCaloriasBasales.setText(String.valueOf(calBal));
+                        tvCaloriasBasales.setText(String.valueOf(calBal)+" Kcal");
 
-                        //System.out.println("******NAcido: "+nacido+"************");
                         //Obtener la fecha actual
                         hoy = System.currentTimeMillis();
 
-                        //System.out.println("****Ahora: "+ahora+"*******");
                         Date fechaActual = new Date(hoy);
-                        // System.out.println("****FechaActual: "+fechaActual+"*******");
+
                         // Crea un formato para mostrar la fecha
                         SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
-                        // System.out.println("****FormatoFecha: "+formatoFecha+"*******");
+
                         // Convierte la fecha actual al formato deseado
                         String fechaFormateada = formatoFecha.format(fechaActual);
-                        //System.out.println("****FechaFormateada: "+fechaFormateada+"*******");
 
                         // Imprime la fecha formateada
                         System.out.println("Fecha actual: " + fechaFormateada);
-
-                        //Obtener formato de la fecha del usuaario
-                        // String fechaString = "31/12/2022";
 
                         long milisegundos = 0;
                         long milisegundosEdad=0;
@@ -269,7 +266,7 @@ public class Inicio extends Fragment {
                          Moderadamente activo (ejercicio moderado de 3-5 días por semana): MB x 1.55.
 
                          */
-                        //double mb;
+
                         //Hombre
                         if(genero.equals("Hombre")){
                             mb=66+(13.75*peso)+(5*altura)-(6.75*edad);
@@ -322,10 +319,6 @@ public class Inicio extends Fragment {
                                         }
                                     });
 
-
-
-
-
                             //Mujer
                         }else if(genero.equals("Mujer")){
                             mb=66+(9.56*peso)+(1.85*altura)-(4.68*edad);
@@ -348,6 +341,9 @@ public class Inicio extends Fragment {
                                 System.out.println("****Calorias recomendadas segun el nivel de " +
                                         "acividad: "+mb);
                             }
+                            //int basales=(int) mb;
+                            //String cal= String.valueOf(mb);
+
 
 
 
@@ -381,9 +377,6 @@ public class Inicio extends Fragment {
                             System.out.println("Error");
                         }
 
-
-
-
                         // Realiza las operaciones necesarias con los datos del documento
                     } else {
                         // El documento no existe
@@ -392,6 +385,8 @@ public class Inicio extends Fragment {
                 .addOnFailureListener(e -> {
                     // Maneja el error en caso de que la lectura del documento falle
                 });
+
+
         // Obtén la colección "dieta" del usuario actual
 
         BarChart barChart = vista.findViewById(R.id.barChart);
@@ -414,6 +409,36 @@ public class Inicio extends Fragment {
         int progress = (int) ((caloriasConsumidas * 100) / caloriasBasales);
         progressBarConsumidas.setProgress(progress);
     }
+  
+    public void obtenerDietaAsignada(){
+        DocumentReference userDocRef = db.collection("dieta_asignada").document(userUid);
+
+        userDocRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                       String calorias= document.getString("calorias");
+
+                        tvCaloriasDieta.setText(calorias);
+
+                    } else {
+                        // El documento no existe
+                        Log.d("Firestore", "El documento no existe");
+                    }
+                } else {
+                    // Error al obtener el documento
+                    Log.e("Firestore", "Error al obtener el documento", task.getException());
+                }
+            }
+        });
+
+
+
+
+    }
+  
     private void graficar(){
         try {
             String userId = mAuth.getCurrentUser().getUid();
@@ -455,13 +480,11 @@ public class Inicio extends Fragment {
                                     int progressConsumidas = (totalConsumidas * 100) / calBal;
                                     // Establece el porcentaje de progreso en el ProgressBar de consumidas
                                     progressBarConsumidas.setProgress(progressConsumidas);
-
                             } else {
                                 // No se encontraron documentos en la colección "basales"
                                 //Me falta arreglar esto
                                 Toast.makeText(getContext(), "No se encontraron calorías basales para graficar", Toast.LENGTH_SHORT).show();
                             }
-
                         })
                             .addOnFailureListener(e -> {
                                     // Maneja el error en caso de que la lectura del documento falle
@@ -538,7 +561,7 @@ public class Inicio extends Fragment {
 
                         ViewGroup.LayoutParams layoutParams = barChart.getLayoutParams();
                         layoutParams.height = 800;
-
+  
                         barChart.setLayoutParams(layoutParams);
                         barChart.setData(barData);
                         barChart.setFitBars(true);

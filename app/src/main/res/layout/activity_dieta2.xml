@@ -25,100 +25,196 @@
         <TextView
             android:id="@+id/tvNombreDieta"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Tipo de dieta: "
+            android:layout_marginTop="10dp"
+            android:text="Tipo: "
             android:textColor="@color/white"
-            android:textSize="20dp"
+            android:textSize="22dp"
             android:textStyle="bold"
-         />
+            tools:layout_editor_absoluteX="-24dp"
+            tools:layout_editor_absoluteY="486dp" />
 
     </androidx.cardview.widget.CardView>
 
-    <ScrollView
-        android:id="@+id/scrollView6"
+
+    <TableRow
+        android:id="@+id/tableRow3"
         android:layout_width="match_parent"
-        android:layout_height="637dp"
+        android:layout_height="67dp"
         android:layout_marginTop="72dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.38"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="@+id/cardView">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tvTotalCalorias"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="Calorias totales: "
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:translationX="85dp"
+
+            app:srcCompat="@drawable/logo_lowcal" />
+    </TableRow>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:textAlignment="center"
+        android:backgroundTint="@color/encabezado"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tableRow3">
+
+        <TextView
+            android:id="@+id/tvPlanAlimenticio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Plan alimenticio:"
             android:gravity="center"
+            android:layout_marginStart="130dp"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/cardView"
+        app:layout_constraintVertical_bias="0.51">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
+            android:backgroundTint="@color/fondo_azul">
 
 
-            app:layout_constraintHorizontal_bias="0.5"
-
-            app:layout_constraintStart_toStartOf="parent">
-
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-
-                <TextView
-                    android:id="@+id/tvTotalCalorias"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Calorias totales: "
-                    android:textColor="@color/black"
-                    android:textSize="17dp"
-                    android:textStyle="bold" />
-
-                <ImageView
-                    android:id="@+id/imageView5"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:translationX="120dp"
-                    app:srcCompat="@drawable/logo_lowcal" />
-            </TableRow>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="15dp" />
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="15dp" />
             <TextView
-                android:id="@+id/tvPlanAlimenticio"
+                android:id="@+id/tv1"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Plan alimenticio:"
+                android:layout_height="wrap_content"
+                android:text="Desayuno"
                 android:textColor="@color/black"
-                android:textSize="17dp"
+
+                android:textSize="20dp"
                 android:textStyle="bold"
-                />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.047"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvPlanAlimenticio" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/tvDesayuno"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+
+            android:text="textview"
+            android:textColor="@color/black"
+
+            android:textSize="19dp"
+
+            />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="15dp" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/fondo_azul">
 
             <TextView
-                android:id="@+id/tvInfoDieta"
+                android:id="@+id/tv2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/dieta3"
+
+                android:text="Almuerzo"
                 android:textColor="@color/black"
 
-                android:textSize="17dp" />
-            <Space
+                android:textSize="20dp"
+                android:textStyle="bold" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/tvAlmuerzo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="textview"
+
+            android:textColor="@color/black"
+            android:textSize="19dp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="15dp" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/fondo_azul">
+
+            <TextView
+                android:id="@+id/tv3"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"></Space>
-
-            <Button
-
-                android:id="@+id/btnAsignarDieta"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/boton_redondo_azul"
 
-                android:text="Asignar"
-                android:textColor="@color/white"
-                android:textStyle="bold"></Button>
+                android:text="Cena"
+                android:textColor="@color/black"
 
-        </LinearLayout>
-    </ScrollView>
+                android:textSize="20dp"
+                android:textStyle="bold" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/tvCena"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="textview"
+
+            android:textColor="@color/black"
+            android:textSize="19dp" />
+    </LinearLayout>
+
+    <Button
+
+        android:id="@+id/btnAsignarDieta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="80dp"
+
+        android:background="@drawable/boton_redondo_azul"
+        android:text="Asignar"
+        android:textSize="18dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"></Button>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
