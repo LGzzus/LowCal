@@ -139,7 +139,10 @@ public class Inicio extends Fragment {
         userUid = mAuth.getCurrentUser().getUid();
         obtenerDietaAsignada();
 
-
+        CollectionReference parentCollectionRef = db.collection("account");
+        DocumentReference documentRef = parentCollectionRef.document(userUid);
+        CollectionReference subCollectionRef = documentRef.collection("dieta");
+        Query query = subCollectionRef.orderBy("hora_registro", Query.Direction.DESCENDING).limit(3);
         graficar();
 
 
