@@ -5,7 +5,7 @@
     android:id="@+id/spinnerAct"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Perfil">
+    tools:context=".perfil.View.Perfil">
 
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout
