@@ -124,8 +124,7 @@
             android:layout_width="280dp"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
-            android:maxLines="1"
-            android:maxLength="25"/>
+            android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
