@@ -32,6 +32,9 @@ public class datos1 extends AppCompatActivity {
     String[] datos1;
     String[] datosDos;
     Bundle recibirDatos;
+    private int maxLength;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +49,9 @@ public class datos1 extends AppCompatActivity {
         recibirDatos= getIntent().getExtras();
         //Establece que la alturo solo debe ser max de 3 cifras
         InputFilter lengthFilter = new InputFilter.LengthFilter(3);
+        InputFilter lengthFilter2 = new InputFilter.LengthFilter(3);
         etEstatura.setFilters(new InputFilter[]{lengthFilter});
+
         // Crea un InputFilter para limitar los decimales
         InputFilter decimalFilter = new InputFilter() {
             @Override
@@ -55,7 +60,7 @@ public class datos1 extends AppCompatActivity {
                 String newText = inputText.substring(0, dstart) + source.subSequence(start, end) + inputText.substring(dend);
 
                 // Verifica si el nuevo texto cumple con el formato de dos decimales después del punto
-                if (!newText.matches("^\\d+(\\.\\d{0,2})?$")) {
+                if (!newText.matches("^\\d{0,3}(\\.\\d{0,2})?$")) {
                     return "";
                 }
 
@@ -65,7 +70,10 @@ public class datos1 extends AppCompatActivity {
 
 
 
+
+
 // Agrega el InputFilter al TextInput
+        etPeso.setFilters(new InputFilter[]{lengthFilter2});
         etPeso.setFilters(new InputFilter[]{decimalFilter});
 
         btnContinuar.setOnClickListener(v -> {

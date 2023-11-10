@@ -57,6 +57,11 @@ public class CrearCuenta extends AppCompatActivity {
                     String correo=etCorreo.getText().toString();
                     String contraseña=etPassword.getText().toString();
                     datos= new String[]{nombre,correo,contraseña};
+                    Bundle pasarDatos = new Bundle();
+                    pasarDatos.putStringArray("keyDatos", datos);
+                    Intent intent = new Intent(CrearCuenta.this, datos1.class);
+                    intent.putExtras(pasarDatos);
+                    startActivity(intent);
                     mAuth.createUserWithEmailAndPassword(correo,contraseña).
                             addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                                 @Override
@@ -79,8 +84,7 @@ public class CrearCuenta extends AppCompatActivity {
                                 public void onFailure(@NonNull Exception e) {
                                     dialogAlert();
                                 }
-                            });
-                }
+                            });}
             }catch (Exception e){
             }
         });
@@ -164,7 +168,7 @@ public class CrearCuenta extends AppCompatActivity {
             retorno =false;
         }else {
             if (contraseña.length() < 6) {
-                tlContraseña.setError("Tu contraseña debe ser mayor a 6 digito");
+                tlContraseña.setError("Tu contraseña debe ser de almenos 6 caracteres");
                 retorno = false;
             } else {
                 tlContraseña.setErrorEnabled(false);
@@ -173,7 +177,10 @@ public class CrearCuenta extends AppCompatActivity {
         return retorno;
     }
     public void atras(View view){
-        this.finish();
+
+            this.finish();
+
+
     }
     private void dialogAlert(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

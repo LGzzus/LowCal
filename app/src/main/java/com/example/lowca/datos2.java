@@ -69,7 +69,7 @@ public class datos2 extends AppCompatActivity {
                 String newText = inputText.substring(0, dstart) + source.subSequence(start, end) + inputText.substring(dend);
 
                 // Verifica si el nuevo texto cumple con el formato de dos decimales después del punto
-                if (!newText.matches("^\\d+(\\.\\d{0,2})?$")) {
+                if (!newText.matches("^\\d{0,3}(\\.\\d{0,2})?$")) {
                     return "";
                 }
 
@@ -123,7 +123,6 @@ public class datos2 extends AppCompatActivity {
                     antropometric_dates.put("birth_date", nacido);
                     antropometric_dates.put("physical_activity_lever",nivelAcF);
                     antropometric_dates.put("calculated_calories",caloriasBasales );
-
 
                     if(rbMujer.isChecked()){
                         genero="Mujer";

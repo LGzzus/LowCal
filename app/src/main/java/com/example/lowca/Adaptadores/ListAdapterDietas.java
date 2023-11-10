@@ -83,6 +83,7 @@ public class ListAdapterDietas extends RecyclerView.Adapter<ListAdapterDietas.Vi
 
         if (selectedItemPosition == position) {
             holder.layoutDietas.setBackgroundColor(Color.BLUE); // Cambia el color de fondo deseado
+
         } else {
             holder.layoutDietas.setBackgroundColor(Color.WHITE); // Cambia el color de fondo deseado
         }

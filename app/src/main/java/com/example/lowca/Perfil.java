@@ -122,7 +122,7 @@ public class Perfil extends Fragment {
         ArrayAdapter<String> adapter= new ArrayAdapter<String>(main,android.R.layout.simple_spinner_item,
                 generos);
         spinnerGen.setAdapter(adapter);
-        String[] opciones={"Seleccione la actividad fisica","Sedentaria","Moderada","Activa"};
+        String[] opciones={"Seleccione la actividad fisica","Sedentaria","Activa"};
         ArrayAdapter<String> adapter2= new ArrayAdapter<String>(main,android.R.layout.simple_spinner_item,
                 opciones);
         spinnerAct.setAdapter(adapter2);
