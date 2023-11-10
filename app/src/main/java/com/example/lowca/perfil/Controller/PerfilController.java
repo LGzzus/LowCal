@@ -1,16 +1,21 @@
 package com.example.lowca.perfil.Controller;
 
+import android.view.View;
+import android.widget.ArrayAdapter;
+
 import com.example.lowca.perfil.Model.PerfilModel;
 import com.example.lowca.perfil.View.Perfil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class PerfilController {
     private Perfil perfilF;
     public PerfilModel perfilModel;
     public FirebaseAuth mAuth;
-    public FirebaseFirestore db;
 
     public PerfilController(Perfil perfil) {
         this.perfilF = perfil;
@@ -69,5 +74,35 @@ public class PerfilController {
                 perfilF.viewData(perfilModel);
             }
         });
+    }
+    public void editarPerfil(String gender, String phyAct){
+        String[] generos={"Mujer","Hombre"};
+        List<String> genderList = Arrays.asList(generos);
+        ArrayAdapter<String> adapter= new ArrayAdapter<String>(perfilF.main,android.R.layout.simple_spinner_item,
+                generos);
+        perfilF.spinnerGen.setAdapter(adapter);
+
+        int positiongender = genderList.indexOf(gender);
+        perfilF.spinnerGen.setSelection(positiongender);
+
+        String[] opciones={"Sedentaria","Moderada","Activa"};
+        List<String> actList = Arrays.asList(opciones);
+        ArrayAdapter<String> adapter2= new ArrayAdapter<String>(perfilF.main,android.R.layout.simple_spinner_item,
+                opciones);
+        perfilF.spinnerAct.setAdapter(adapter2);
+
+        int positionAct = actList.indexOf(phyAct);
+        perfilF.spinnerAct.setSelection(positionAct);
+
+        perfilF.editarDatos.setVisibility(View.INVISIBLE);
+        perfilF.guardarDatos.setVisibility(View.VISIBLE);
+        perfilF.etGenero.setVisibility(View.INVISIBLE);
+        perfilF.spinnerGen.setVisibility(View.VISIBLE);
+        perfilF.etActividadF.setVisibility(View.INVISIBLE);
+        perfilF.spinnerAct.setVisibility(View.VISIBLE);
+        perfilF.etFechan.setEnabled(true);
+        perfilF.etEstatura.setEnabled(true);
+        perfilF.etPesoA.setEnabled(true);
+        perfilF.etPesoO.setEnabled(true);
     }
 }

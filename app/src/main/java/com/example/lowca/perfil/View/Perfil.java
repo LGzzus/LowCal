@@ -2,7 +2,6 @@ package com.example.lowca.perfil.View;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -16,8 +15,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import com.example.lowca.IniciarSesion;
 import com.example.lowca.R;
 import com.example.lowca.perfil.Controller.PerfilController;
 import com.example.lowca.perfil.Model.PerfilModel;
@@ -34,17 +31,17 @@ public class Perfil extends Fragment {
     private String mParam2;
 
     private PerfilController perfilController;
-    View vista;
-    TextView tvNombre, tvCorreo, tvPesoO;
-    EditText etGenero, etPesoA, etEstatura, etActividadF, etFechan;
-    Button cerrarSesion, editarDatos, guardarDatos,btnExportarInfo;
-    Spinner spinnerGen, spinnerAct;
+    public View vista;
+    public  TextView tvNombre, tvCorreo, tvPesoO;
+    public EditText etGenero, etPesoA, etEstatura, etActividadF, etFechan, etPesoO;
+    public Button cerrarSesion, editarDatos, guardarDatos,btnExportarInfo;
+    public Spinner spinnerGen, spinnerAct;
     public FirebaseAuth mAuth;
     public  FirebaseFirestore db;
     String userID;
     private ProgressDialog progressDialog;
     public  ProgressDialog progressDialogsingOut;
-    Activity main;
+    public Activity main;
     public static Perfil newInstance(String param1, String param2) {
         Perfil fragment = new Perfil();
         Bundle args = new Bundle();
@@ -81,7 +78,7 @@ public class Perfil extends Fragment {
         etGenero = (EditText) vista.findViewById(R.id.etGenero);
         etPesoA = (EditText) vista.findViewById(R.id.etPesoA);
         etActividadF = (EditText) vista.findViewById(R.id.etActf);
-        tvPesoO = (TextView) vista.findViewById(R.id.tvPesoO);
+        etPesoO = (EditText) vista.findViewById(R.id.tvPesoO);
         cerrarSesion = (Button) vista.findViewById(R.id.cerrar_sesion);
         editarDatos = (Button) vista.findViewById(R.id.editar);
         guardarDatos = (Button) vista.findViewById(R.id.guardar);
@@ -97,6 +94,7 @@ public class Perfil extends Fragment {
         etPesoA.setEnabled(false);
         etFechan.setEnabled(false);
         etActividadF.setEnabled(false);
+        etPesoO.setEnabled(false);
 
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setTitle("Obteniendo Datos");
@@ -106,6 +104,7 @@ public class Perfil extends Fragment {
         perfilController = new PerfilController(this);
         String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         perfilController.loadPerfilData(userUID);
+        //button signOut succes
         cerrarSesion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,14 +120,20 @@ public class Perfil extends Fragment {
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            progressDialogsingOut.dismiss();
-                            Intent i = new Intent(getContext(), IniciarSesion.class);
-                            startActivity(i);
-                            getActivity().finish();
+                            progressDialogsingOut.show();
                         }
                     },1000);
                 }
 
+            }
+        });
+        editarDatos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String gender = String.valueOf(etGenero.getText());
+                String phyAct = String.valueOf(etActividadF.getText());
+                Log.d("data","El genero es "+gender+"la actividad"+phyAct);
+                perfilController.editarPerfil(gender,phyAct);
             }
         });
         return vista;
@@ -141,7 +146,7 @@ public class Perfil extends Fragment {
         etPesoA.setText(perfilModel.getWeight());
         etFechan.setText(perfilModel.getBirthDate());
         etActividadF.setText(perfilModel.getPhysical_activity());
-        tvPesoO.setText(perfilModel.getTargetWeight()+"kl");
+        etPesoO.setText(perfilModel.getTargetWeight()+"kl");
         if(progressDialog.isShowing()){
             new Handler().postDelayed(new Runnable() {
                 @Override
