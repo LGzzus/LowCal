@@ -27,7 +27,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 
 public class CrearCuenta extends AppCompatActivity {
@@ -36,7 +35,6 @@ public class CrearCuenta extends AppCompatActivity {
     Button btnEntrar;
     String[] datos;
     public FirebaseAuth mAuth;
-    public String textError, titleError;
     boolean registrado;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +52,6 @@ public class CrearCuenta extends AppCompatActivity {
         mAuth=FirebaseAuth.getInstance();
         btnEntrar.setOnClickListener(v -> {
             try {
-                Log.d("validate","validate is: "+validar());
                 if(validar()){
                     String nombre=etNombre.getText().toString();
                     String correo=etCorreo.getText().toString();
@@ -80,21 +77,7 @@ public class CrearCuenta extends AppCompatActivity {
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    if(e instanceof FirebaseAuthException){
-                                        String errorCode = ((FirebaseAuthException)e).getErrorCode();
-                                        Log.d("errorCode",""+errorCode);
-                                        switch (errorCode){
-                                            case "ERROR_INVALID_EMAIL":
-                                                titleError = "Verifique su correo";
-                                                textError = "Ingrese su correo e intente nuevamente";
-                                                dialogAlert(titleError,textError);
-                                                break;
-                                            case "ERROR_EMAIL_ALREADY_IN_USE":
-                                                titleError = "Correo registrado";
-                                                textError = "El correo que ingreso ya esta registrado, intente nuevamente";
-                                                dialogAlert(titleError,textError);
-                                        }
-                                    }
+                                    dialogAlert();
                                 }
                             });
                 }
@@ -172,7 +155,6 @@ public class CrearCuenta extends AppCompatActivity {
         }else{
             if(!Patterns.EMAIL_ADDRESS.matcher(correo).matches()){
                 tlCorreo.setError("Correo Incorrecto, Verifiquelo");
-
             }else{
                 tlCorreo.setErrorEnabled(false);
             }
@@ -182,7 +164,7 @@ public class CrearCuenta extends AppCompatActivity {
             retorno =false;
         }else {
             if (contraseña.length() < 6) {
-                tlContraseña.setError("Tu contraseña debe ser mayor a 6 digitos");
+                tlContraseña.setError("Tu contraseña debe ser mayor a 6 digito");
                 retorno = false;
             } else {
                 tlContraseña.setErrorEnabled(false);
@@ -193,10 +175,10 @@ public class CrearCuenta extends AppCompatActivity {
     public void atras(View view){
         this.finish();
     }
-    private void dialogAlert(String title, String message){
+    private void dialogAlert(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(title)
-                .setMessage(message)
+        builder.setTitle("Usuario Registrado")
+                .setMessage("Su correo electronico ya ha sido registrado, intente nuevamente.")
                 .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

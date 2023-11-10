@@ -190,16 +190,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etNacido">
 
-        <Button
-            android:id="@+id/button"
-            style="@style/MiBotonEstilo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/boton_redondo_blanco"
-            android:onClick="atras"
-            android:text="@string/btnatras"
-            android:textColor="@color/black" />
-
         <Space
             android:layout_width="80dp"
             android:layout_height="wrap_content" />

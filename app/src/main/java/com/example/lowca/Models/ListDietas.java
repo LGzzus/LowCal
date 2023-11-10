@@ -4,6 +4,7 @@ public class ListDietas {
    private  String dieta,tipoDieta;
    private String calorias,id_dieta;
    private  String [] infoDieta;
+   private int color;
 
 
     public ListDietas(String dieta, String calorias,String [] infoDieta,String tipoDieta,String id_dieta) {
@@ -13,8 +14,15 @@ public class ListDietas {
         this.tipoDieta=tipoDieta;
         this.id_dieta=id_dieta;
 
+
+    }
+    public int getColor() {
+        return color;
     }
 
+    public void setColor(int color) {
+        this.color = color;
+    }
     public String getId_dieta() {
         return id_dieta;
     }
