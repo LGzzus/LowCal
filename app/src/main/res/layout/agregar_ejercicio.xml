@@ -23,28 +23,49 @@
                 android:entries="@array/Lista_de_ejercicios"></Spinner>
 
 
-
-
         </LinearLayout>
 
-        <Spinner
-            android:id="@+id/spinnerMinutos"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_margin="8dp"
-            android:entries="@array/Minutos"></Spinner>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView29"
+                android:layout_width="164dp"
+                android:layout_height="29dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/txtViewMinutos"
+                android:layout_width="118dp"
+                android:layout_height="match_parent"
+
+                android:layout_gravity="start"
+                android:layout_margin="8dp"
+                android:text="Minutos"
+                android:textColor="#000000" />
+
+            <Spinner
+                android:id="@+id/spinnerMinutos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_margin="8dp"
+                android:entries="@array/Minutos"></Spinner>
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/btnAgregarEjericio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/boton_redondo_azul"
-            android:text="@string/agregar"
-            android:textColor="@color/white"
             android:layout_gravity="center"
             android:layout_margin="10dp"
-            ></Button>
+            android:background="@drawable/boton_redondo_azul"
+            android:text="@string/agregar"
+            android:textColor="@color/white"></Button>
+
     </LinearLayout>
 </LinearLayout>

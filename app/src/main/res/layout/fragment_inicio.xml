@@ -480,6 +480,32 @@
 
 
                     </LinearLayout>
+                    <RadioGroup
+                        android:id="@+id/radioGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="bottom"
+                        android:gravity="center">
+
+                        <RadioButton
+                            android:id="@+id/weekRadioButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Semana" />
+
+                        <RadioButton
+                            android:id="@+id/monthRadioButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Mes" />
+
+                        <RadioButton
+                            android:id="@+id/yearRadioButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Año" />
+                    </RadioGroup>
 
                 </LinearLayout>
             </ScrollView>

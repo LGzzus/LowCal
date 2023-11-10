@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -134,6 +135,7 @@ public class Inicio extends Fragment {
         tvProgressRecomendadas=vista.findViewById(R.id.tvProgressRecomendadas);
         progressBarRecomendadas=vista.findViewById(R.id.progressBarRecomendadas);
 
+
         db=FirebaseFirestore.getInstance();
         mAuth=FirebaseAuth.getInstance();
         userUid = mAuth.getCurrentUser().getUid();
@@ -144,6 +146,28 @@ public class Inicio extends Fragment {
         CollectionReference subCollectionRef = documentRef.collection("dieta");
         Query query = subCollectionRef.orderBy("hora_registro", Query.Direction.DESCENDING).limit(3);
         graficar();
+        RadioGroup radioGroup = vista.findViewById(R.id.radioGroup);
+        radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            BarChart barChart = vista.findViewById(R.id.barChart);
+            barChart.getDescription().setEnabled(false);
+            barChart.getAxisLeft().setEnabled(false);
+            barChart.getAxisRight().setEnabled(false);
+            barChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+            switch (checkedId) {
+                case R.id.weekRadioButton:
+                    // Lógica para mostrar datos de la semana
+                    cargarYMostrarGraficoBarras(barChart, "week");
+                    break;
+                case R.id.monthRadioButton:
+                    // Lógica para mostrar datos del mes
+                    cargarYMostrarGraficoBarras(barChart, "month");
+                    break;
+                case R.id.yearRadioButton:
+                    // Lógica para mostrar datos del año
+                    cargarYMostrarGraficoBarras(barChart, "year");
+                    break;
+            }
+        });
 
 
         /*subCollectionRef.get()
@@ -399,7 +423,7 @@ public class Inicio extends Fragment {
         barChart.getAxisLeft().setEnabled(false);
         barChart.getAxisRight().setEnabled(false);
         barChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-        cargarYMostrarGraficoBarras(barChart);
+        cargarYMostrarGraficoBarras(barChart,"week");
 
 
         return vista;
@@ -510,12 +534,20 @@ public class Inicio extends Fragment {
 
 
 }
-    private void cargarYMostrarGraficoBarras(BarChart barChart) {
+    private void cargarYMostrarGraficoBarras(BarChart barChart, String escalaTiempo) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Calendar calendar = Calendar.getInstance();
         java.util.Date currentDate = calendar.getTime();
-        calendar.add(Calendar.DAY_OF_YEAR, -6);
-        java.util.Date lastWeek = calendar.getTime();
+
+        // Define el rango de fechas según la escala de tiempo seleccionada
+        if (escalaTiempo.equals("week")) {
+            calendar.add(Calendar.DAY_OF_YEAR, -6); // Mostrar datos de la última semana
+        } else if (escalaTiempo.equals("month")) {
+            calendar.add(Calendar.MONTH, -1); // Mostrar datos del último mes
+        } else if (escalaTiempo.equals("year")) {
+            calendar.add(Calendar.YEAR, -1); // Mostrar datos del último año
+        }
+        java.util.Date startDate = calendar.getTime();
 
         Map<String, Integer> caloriasPorDia = new HashMap<>();
 
@@ -533,19 +565,21 @@ public class Inicio extends Fragment {
                         int calorias = Integer.parseInt(caloriasString);
                         try {
                             java.util.Date date = dateFormat.parse(fecha);
-                            if (date.after(lastWeek) && date.before(currentDate)) {
+                            if (date.after(startDate) && date.before(currentDate)) {
                                 // Si la fecha está en el rango, suma las calorías
-                                if (caloriasPorDia.containsKey(fecha)) {
-                                    int caloriasExistente = caloriasPorDia.get(fecha);
-                                    caloriasPorDia.put(fecha, caloriasExistente + calorias);
+                                String fechaFormateada = dateFormat.format(date);
+                                if (caloriasPorDia.containsKey(fechaFormateada)) {
+                                    int caloriasExistente = caloriasPorDia.get(fechaFormateada);
+                                    caloriasPorDia.put(fechaFormateada, caloriasExistente + calorias);
                                 } else {
-                                    caloriasPorDia.put(fecha, calorias);
+                                    caloriasPorDia.put(fechaFormateada, calorias);
                                 }
                             }
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
                     }
+
                     ArrayList<BarEntry> entries = new ArrayList<>();
                     ArrayList<String> labels = new ArrayList<>();
                     int index = 0;
@@ -557,44 +591,36 @@ public class Inicio extends Fragment {
                         index++;
                     }
 
-                        BarDataSet barDataSet = new BarDataSet(entries, "Calorías");
-                        barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-                        barDataSet.setValueTextSize(12f);
+                    BarDataSet barDataSet = new BarDataSet(entries, "Calorías");
+                    barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+                    barDataSet.setValueTextSize(12f);
 
-                        BarData barData = new BarData(barDataSet);
-                        barData.setBarWidth(0.8f);
+                    BarData barData = new BarData(barDataSet);
+                    barData.setBarWidth(0.8f);
 
-                        ViewGroup.LayoutParams layoutParams = barChart.getLayoutParams();
-                        layoutParams.height = 800;
-  
-                        barChart.setLayoutParams(layoutParams);
-                        barChart.setData(barData);
-                        barChart.setFitBars(true);
-                        barChart.invalidate();
+                    ViewGroup.LayoutParams layoutParams = barChart.getLayoutParams();
+                    layoutParams.height = 800;
 
-                        XAxis xAxis = barChart.getXAxis();
-                        xAxis.setValueFormatter(new ValueFormatter() {
-                            @Override
-                            public String getFormattedValue(float value) {
-                                int intValue = (int) value;
-                                if (intValue >= 0 && intValue < labels.size()) {
-                                    String fecha = labels.get(intValue);
-                                    SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                                    SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM", Locale.getDefault());
-                                    try {
-                                        java.util.Date date = inputFormat.parse(fecha);
-                                        return outputFormat.format(date);
-                                    } catch (ParseException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                                return "";
+                    barChart.setLayoutParams(layoutParams);
+                    barChart.setData(barData);
+                    barChart.setFitBars(true);
+                    barChart.invalidate();
+
+                    XAxis xAxis = barChart.getXAxis();
+                    xAxis.setValueFormatter(new ValueFormatter() {
+                        @Override
+                        public String getFormattedValue(float value) {
+                            int intValue = (int) value;
+                            if (intValue >= 0 && intValue < labels.size()) {
+                                return labels.get(intValue);
                             }
-                        });
-                    })
-                    .addOnFailureListener(e -> {
-                        System.out.println("error al graficar con barras" +e);
+                            return "";
+                        }
                     });
+                })
+                .addOnFailureListener(e -> {
+                    System.out.println("Error al cargar y mostrar el gráfico de barras: " + e);
+                });
     }
 }
 
