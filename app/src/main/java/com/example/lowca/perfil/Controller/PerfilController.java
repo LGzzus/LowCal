@@ -2,7 +2,9 @@ package com.example.lowca.perfil.Controller;
 
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
+import com.example.lowca.model.DatosAnt;
 import com.example.lowca.perfil.Model.PerfilModel;
 import com.example.lowca.perfil.View.Perfil;
 import com.google.firebase.auth.FirebaseAuth;
@@ -10,12 +12,15 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PerfilController {
     private Perfil perfilF;
     public PerfilModel perfilModel;
     public FirebaseAuth mAuth;
+    DatosAnt datosA = new DatosAnt();
 
     public PerfilController(Perfil perfil) {
         this.perfilF = perfil;
@@ -104,5 +109,71 @@ public class PerfilController {
         perfilF.etEstatura.setEnabled(true);
         perfilF.etPesoA.setEnabled(true);
         perfilF.etPesoO.setEnabled(true);
+    }
+    public void saveDataNew (String userUID){
+        try {
+            if(validar()){
+                DatosAnt datosA = new DatosAnt();
+                datosA.setFechaN(perfilF.etFechan.getText().toString());
+                datosA.setGenero(perfilF.spinnerGen.getSelectedItem().toString());
+                datosA.setEstatura(Integer.parseInt(perfilF.etEstatura.getText().toString()));
+                datosA.setPesoO(Float.parseFloat((perfilF.etPesoO.getText().toString())));
+                Float pesoA = Float.parseFloat(perfilF.etPesoA.getText().toString());
+                datosA.setActividadF(perfilF.spinnerAct.getSelectedItem().toString());
+                Map<String, Object> dat = new HashMap<>();
+                dat.put("birth_date",datosA.getFechaN());
+                dat.put("gender", datosA.getGenero());
+                dat.put("height", datosA.getEstatura());
+                dat.put("weight",pesoA);
+                dat.put("physical_activity_lever",datosA.getActividadF());
+                dat.put("target_weight",datosA.getPesoO());
+
+                FirebaseFirestore.getInstance().collection("antropometric_dates").document(userUID).update(dat);
+                Toast.makeText(perfilF.main,"Actualizando",Toast.LENGTH_LONG).show();
+                perfilF.editarDatos.setVisibility(View.VISIBLE);
+                perfilF.guardarDatos.setVisibility(View.INVISIBLE);
+                perfilF.etGenero.setVisibility(View.VISIBLE);
+                perfilF.spinnerGen.setVisibility(View.INVISIBLE);
+                perfilF.etActividadF.setVisibility(View.VISIBLE);
+                perfilF.spinnerAct.setVisibility(View.INVISIBLE);
+                perfilF.etFechan.setEnabled(false);
+                perfilF.etGenero.setEnabled(false);
+                perfilF.etEstatura.setEnabled(false);
+                perfilF.etPesoA.setEnabled(false);
+                perfilF.etActividadF.setEnabled(false);
+                perfilF.etPesoO.setEnabled(false);
+            }
+        }catch (Exception e){
+
+        }
+    }
+    public boolean validar(){
+        boolean retorno = true;
+        String FechaNac = datosA.getFechaN();
+        String Genero = datosA.getGenero();
+        String Estatura = perfilF.etEstatura.getText().toString();
+        String PesoAc = perfilF.etPesoA.getText().toString();
+        String ActividadFis = datosA.getActividadF();
+        /*if(etFechan.getText()==null){
+            etFechan.setError("Llena el campo");
+            retorno = false;
+        }*/
+        if (perfilF.spinnerGen.getSelectedItemPosition()==0){
+            Toast.makeText(perfilF.main,"Seleccione una opcion",Toast.LENGTH_LONG).show();
+            retorno = false;
+        }
+        if (Estatura.isEmpty()){
+            perfilF.etEstatura.setError("Ingresa tu estatura correcta");
+            retorno = false;
+        }
+        if (PesoAc.isEmpty()){
+            perfilF.etPesoA.setError("Ingresa tu Peso correcto");
+            retorno = false;
+        }
+        if(perfilF.spinnerAct.getSelectedItemPosition()==0){
+            Toast.makeText(perfilF.main,"Selecciona la opcion correcta",Toast.LENGTH_LONG).show();
+            retorno = false;
+        }
+        return retorno;
     }
 }

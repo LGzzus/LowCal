@@ -136,6 +136,12 @@ public class Perfil extends Fragment {
                 perfilController.editarPerfil(gender,phyAct);
             }
         });
+        guardarDatos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                perfilController.saveDataNew(userUID);
+            }
+        });
         return vista;
     }
     public void viewData(PerfilModel perfilModel){
@@ -146,7 +152,7 @@ public class Perfil extends Fragment {
         etPesoA.setText(perfilModel.getWeight());
         etFechan.setText(perfilModel.getBirthDate());
         etActividadF.setText(perfilModel.getPhysical_activity());
-        etPesoO.setText(perfilModel.getTargetWeight()+"kl");
+        etPesoO.setText(perfilModel.getTargetWeight());
         if(progressDialog.isShowing()){
             new Handler().postDelayed(new Runnable() {
                 @Override
