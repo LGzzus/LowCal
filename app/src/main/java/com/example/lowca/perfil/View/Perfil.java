@@ -2,6 +2,7 @@ package com.example.lowca.perfil.View;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -15,9 +16,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.example.lowca.IniciarSesion;
 import com.example.lowca.R;
 import com.example.lowca.perfil.Controller.PerfilController;
 import com.example.lowca.perfil.Model.PerfilModel;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -39,6 +43,7 @@ public class Perfil extends Fragment {
     public  FirebaseFirestore db;
     String userID;
     private ProgressDialog progressDialog;
+    public  ProgressDialog progressDialogsingOut;
     Activity main;
     public static Perfil newInstance(String param1, String param2) {
         Perfil fragment = new Perfil();
@@ -101,7 +106,31 @@ public class Perfil extends Fragment {
         perfilController = new PerfilController(this);
         String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         perfilController.loadPerfilData(userUID);
+        cerrarSesion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAuth = FirebaseAuth.getInstance();
+                String user = mAuth.getCurrentUser().getUid();
+                Log.d("UID","user "+user);
+                progressDialogsingOut = new ProgressDialog(getContext());
+                progressDialogsingOut.setTitle("Cerrando Sesion...");
+                progressDialogsingOut.setMessage("Su sesion se esta cerrando");
+                progressDialogsingOut.show();
+                mAuth.signOut();
+                if(mAuth.getCurrentUser() == null){
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            progressDialogsingOut.dismiss();
+                            Intent i = new Intent(getContext(), IniciarSesion.class);
+                            startActivity(i);
+                            getActivity().finish();
+                        }
+                    },1000);
+                }
 
+            }
+        });
         return vista;
     }
     public void viewData(PerfilModel perfilModel){
