@@ -123,6 +123,9 @@ public class Dieta2 extends AppCompatActivity {
         dieta_registrada.put("num_dieta",numDieta);
 
 
+        progressDialog = new ProgressDialog(Dieta2.this);
+        progressDialog.setTitle("Asignando Dieta");
+        progressDialog.setMessage("Cargando dietas");
 
         DocumentReference userDocRef = db.collection("dieta_asignada").document(userUid);
 
@@ -148,7 +151,7 @@ public class Dieta2 extends AppCompatActivity {
                                     .addOnFailureListener(e -> {
                                         Log.e("Firestore", "Error al actualizar el documento", e);
                                     });
-
+                            progressDialog.show();
                         }
 
                         Log.d("IdRecibido: ",""+idDieta);
@@ -164,23 +167,22 @@ public class Dieta2 extends AppCompatActivity {
                                     .addOnFailureListener(e -> {
                                         Log.e("Firestore", "Error al crear el documento", e);
                                     });
-
+                            progressDialog.show();
                         Log.d("Firestore", "El documento no existe");
                     }
 
-                    progressDialog = new ProgressDialog(Dieta2.this);
-                    progressDialog.setTitle("Asignando Dieta");
-                    progressDialog.setMessage("Cargando dietas");
-                    progressDialog.show();
+
+
                     if(progressDialog.isShowing()){
                         new Handler().postDelayed(new Runnable() {
 
                             @Override
                             public void run() {
                                 progressDialog.dismiss();
+                                Toast.makeText(Dieta2.this,"Dieta asignada",Toast.LENGTH_LONG).show();
                             }
                         },500);
-                    } Toast.makeText(Dieta2.this,"Dieta asignada",Toast.LENGTH_LONG).show();
+                    }
                 } else {
                     // Error al obtener el documento
                     Log.e("Firestore", "Error al obtener el documento", task.getException());
