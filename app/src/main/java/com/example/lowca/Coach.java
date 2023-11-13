@@ -147,51 +147,61 @@ public class Coach extends Fragment {
                 builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // Aquí puedes realizar acciones adicionales si el usuario hace clic en "Aceptar"
-                        txtAreas.setText(areas);
-                        txtCalQuemadas.setText(calQuemadas);
-                        txtDiaAsignado.setText(diaAsignado);
-                        txtNombre.setText(nombre);
-                        txtNombreEje1.setText(nombreEje1);
-                        txtNombreEje2.setText(nombreEje2);
-                        txtNombreEje3.setText(nombreEje3);
-                        txtRepeEje1.setText(repeEje1);
-                        txtRepeEje2.setText(repeEje2);
-                        txtRepeEje3.setText(repeEje3);
-                        txtSetsEje1.setText(setsEje1);
-                        txtSetsEje2.setText(setsEje2);
-                        txtSetsEje3.setText(setsEje3);
-                        //Se mandan a guardar los datoss de rutina
-                        Map<String, Object> data = new HashMap<>();
-                        data.put("areas", areas);
-                        data.put("cal_quemadas", calQuemadas);
-                        data.put("dia_asignado", diaAsignado);
-                        data.put("nombre", nombre);
-                        data.put("nombre_ejercicio1", nombreEje1);
-                        data.put("nombre_ejercicio2", nombreEje2);
-                        data.put("nombre_ejercicio3", nombreEje3);
-                        data.put("repe_ejercicio1", repeEje1);
-                        data.put("repe_ejercicio2", repeEje2);
-                        data.put("repe_ejercicio3", repeEje3);
-                        data.put("sets_ejercicio1", setsEje1);
-                        data.put("sets_ejercicio2", setsEje2);
-                        data.put("sets_ejercicio3", setsEje3);
-                        // Agrega los datos a Firestore con el ID de documento personalizado
-                        userUid = mAuth.getCurrentUser().getUid();
-                        db.collection("rutina_elejida").document(userUid).set(data)
-                                .addOnSuccessListener(aVoid -> {
-                                    // Éxito
-                                    AlertDialog.Builder builder2 = new AlertDialog.Builder(getContext());
-                                    builder2.setMessage("REGISTRADO");
-                                    builder2.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {}
+                        if (nombre.equals(txtNombre.getText())){
+                            AlertDialog.Builder builder3 = new AlertDialog.Builder(getContext());
+                            builder3.setMessage("No puedes elejir una rutina que ya está asignada");
+                            builder3.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {}
+                            });
+                        }
+                        else {
+                            // Aquí puedes realizar acciones adicionales si el usuario hace clic en "Aceptar"
+                            txtAreas.setText(areas);
+                            txtCalQuemadas.setText(calQuemadas);
+                            txtDiaAsignado.setText(diaAsignado);
+                            txtNombre.setText(nombre);
+                            txtNombreEje1.setText(nombreEje1);
+                            txtNombreEje2.setText(nombreEje2);
+                            txtNombreEje3.setText(nombreEje3);
+                            txtRepeEje1.setText(repeEje1);
+                            txtRepeEje2.setText(repeEje2);
+                            txtRepeEje3.setText(repeEje3);
+                            txtSetsEje1.setText(setsEje1);
+                            txtSetsEje2.setText(setsEje2);
+                            txtSetsEje3.setText(setsEje3);
+                            //Se mandan a guardar los datoss de rutina
+                            Map<String, Object> data = new HashMap<>();
+                            data.put("areas", areas);
+                            data.put("cal_quemadas", calQuemadas);
+                            data.put("dia_asignado", diaAsignado);
+                            data.put("nombre", nombre);
+                            data.put("nombre_ejercicio1", nombreEje1);
+                            data.put("nombre_ejercicio2", nombreEje2);
+                            data.put("nombre_ejercicio3", nombreEje3);
+                            data.put("repe_ejercicio1", repeEje1);
+                            data.put("repe_ejercicio2", repeEje2);
+                            data.put("repe_ejercicio3", repeEje3);
+                            data.put("sets_ejercicio1", setsEje1);
+                            data.put("sets_ejercicio2", setsEje2);
+                            data.put("sets_ejercicio3", setsEje3);
+                            // Agrega los datos a Firestore con el ID de documento personalizado
+                            userUid = mAuth.getCurrentUser().getUid();
+                            db.collection("rutina_elejida").document(userUid).set(data)
+                                    .addOnSuccessListener(aVoid -> {
+                                        // Éxito
+                                        AlertDialog.Builder builder2 = new AlertDialog.Builder(getContext());
+                                        builder2.setMessage("REGISTRADO");
+                                        builder2.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {}
+                                        });
+                                        builder2.show();
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        // Error
                                     });
-                                    builder2.show();
-                                })
-                                .addOnFailureListener(e -> {
-                                    // Error
-                                });
+                        }
                     }
                 });
                 builder.setNegativeButton("Cancelar", null);
