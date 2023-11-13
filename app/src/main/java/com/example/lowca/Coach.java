@@ -154,6 +154,7 @@ public class Coach extends Fragment {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {}
                             });
+                            builder3.show();
                         }
                         else {
                             // Aquí puedes realizar acciones adicionales si el usuario hace clic en "Aceptar"
