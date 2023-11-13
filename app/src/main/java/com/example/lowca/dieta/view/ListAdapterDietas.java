@@ -1,4 +1,4 @@
-package com.example.lowca.Adaptadores;
+package com.example.lowca.dieta.view;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,9 +13,8 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.lowca.Dieta;
-import com.example.lowca.Dieta2;
-import com.example.lowca.Models.ListDietas;
+import com.example.lowca.dietaAsignada.view.Dieta2;
+import com.example.lowca.dieta.modelo.ListDietas;
 import com.example.lowca.R;
 
 import java.util.List;
@@ -23,8 +22,10 @@ import java.util.List;
 
 public class ListAdapterDietas extends RecyclerView.Adapter<ListAdapterDietas.ViewHolder> {
     private List<ListDietas> mData;
+    public ListDietas listDietasModel;
     private LayoutInflater mInflater;
-    private Context context;
+    public Context context;
+    public Context cont;
     private OnItemClickListener mClickListener;
 
     private String[] mDatosStrings;
@@ -39,7 +40,7 @@ public class ListAdapterDietas extends RecyclerView.Adapter<ListAdapterDietas.Vi
 
     public ListAdapterDietas(List<ListDietas> itemList, Context context){
         this.mInflater= LayoutInflater.from(context);
-        this.context =context;
+        this.context=context;
         this.mData=itemList;
     }
     @Override
@@ -49,7 +50,10 @@ public class ListAdapterDietas extends RecyclerView.Adapter<ListAdapterDietas.Vi
    public void setOnItemClickListener(OnItemClickListener clickListener) {
         mClickListener = clickListener;
     }
-   public interface OnItemClickListener {
+
+
+
+    public interface OnItemClickListener {
        void onItemClick(int position);
 
    }
@@ -117,11 +121,8 @@ public class ListAdapterDietas extends RecyclerView.Adapter<ListAdapterDietas.Vi
                         int position = getAdapterPosition();
                         if (position != RecyclerView.NO_POSITION) {
                             mClickListener.onItemClick(position);
-                            //pasarDatos= new Bundle();
                             Context contexto=view.getContext();
                             Intent intent= new Intent(contexto, Dieta2.class);
-                            //pasarDatos.putStringArray("keyDatos",mDatosStrings);
-                           //intent.putExtras(pasarDatos);
 
                             if (mDietaFragment != null) {
                                 // Obtener el elemento de la lista en la posición seleccionada
@@ -129,7 +130,7 @@ public class ListAdapterDietas extends RecyclerView.Adapter<ListAdapterDietas.Vi
                                 // Pasar los datos al fragment Dieta
                                 mDietaFragment.recibirDatos(dieta.getTipoDieta(), dieta.getCalorias(), dieta.getInfoDieta(),dieta.getId_dieta(),dieta.getDieta());
                             }
-                            //contexto.startActivity(intent);
+
 
                         }
                     }
@@ -140,11 +141,11 @@ public class ListAdapterDietas extends RecyclerView.Adapter<ListAdapterDietas.Vi
         }
 
 
-        void  bindData(final ListDietas item){
-           // imageViewDieta.setColorFilter(Color.parseColor(item.getColor()), PorterDuff.Mode.SRC_IN);
+       void  bindData(final ListDietas item){
             dieta.setText(item.getDieta());
             calorias.setText(item.getCalorias());
         }
+
 
     }
 

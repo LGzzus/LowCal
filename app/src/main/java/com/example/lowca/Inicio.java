@@ -69,7 +69,7 @@ public class Inicio extends Fragment {
     private String mParam1;
     private String mParam2;
     View vista;
-    TextView tvCaloriasDieta,tvCaloriasBasales,txtViewCaloriasDieta, textViewConsumidasGraf, textViewReservadasGraf;
+    TextView tvDietaAsig,tvCaloriasDieta,tvCaloriasBasales,txtViewCaloriasDieta, textViewConsumidasGraf, textViewReservadasGraf;
     ProgressBar progressBarReservadas, progressBarConsumidas;
 
 
@@ -123,6 +123,7 @@ public class Inicio extends Fragment {
         vista = inflater.inflate(R.layout.fragment_inicio, container, false);
         tvCaloriasDieta=vista.findViewById(R.id.tvReservadas);
         tvCaloriasBasales=vista.findViewById(R.id.tvCaloriasBasales);
+        tvDietaAsig=vista.findViewById(R.id.tvDietaAsignadaR);
 
         txtViewCaloriasDieta= vista.findViewById(R.id.tvCaloriasDieta);
 
@@ -145,25 +146,6 @@ public class Inicio extends Fragment {
         Query query = subCollectionRef.orderBy("hora_registro", Query.Direction.DESCENDING).limit(3);
         graficar();
 
-
-        /*subCollectionRef.get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                        //String documentId=documentSnapshot.getId();
-
-                        String dato = documentSnapshot.getString("calorias_usuario");
-                        // Realiza las operaciones necesarias con los datos obtenidos de la subcolección
-                        String  cal= dato;
-                        System.out.println("********Calorias tablero: "+cal+"**********");
-
-
-                        tvCaloriasDieta.setText(dato+" kcal");
-
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    // Maneja el error en caso de que la lectura de la subcolección falle
-                });*/
 
         query.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -425,8 +407,10 @@ public class Inicio extends Fragment {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                        String calorias= document.getString("calorias");
+                       String numDieta=document.getString("num_dieta");
 
                         tvCaloriasDieta.setText(calorias);
+                        tvDietaAsig.setText(numDieta);
 
                     } else {
                         // El documento no existe

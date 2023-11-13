@@ -1,11 +1,15 @@
-package com.example.lowca.Models;
+package com.example.lowca.dieta.modelo;
 
 public class ListDietas {
    private  String dieta,tipoDieta;
    private String calorias,id_dieta;
    private  String [] infoDieta;
    private int color;
+   private String dietaAsiganda;
 
+     public ListDietas(){
+
+     }
 
     public ListDietas(String dieta, String calorias,String [] infoDieta,String tipoDieta,String id_dieta) {
         this.dieta = dieta;
@@ -13,8 +17,6 @@ public class ListDietas {
         this.infoDieta=infoDieta;
         this.tipoDieta=tipoDieta;
         this.id_dieta=id_dieta;
-
-
     }
     public int getColor() {
         return color;
@@ -25,6 +27,9 @@ public class ListDietas {
     }
     public String getId_dieta() {
         return id_dieta;
+    }
+    public void setId_dieta(String id_dieta){
+         this.id_dieta=id_dieta;
     }
 
     public String getTipoDieta() {
@@ -68,5 +73,11 @@ public class ListDietas {
         this.calorias = calorias;
     }
 
+    public String getDietaAsiganda() {
+        return dietaAsiganda;
+    }
 
+    public void setDietaAsiganda(String dietaAsiganda) {
+        this.dietaAsiganda = dietaAsiganda;
+    }
 }

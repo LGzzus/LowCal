@@ -164,7 +164,7 @@ public class CrearCuenta extends AppCompatActivity {
             retorno =false;
         }else {
             if (contraseña.length() < 6) {
-                tlContraseña.setError("Tu contraseña debe ser mayor a 6 digito");
+                tlContraseña.setError("Tu contraseña debe tener al menos 6 caracteres");
                 retorno = false;
             } else {
                 tlContraseña.setErrorEnabled(false);

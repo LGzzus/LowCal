@@ -45,6 +45,9 @@ public class datos2 extends AppCompatActivity {
 
     Button btnSiguiente;
 
+    public int alturaMax,alturaMin;
+    double imc;
+
     int pesoActual,pesoObjetivo2, estatura2;
     public FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -60,6 +63,8 @@ public class datos2 extends AppCompatActivity {
         rbMujer=(RadioButton) findViewById(R.id.radioBtnMujer);
         spinnerDatos=(Spinner) findViewById(R.id.spinnerDatos);
         btnSiguiente = (Button) findViewById(R.id.btnSiguiente);
+        alturaMax=230;
+        alturaMin=100;
 
         //El peso objetivo solo acepta dos decimas
         InputFilter decimalFilter = new InputFilter() {
@@ -85,6 +90,7 @@ public class datos2 extends AppCompatActivity {
         recibirDatos1=getIntent().getExtras();
         recibirDatos2=getIntent().getExtras();
         datos1=recibirDatos1.getStringArray("keyDatos");
+        datosDos=recibirDatos2.getStringArray("keyDatos2");
         btnSiguiente.setOnClickListener(v -> {
             try {
                 if(cargarCuenta()){
@@ -134,8 +140,6 @@ public class datos2 extends AppCompatActivity {
                         Toast.makeText(this,"Seleccione sus datos",Toast.LENGTH_LONG).show();
                     }
 
-
-
                     db.collection("account").document(userUid)
                             .set(account).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
@@ -160,18 +164,18 @@ public class datos2 extends AppCompatActivity {
                                     Log.d(TAG, "DocumentSnapshot written with ID:");
                                 }
                             });
-
                     Intent intent=new Intent(datos2.this, MainActivity.class);
-
                     startActivity(intent);
                 }else{
+                    Log.d("Error: ","Cuenta no cargada correctamente");
                 }
             }catch (Exception e){
+                e.printStackTrace();
+                Log.e("Error: ", "Excepción en btnSiguiente.setOnClickListener", e);
 
             }
         });
 
-        datosDos=recibirDatos2.getStringArray("keyDatos2");
 
 
         mAuth=FirebaseAuth.getInstance();
@@ -187,22 +191,129 @@ public class datos2 extends AppCompatActivity {
             currentUser.reload();
         }
     }
+    /*public void terminar(View view ){
+        try {
+            if(cargarCuenta()){
+                userUid = mAuth.getCurrentUser().getUid();
+                System.out.println(userUid);
+                //Cuenta
+                nombre=datos1[0];
+                correo=datos1[1];
+                password=datos1[2];
+                //Datos 1
+                peso=datosDos[0];
+                estatura=datosDos[1];
+                nacido=datosDos[2];
+
+                //cabiar datos a int
+                pesoActual = Integer.parseInt(peso);
+                estatura2 = Integer.parseInt(estatura);
+
+                Map<String,Object>user=new HashMap<>();
+                Map<String,Object>account=new HashMap<>();
+                Map<String,Object>antropometric_dates=new HashMap<>();
+                user.put("name",nombre);
+                account.put("mail",correo);
+                account.put("password",password);
+
+                //String nivelAcF;
+                String genero;
+                String pesoObjetivo=etPesoObjetivo.getText().toString();
+                pesoObjetivo2 = Integer.parseInt(pesoObjetivo);
+                String nivelAcF= spinnerDatos.getSelectedItem().toString();
+                double caloriasBasales=0;
+
+                antropometric_dates.put("weight", pesoActual);
+                antropometric_dates.put("height",estatura2);
+                antropometric_dates.put("target_weight",pesoObjetivo2);
+                antropometric_dates.put("birth_date", nacido);
+                antropometric_dates.put("physical_activity_lever",nivelAcF);
+                antropometric_dates.put("calculated_calories",caloriasBasales );
+
+                if(rbMujer.isChecked()){
+                    genero="Mujer";
+                    antropometric_dates.put("gender",genero);
+                } else if(rbHombre.isChecked()){
+                    genero="Hombre";
+                    antropometric_dates.put("gender",genero);
+                }else {
+                    Toast.makeText(this,"Seleccione sus datos",Toast.LENGTH_LONG).show();
+                }
+
+                db.collection("account").document(userUid)
+                        .set(account).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(TAG, "DocumentSnapshot written with ID: ");
+                            }
+                        });
+                db.collection("user").document(userUid)
+                        .set(user)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(TAG, "DocumentSnapshot written with ID:");
+                            }
+                        });
+                db.collection("antropometric_dates").document(userUid)
+                        .set(antropometric_dates)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(TAG, "DocumentSnapshot written with ID:");
+                            }
+                        });
+                Intent intent=new Intent(datos2.this, MainActivity.class);
+                startActivity(intent);
+            }else{
+                Log.d("Error: ","Cuenta no cargada correctamente");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            Log.e("Error: ", "Excepción en btnSiguiente.setOnClickListener", e);
+
+        }
+    }*/
 
 
     public boolean cargarCuenta(){
-        boolean retorno = true;
+        boolean retorno=true;
         String pesoObjetivotxt = etPesoObjetivo.getText().toString();
+        verificarIMC();
+        if(imc<=14 || imc>=45){
+            tilPesoObjetivo.setError("Ingrese un dato coherente");
+            Toast.makeText(this,"Peso objetivo incoherente",Toast.LENGTH_LONG).show();
+            retorno = false;
+        }else{
+            tilPesoObjetivo.setErrorEnabled(false);
+
+        }
         if (pesoObjetivotxt.isEmpty()){
             tilPesoObjetivo.setError("Ingrese su peso Objetivo");
             retorno = false;
         }else{
             tilPesoObjetivo.setErrorEnabled(false);
-            retorno = true;
+
         }
         return retorno;
     }
 
     public void atras(View view){
         this.finish();
+    }
+
+    private void verificarIMC() {
+        double h= Double.parseDouble(datosDos[1]);
+        int pesoObjetivo=Integer.parseInt(etPesoObjetivo.getText().toString());
+
+        //int h2=Integer.parseInt(h);
+            Log.d("Altura2: ",""+h);
+        if (h >= alturaMin && h <= alturaMax) {
+            imc = pesoObjetivo / ((h/ 100) * (h / 100));
+            Log.d("IMC: ", "" + imc);
+        } else {
+
+        }
     }
 }
