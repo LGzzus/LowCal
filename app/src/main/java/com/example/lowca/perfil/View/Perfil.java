@@ -1,9 +1,15 @@
 package com.example.lowca.perfil.View;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
@@ -15,10 +21,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.example.lowca.R;
 import com.example.lowca.perfil.Controller.PerfilController;
 import com.example.lowca.perfil.Model.PerfilModel;
-import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -42,6 +50,13 @@ public class Perfil extends Fragment {
     private ProgressDialog progressDialog;
     public  ProgressDialog progressDialogsingOut;
     public Activity main;
+    private final ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult( new ActivityResultContracts.RequestPermission(), isTrue -> {
+       if(isTrue){
+           Toast.makeText(main,"Permisos Concedidos",Toast.LENGTH_SHORT).show();
+       }else{
+           Toast.makeText(main,"Permisos Rechazados",Toast.LENGTH_SHORT).show();
+       }
+    });
     public static Perfil newInstance(String param1, String param2) {
         Perfil fragment = new Perfil();
         Bundle args = new Bundle();
@@ -142,7 +157,37 @@ public class Perfil extends Fragment {
                 perfilController.saveDataNew(userUID);
             }
         });
+        btnExportarInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkPermission(v);
+            }
+        });
+
+
         return vista;
+    }
+    private void checkPermission(View view){
+        if (
+                ContextCompat.checkSelfPermission(
+                        main,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )  == PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(main,"Permisos Concedidos",Toast.LENGTH_SHORT).show();
+            perfilController.createPDF();
+        }else if(ActivityCompat.shouldShowRequestPermissionRationale(
+                main,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )){
+            Snackbar.make(view,"Este permiso es necesario para crear el archivo",Snackbar.LENGTH_INDEFINITE).setAction("Ok", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                }
+            });
+        }else{
+            requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
     }
     public void viewData(PerfilModel perfilModel){
         tvCorreo.setText(perfilModel.getCorre());

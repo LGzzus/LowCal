@@ -1,7 +1,7 @@
 package com.example.lowca.perfil.Model;
 
 public class PerfilModel {
-    String name ;
+    String name;
     String corre;
     String gender;
     String birthDate;
