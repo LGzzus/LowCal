@@ -201,12 +201,19 @@ public class datos1 extends AppCompatActivity {
         int d = c.get(Calendar.DAY_OF_MONTH);
         int dia = d;
         int year = y-15;
+        int yearmin = y-50;
         int mes = m;
         DatePickerDialog fechaNacido = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int y, int m, int d) {
-                if(y>year || y>=year && d<=dia && m==mes){
-                    dialogAlert();
+                if(y<yearmin ){
+                    String title = "Fecha invalida";
+                    String message = "Ingrese una fecha valida";
+                    dialogAlert(title,message);
+                }else if(y>year || y>=year && d>dia && m>=mes){
+                    String title = "Eres menor de edad";
+                    String message = "Tienes que tener 15 años cumplidos o mas";
+                    dialogAlert(title,message);
                 }else{
                     etNacido.setText(String.valueOf(d)+"/"+String.valueOf(m+1)+"/"+String.valueOf(y));
                 }
@@ -214,10 +221,10 @@ public class datos1 extends AppCompatActivity {
         }, y-15, m, d);
         fechaNacido.show();
     }
-    private void dialogAlert (){
+    private void dialogAlert (String title, String message){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("No eres apto")
-                .setMessage("Para poder crear una cuenta tienes que ser mayor de 15 años")
+        builder.setTitle(title)
+                .setMessage(message)
                 .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

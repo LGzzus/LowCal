@@ -2,12 +2,15 @@ package com.example.lowca.perfil.View;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -18,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -29,6 +33,8 @@ import com.example.lowca.perfil.Model.PerfilModel;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Calendar;
 
 public class Perfil extends Fragment {
 
@@ -120,6 +126,12 @@ public class Perfil extends Fragment {
         String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         perfilController.loadPerfilData(userUID);
         //button signOut succes
+        etFechan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDialog();
+            }
+        });
         cerrarSesion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -206,5 +218,45 @@ public class Perfil extends Fragment {
                 }
             },500);
         }
+    }
+    public void openDialog(){
+        final Calendar c = Calendar.getInstance();
+        int y = c.get(Calendar.YEAR);
+        int m = c.get(Calendar.MONTH);
+        int d = c.get(Calendar.DAY_OF_MONTH);
+        int dia = d;
+        int year = y-15;
+        int yearmin = y-50;
+        int mes = m;
+        DatePickerDialog fechaNacido = new DatePickerDialog(main, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int y, int m, int d) {
+                if(y<yearmin ){
+                    String title = "Fecha invalida";
+                    String message = "Ingrese una fecha valida";
+                    dialogAlert(title,message);
+                }else if(y>year || y>=year && d>dia && m>=mes){
+                    String title = "Eres menor de edad";
+                    String message = "Tienes que tener 15 años cumplidos";
+                    dialogAlert(title,message);
+                }else{
+                    etFechan.setText(String.valueOf(d)+"/"+String.valueOf(m+1)+"/"+String.valueOf(y));
+                }
+            }
+        }, y-15, m, d);
+        fechaNacido.show();
+    }
+    private void dialogAlert (String title, String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(main);
+        builder.setTitle(title)
+                .setMessage(message)
+                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        openDialog();
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        builder.show();
     }
 }
