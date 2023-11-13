@@ -66,6 +66,7 @@ public class IniciarSesion extends AppCompatActivity {
                             }).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                                 @Override
                                 public void onSuccess(AuthResult authResult) {
+                                    finish();
                                     Intent i = new Intent(IniciarSesion.this, MainActivity.class);
                                     startActivity(i);
                                 }

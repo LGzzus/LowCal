@@ -5,7 +5,7 @@
     android:id="@+id/spinnerAct"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Perfil">
+    tools:context=".perfil.View.Perfil">
 
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout
@@ -224,18 +224,18 @@
                 app:layout_constraintStart_toEndOf="@+id/textView2"
                 app:layout_constraintTop_toBottomOf="@+id/etGenero" />
 
-            <TextView
+            <EditText
                 android:id="@+id/tvPesoO"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="217dp"
+                android:layout_height="44dp"
                 android:layout_marginStart="12dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="4dp"
                 android:text="TextView"
                 android:textSize="18sp"
-                app:layout_constraintBottom_toTopOf="@+id/btnSiguiente"
+                app:layout_constraintEnd_toEndOf="@+id/view4"
+                app:layout_constraintHorizontal_bias="0.586"
                 app:layout_constraintStart_toEndOf="@+id/textView7"
-                app:layout_constraintTop_toTopOf="@+id/view4"
-                app:layout_constraintVertical_bias="0.006" />
+                app:layout_constraintTop_toTopOf="@+id/view4" />
 
             <Button
                 android:id="@+id/guardar"
