@@ -539,6 +539,11 @@ public class Inicio extends Fragment {
         Calendar calendar = Calendar.getInstance();
         java.util.Date currentDate = calendar.getTime();
 
+
+        CollectionReference eatCollectionRef = db.collection("eat");
+        String userId = mAuth.getCurrentUser().getUid();
+        String userIdPrefix = userId.substring(0, 4);
+
         // Define el rango de fechas según la escala de tiempo seleccionada
         if (escalaTiempo.equals("week")) {
             calendar.add(Calendar.DAY_OF_YEAR, -6); // Mostrar datos de la última semana
@@ -549,11 +554,8 @@ public class Inicio extends Fragment {
         }
         java.util.Date startDate = calendar.getTime();
 
-        Map<String, Integer> caloriasPorDia = new HashMap<>();
-
-        CollectionReference eatCollectionRef = db.collection("eat");
-        String userId = mAuth.getCurrentUser().getUid();
-        String userIdPrefix = userId.substring(0, 4);
+        // Lógica para agrupar datos en barras
+        Map<String, Integer> barras = new HashMap<>();
 
         eatCollectionRef.whereGreaterThanOrEqualTo(FieldPath.documentId(), userIdPrefix)
                 .whereLessThan(FieldPath.documentId(), userIdPrefix + "\uf8ff")
@@ -566,14 +568,9 @@ public class Inicio extends Fragment {
                         try {
                             java.util.Date date = dateFormat.parse(fecha);
                             if (date.after(startDate) && date.before(currentDate)) {
-                                // Si la fecha está en el rango, suma las calorías
-                                String fechaFormateada = dateFormat.format(date);
-                                if (caloriasPorDia.containsKey(fechaFormateada)) {
-                                    int caloriasExistente = caloriasPorDia.get(fechaFormateada);
-                                    caloriasPorDia.put(fechaFormateada, caloriasExistente + calorias);
-                                } else {
-                                    caloriasPorDia.put(fechaFormateada, calorias);
-                                }
+                                // Si la fecha está en el rango, agrupa las calorías
+                                String key = obtenerClaveSegunEscalaTiempo(date, escalaTiempo);
+                                barras.put(key, barras.getOrDefault(key, 0) + calorias);
                             }
                         } catch (ParseException e) {
                             e.printStackTrace();
@@ -583,11 +580,11 @@ public class Inicio extends Fragment {
                     ArrayList<BarEntry> entries = new ArrayList<>();
                     ArrayList<String> labels = new ArrayList<>();
                     int index = 0;
-                    for (Map.Entry<String, Integer> entry : caloriasPorDia.entrySet()) {
-                        String fecha = entry.getKey();
+                    for (Map.Entry<String, Integer> entry : barras.entrySet()) {
+                        String label = entry.getKey();
                         int calorias = entry.getValue();
                         entries.add(new BarEntry(index, calorias));
-                        labels.add(fecha);
+                        labels.add(label);
                         index++;
                     }
 
@@ -622,5 +619,21 @@ public class Inicio extends Fragment {
                     System.out.println("Error al cargar y mostrar el gráfico de barras: " + e);
                 });
     }
+
+    private String obtenerClaveSegunEscalaTiempo(java.util.Date date, String escalaTiempo) {
+        SimpleDateFormat dateFormat;
+        if (escalaTiempo.equals("week")) {
+            dateFormat = new SimpleDateFormat("E", Locale.getDefault()); // Para obtener el nombre del día de la semana
+        } else if (escalaTiempo.equals("month")) {
+            dateFormat = new SimpleDateFormat("MMMM", Locale.getDefault()); // Para obtener el nombre del mes
+        } else if (escalaTiempo.equals("year")) {
+            dateFormat = new SimpleDateFormat("MMMM", Locale.getDefault()); // Para obtener el nombre del mes
+        } else {
+            return "";
+        }
+
+        return dateFormat.format(date);
+    }
+
 }
 
