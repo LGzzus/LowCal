@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Dieta2">
+    tools:context=".dietaAsignada.view.Dieta2">
 
 
     <androidx.cardview.widget.CardView
@@ -215,9 +215,10 @@
         android:layout_marginBottom="80dp"
 
         android:background="@drawable/boton_redondo_azul"
+        android:onClick="verificarDietaAsiganada"
         android:text="Asignar"
-        android:textSize="18dp"
         android:textColor="@color/white"
+        android:textSize="18dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

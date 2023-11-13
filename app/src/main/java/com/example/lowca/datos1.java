@@ -11,6 +11,7 @@ import android.text.Spanned;
 import android.text.Editable;
 import android.text.TextWatcher;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -32,6 +33,11 @@ public class datos1 extends AppCompatActivity {
     String[] datos1;
     String[] datosDos;
     Bundle recibirDatos;
+    private int maxLength;
+
+    public double alturaMax,alturaMin,imc;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +53,10 @@ public class datos1 extends AppCompatActivity {
         //Establece que la alturo solo debe ser max de 3 cifras
         InputFilter lengthFilter = new InputFilter.LengthFilter(3);
         etEstatura.setFilters(new InputFilter[]{lengthFilter});
+
+        alturaMax=230;
+        alturaMin=100;
+
         // Crea un InputFilter para limitar los decimales
         InputFilter decimalFilter = new InputFilter() {
             @Override
@@ -54,18 +64,16 @@ public class datos1 extends AppCompatActivity {
                 String inputText = dest.toString();
                 String newText = inputText.substring(0, dstart) + source.subSequence(start, end) + inputText.substring(dend);
 
-                // Verifica si el nuevo texto cumple con el formato de dos decimales después del punto
-                if (!newText.matches("^\\d+(\\.\\d{0,2})?$")) {
+                if (!newText.matches("^\\d{0,3}(\\.\\d{0,2})?$")) {
                     return "";
                 }
 
-                return null; // Deja pasar el texto ingresado
+                return null;
             }
         };
 
 
 
-// Agrega el InputFilter al TextInput
         etPeso.setFilters(new InputFilter[]{decimalFilter});
 
         btnContinuar.setOnClickListener(v -> {
@@ -86,7 +94,7 @@ public class datos1 extends AppCompatActivity {
                     intent.putExtras(pasarDatos2);
                     startActivity(intent);
                 }else{
-                    Toast.makeText(this,"Llene todo",Toast.LENGTH_LONG).show();
+                    Toast.makeText(this,"Verifique sus datos",Toast.LENGTH_LONG).show();
                 }
             }catch (Exception e){
             }
@@ -154,6 +162,18 @@ public class datos1 extends AppCompatActivity {
         String peso=etPeso.getText().toString();
         String estatura=etEstatura.getText().toString();
         String fechan=etNacido.getText().toString();
+        verificarIMC();
+
+        if(imc<=14 || imc>=45){
+            tilEstatura.setError("Ingresa dato coherente");
+            tilPeso.setError("Ingresa dato coherente");
+
+            retorno = false;
+
+        }else{
+            tilPeso.setErrorEnabled(false);
+            tilEstatura.setErrorEnabled(false);
+        }
         if(peso.isEmpty()){
             tilPeso.setError("Ingresa tu Peso Actual");
             retorno = false;
@@ -206,5 +226,20 @@ public class datos1 extends AppCompatActivity {
                 });
         AlertDialog dialog = builder.create();
         builder.show();
+    }
+
+    private void verificarIMC(){
+        double peso= Double.parseDouble(etPeso.getText().toString());
+
+        double estatura=Double.parseDouble(etEstatura.getText().toString());
+
+        if(estatura>=alturaMin && estatura<=alturaMax){
+            imc=peso/((estatura/100)*(estatura/100));
+            Log.d("IMC: ",""+imc);
+        }else{
+
+        }
+
+
     }
 }
