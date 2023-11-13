@@ -15,6 +15,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <Button
                 android:id="@+id/cerrar_sesion"
                 android:layout_width="125dp"
@@ -112,7 +113,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="324dp"
-                android:text="Peso Objetivo"
+                android:text="Peso Objetivo (kg):"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -139,14 +140,12 @@
                 android:id="@+id/btnExportarInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="126dp"
-                android:layout_marginTop="120dp"
-                android:layout_marginEnd="126dp"
+                android:layout_marginTop="100dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/boton_redondo_azul"
                 android:text="Expotar Informacion"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view4"
                 app:layout_constraintVertical_bias="0.0" />
@@ -277,7 +276,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="32dp"
-                android:text="Estatura:"
+                android:text="Estatura (cm):"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -290,7 +289,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="28dp"
-                android:text="Peso Actual"
+                android:text="Peso Actual (kg):"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -345,7 +344,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toEndOf="@+id/textView38"
-                app:layout_constraintTop_toBottomOf="@+id/etFechaN" />
+                app:layout_constraintTop_toBottomOf="@+id/etFechaN"
+                tools:visibility="invisible" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
